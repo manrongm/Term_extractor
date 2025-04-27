@@ -1,0 +1,360 @@
+DeepMapping2: Self-Supervised Large-Scale LiDAR Map Optimization Chao Chen1,*, Xinhao Liu1,*, Yiming Li1, Li Ding2, Chen Feng1,† 1New York University 2 University of Rochester https://ai4ce.github.io/DeepMapping2/ 3 2 0 2 r a M 6 1 ] V C .
+s
+c [ 2 v 1 3 3 6 0 .
+2 1 2 2 : v i X r a .
+Mapping result on the KITTI dataset.
+The bird’s eye view map is shown together with the estimated sensor pose of each frame.
+Each pose is represented by an arrow indicating the xy-coordinate and heading (yaw angle) as shown in the bottom examples.
+The color indicates the frame index in the trajectory.
+Challenging regions are zoomed in for a clear view.
+Best viewed in color.
+Abstract LiDAR mapping is important yet challenging in self- driving and mobile robotics.
+To tackle such a global point cloud registration problem, DeepMapping converts the complex map estimation into a self-supervised training of simple deep networks.
+Despite its broad convergence range on small datasets, DeepMapping still cannot produce sat- isfactory results on large-scale datasets with thousands of frames.
+This is due to the lack of loop closures and ex- act cross-frame point correspondences, and the slow con- vergence of its global localization network.
+We propose DeepMapping2 by adding two novel techniques to address these issues: organization of training batch based on map topology from loop closing, and self-supervised *Equal contribution †The corresponding author is Chen Feng cfeng@nyu.edu local-to-global point consistency loss leveraging pairwise registration.
+Our experiments and ablation studies on pub- lic datasets such as KITTI, NCLT, and Nebula demonstrate the effectiveness of our method.
+1.
+Introduction Mapping is a fundamental ability for autonomous mo- bile agents.
+It organizes an agent’s local sensor observa- tions into a map, i.e., a global spatial representation of the environment.
+A pre-built map is useful in robotics, self- driving, and augmented reality for agents to localize them- selves [2–6].
+Various simultaneous localization and map- ping (SLAM) methods can create maps of new environ- ments from 2D and/or 3D sensors [7–13].
+In particular, LiDAR-based mapping is often adopted to build large-scale maps in self-driving and mobile robotics due to LiDAR’s direct and accurate 3D point cloud sensing capability.
+1 Multiway registrationLeGO-LOAMGPSKITTI (0018)ICP+DM2 (ours)KITTI (0027)Trajectory example:Straight(good)Corner (good)Straight(bad)Corner (bad) Similar to visual SLAM, LiDAR SLAM methods typ- ically contain front-end and back-end modules [14–17].
+The front-end module tracks sensor movements by Li- DAR/inertial/wheel odometry and provides constraints be-
+tween sequential frames of point clouds by either iterative closest point (ICP) or 3D feature detection and correspon- dence matching algorithms.
+The back-end uses those con- straints in a pose/pose-landmark graph optimization [18,19] to minimize the odometry drift, similar to the bundle adjust- ment in visual SLAM and Structure-from-Motion (SfM).
+However, without accurate GNSS/IMU as odometry, large-scale LiDAR mapping results could be unsatisfactory (see Fig. 1), due to errors in LiDAR odometry and diffi- culties in correspondence matching and loop closing, es- pecially outdoors.
+To tackle these issues, researchers start to explore deep learning methods.
+Some of them focus on replacing sub-tasks in LiDAR mapping with deep net- works [20–23], following the common machine learning paradigm: train-then-test.
+Yet such methods could face generalization issues when the training dataset domain is different than the testing one.
+Differently, DeepMapping proposes a new paradigm: training-as-optimization for point cloud map- ping.
+It encapsulates the global registration in a point- cloud-based PoseNet (L-Net), and evaluates the map quality using another binary occupancy network (M-Net) with a binary cross-entropy (BCE) loss.
+This converts the continuous map optimization into a self-supervised training of binary classifications.
+Since no testing is needed, it does not face any generalization issues because mapping is done once training is finished.
+However, despite its superior performance on small- scale datasets, we found DeepMapping often fails on large- scale datasets due to the following challenges: No-explicit-loop-closure: DeepMapping gradually optimizes L-Net using frames in each mini-batch that are temporal neighbors, and only relies on M-Net to control the global map consistency.
+This is like incremental registra- tion that is doomed to drift when the number of frames is large.
+SLAM solves this by loop closing, which is not yet clear how to be incorporated into DeepMapping.
+No-local-registration:
+Although previous works have shown local registration to be locally accurate [25–28], DeepMapping only uses it in the ICP-based pose initializa- tion but not in the optimization.
+This is due to a common problem faced by all LiDAR registration methods, the lack of point correspondences in LiDAR point clouds: the same 3D point rarely appears again in another scan, because of the sparse sensor resolution and long-range sensing.
+Slow-convergence-in-global-registration: L-Net re- gresses a single frame of point cloud into its global pose, which is supervised only by the M-Net and BCE loss.
+Unlike pairwise registration, this global registration lacks enough inference cues to output correct poses, thus leading to slow convergence when the dataset is large.
+We propose DeepMapping2 that is able to effectively optimize maps on large-scale LiDAR datasets.
+It extends DeepMapping with two novel techniques.
+The first one ad- dresses challenge by organizing data frames into train- ing batches based on map topology from loop closing.
+This allows a frame with its topological/spatial neighbors to be grouped into the same batch.
+We find this to be the best way of adding loop closing into DeepMapping which uses free-space inconsistencies via M-Net and BCE loss to gen- erate self-supervision, because such inconsistencies happen mostly between unregistered neighboring frames.
+The second technique is a novel self-supervised local- to-global point consistency loss that leverages precomputed pairwise registration.
+For each point in a frame, we can compute this new consistency as the L2 distance between different versions of its global coordinate calculated using a neighboring frame’s global pose and the relative pose be- tween the two frames from the pairwise registration.
+This allows us to address challenge without relying on point correspondences between different frames: even if two neighboring frames do not have enough common points as correspondences for pairwise local registration, we can still incorporate the local registration’s results during training.
+It also addresses the challenge because now L-Net is su- pervised by stronger gradients from not only the BCE loss, but also the new consistency loss.
+Our contributions are summarized as follows: • Our DeepMapping2 is the first self-supervised large- scale LiDAR map optimization method as far as we know, and this generic method achieves state-of-the- art mapping results on various indoor/outdoor public datasets, including KITTI , NCLT , and the challenging underground dataset Nebula .
+•
+Our analysis reveals why DeepMapping fails to scale up and leads to the two novel techniques–batch orga- nization and local-to-global point consistency loss–to incorporate loop closing and local registration in the DeepMapping framework.
+Their necessity and effec- tiveness are further validated in our ablation study.
+2. Related Work Pairwise registration.
+Pairwise registration computes the transformation from a source point cloud to a target point cloud.
+A global pose of each point cloud can be obtained by incrementing the pairwise transformation se- quentially.
+Iterative closest point (ICP) and its vari- ants [25, 33] are widely-used pairwise registration meth- ods by iteratively estimating and minimizing closest point correspondence.
+More recently, learning-based algorithms use a pre-trained model to predict pairwise transforma- 2 tion
+[27, 28].
+However, all these methods suffer from ag- gregation errors when the registration is done incrementally to solve a mapping problem.
+Though DeepMapping2 relies on pairwise registration for consistency loss, it only bene- fits from the relatively accurate pairwise transformation but does not suffer aggregation errors because registration is not done incrementally.
+Multiple registration.
+In addition to pairwise registra- tion, several methods for multiple point cloud registration have been proposed [9, 34, 35].
+Global SfM
+[36, 37] divides one scene into smaller partitions and iteratively does mo- tion averaging until convergence.
+transforms the prob- lem into pose-graph optimization and uses partitioning to reduce computation.
+follows a similar practice but with a supervised end-to-end learnable algorithm.
+On the other hand, DeepMapping does not require any scene parti- tioning or supervised training.
+Instead, it approaches the problem by transforming global map optimization into self- supervised training of deep networks.
+DeepMapping2 fol- lows the same line of thought and inherits the general frame- work of DeepMapping.
+It improves the mapping result of DeepMapping, especially in large-scale scenes, and over- comes challenges faced by DeepMapping by the two pro- posed novel techniques.
+Loop closure.
+Loop closure is a significant component in SLAM algorithms.
+It aims to decide whether a place has been visited before by the agent.
+Most classical loop clo-
+sure methods rely on hand-crafted features and descrip- tors to compare different frames.
+Deep learning approaches like PointNetVLAD combine the feature extraction from PointNet and the supervised contrastive loss from NetVLAD .
+In contrast, TF-VPR trains a similar deep-learning based network without supervision by mining the information between temporal and feature neighbors.
+It is a challenge, however, to incorporate loop closing in the training of DeepMapping because the detected loop closure cannot be described in a differentiable manner.
+DeepMap- ping2 solves this problem by organizing the training batches with spatially adjacent frames and incorporating loop clo-
+sure information into the self-supervised training process.
+Simultaneous Localization and Mapping.
+SLAM is the computational problem of building a map while keep-
+ing track of an agent’s location.
+Both visual [45–47] and LiDAR SLAM
+[14, 15, 32, 48, 49] are well-studied in this domain.
+Particularly, LiDAR SLAM provides relatively accurate geometric information and can be classified into train-then-test and train-as-optimization.
+The majority of methods fall into the train-then-test category.
+Such LiDAR SLAM methods perform point-level matching , feature- level matching
+[48, 49], and point feature to edge/plane matching
+[14, 15] to find correspondences between scans.
+However, existing LiDAR SLAM algorithms are prone to large errors, particularly in estimating the sensor rotation of each frame.
+DeepMapping , on the other hand, be- longs to the train-as-optimization category, and the network trained does not generalize in other scenes because the self- supervised loss functions in DeepMapping2 are designed for same scene optimization.
+3. Method .
+Overview Problem setup.
+We aim to solve the problem of regis- tering multiple point clouds into a single global frame.
+For- mally, the input point cloud is denoted as S = {Si}K i=1, where K is the total number of point clouds.
+Each point cloud Si is represented by a Ni × 3 matrix where Ni is the number of points in Si, i.e. Si ∈ RNi×3.
+The goal is to estimate the sensor pose T = {Ti}K i=1 for each Si, where Ti ∈ SE.
+Common ground with DeepMapping.
+Inspired by DeepMapping , we use deep neural networks, repre- sented as a function f with learnable parameters, to esti- mate sensor poses T .
+The registration problem is then trans- formed into finding the optimal network parameters that minimize the objective function (θ∗, ϕ∗)
+= arg min θ,ϕ Lϕ(fθ(S), S),
+where fθ : Si (cid:55)→ Ti is a localization network (L-Net) that estimates the global pose for each point cloud, and ϕ is the parameter of a map network (M-Net) mϕ that maps from a global coordinate to its corresponding occupancy proba- bility.
+Lϕ is the self-supervised binary cross entropy loss to measure the global registration quality: Lϕ = 1 K K (cid:88) i=1 B
+[mϕ (Gi) , 1] + B
+[mϕ (s (Gi)) , 0] , where the global point cloud Gi is a function of L-Net pa- rameters θ, and s(Gi) is a set of points sampled from the free space in Gi.
+B[p, y] in Eq. is the binary cross en- tropy between the predicted occupancy probability p and the self-supervised binary label y: B[p, y] = −y log(p)
+− (1 − y) log(1 − p).
+Moreover, Chamfer distance is another loss to help the network converge faster in DeepMapping .
+It measures the distance of two global point clouds X and Y by: d(X, Y )
+= 1 |X| + 1 |Y | (cid:88)
+x∈X
+(cid:88)
+y∈Y min y∈Y ∥x − y∥2 ∥x − y∥2.
+min x∈X Difference from DeepMapping.
+DeepMapping intro- duces a ”warm start” mechanism to transform each raw 3 .
+Pipeline of DeepMapping2.
+The pipeline mainly consists of place-recognition-based batch organization and learning-based optimization.
+In batch organization, the input point clouds are organized into mini-batches by topological map attained from place recog- nition.
+Each batch contains an anchor frame A and several spatially closed neighbor frames N .
+The transformation between the anchor frame and each neighbor frame T A N is obtained by pairwise registration.
+In optimization, each batch is fed into L-Net to estimate the global pose.
+The transformed global anchor frame is then obtained in two ways: A′ directly from the global pose of the anchor frame (T G A ) and A′′ from the global pose of the neighbor frame (T G N ).
+The consistency loss penalizes the differences between A′ and A′′. The global frames are also fed into M-Net for computing DeepMapping loss.
+Best viewed in color.
+N )
+and the pairwise registration (T A point cloud to a sub-optimal global pose via existing reg- istration methods like ICP.
+This optional step will accel- erate the convergence of DeepMapping in the small-scale dataset.
+However, a reasonable initialization is required in our method for large-scale datasets, because it would be dif- ficult to converge if starting from scratch.
+Limitation of DeepMapping.
+Despite its success in small datasets, DeepMapping cannot scale up to large datasets because of the aforementioned challenges: no-explicit-loop-closure, no-local-registration, and slow-convergence-in-global-registration.
+In Sec. , we will introduce the pipeline of our method.
+We will introduce the solution to challenge in Sec. , and the solution to challenges and in Sec.  .
+Pipeline Batch organization.
+The pipeline of DeepMapping2 has two main stages as shown in yellow and blue blocks in Fig.
+2.
+The first stage is the organization of training batches based on map topology from place recognition.
+The input is a sequence of point clouds that is initially registered to an intermediate state between scratch and the ground truth.
+Each anchor frame A is organized with its neighbor frame N into one batch using the map topology from off-the-shelf place recognition algorithms
+[41,44] (A and N are formally defined in Sec. ).
+Pairwise registration.
+Before the optimization in the second stage, pairwise registration is calculated between the anchor frame and the neighbor frames in each batch by finding the transformation from the neighbors to the anchor.
+This can also be achieved by any off-the-shelf pairwise
+reg- istration algorithms.
+Training as optimization.
+The second stage of the pipeline is learning-based optimization.
+Besides those im- portant components that have been introduced in Sec. , the consistency loss is another key component of DeepMap- ping2.
+The loss function is designed with the following idea: for each point in the anchor frame A, we can com- pute its consistency as the L2 difference between different versions (A′ and A′′) of its global coordinates.
+These ver- sions are calculated from the global pose of each neighbor- ing frame N and the relative transformation between the anchor and the neighbor.
+A more detailed explanation of the loss function will be given in Sec. . .
+Batch organization Due to the lack of loop closure in DeepMapping, extend-
+ing the method to a large-scale environment is challenging.
+Though loop closure can be easily integrated into a SLAM system (e.g. through bundle adjustment), it is hard to imple- ment in deep-learning-based mapping methods because of its non-differentiability.
+Effect of different batch organization.
+Dividing the whole trajectory into multiple mini-batches is inevitable.
+Then what is the correct way of such division?
+We tested several batch arrangements to split the dataset as shown 4 ···Place recognitionOne batchPairwiseregistrationAN1AN1Pairwise transformationBatch samplingMini-batch GDPlace-recognition-based batch organizationTraining-as-optimizationPoint cloud inputANL-NetNAA’N’𝑇!!"𝑇!""𝑇!#"𝑇!"A’AA’’M-NetConsistencylossDM lossN3N2N2N3ANAnchor frameNeighbor frameOff-the-shelfalgorithmWithout gradientWith gradientGlobal poseA’N’Global point cloudGlobal frameLocal frameTransformTransformTransform (a) Random (b) Temporal (c) Spatial topology .
+Illustration of various batch organization methods.
+We show the mapping results and the trajectories in a large-scale toy dataset .
+Using a spatial group would produce the best mapping results compared to other mapping methods.
+Other methods fail because the network wrongly registers frames from different areas together.
+Note that (b) is adopted in DeepMapping .
+in Fig. 3.
+In Fig.
+3a, a random organization of batches leads to an inferior mapping result because the network tends to pull random pairs of frames together and register In Fig.
+3b, the batches are organized sequentially, them.
+as in DeepMapping.
+They can be registered well locally, but the global mapping quality is still inferior.
+Not surpris- ingly, in Fig.
+3c, using spatially adjacent neighbors to form a batch would yield the best result.
+The reason is that M- Net would pull together the frames in a batch and register them together.
+Meanwhile, loop closure is incorporated into the training process because the loop is closed when all spa- tially adjacent frames are registered correctly in the loop.
+Loop-closure-based batch organization.
+We construct a batch that contains spatially adjacent neighbors (A and N s) using map topology from off-the-shelf place recogni- tion algorithms.
+The map topology is a connected graph where each node represents a frame, and each edge con- nects two spatially adjacent nodes.
+To construct the batches, given an anchor frame A, we find the top k closest frames connected to the anchor frame in map topology and orga- nize them into one batch.
+By doing so, we can include loop closure information in the training process by letting M-Net register those spatially adjacent frames.
+This also makes it possible to construct the pairwise constraint in the local-to- global point consistency loss explained in Sec. . .
+Local-to-global point consistency loss Slow convergence.
+Even with the new batch organiza- tion, DeepMapping can still converge slowly, especially in large-scale scenes.
+Although initialization can give a ”warm start” to the network, this information becomes decrepit as the training gets farther away from the initialization because it does not provide enough constraint on global pose esti- mation.
+Therefore, we want to incorporate the information from the initialization into the training process to provide a global inference cue for the networks.
+This can be done by constraining the pairwise relations of two adjacent point clouds to minimize their distance in the global frame.
+Point correspondence.
+However, point-level correspon- dence is needed to compute the distance between points.
+(a) Color-coded distance (m) (b) Histogram of distance .
+Example of LiDAR point clouds lacking point-to- point correspondence.
+We select two consecutive frames from the KITTI dataset and register them with ground truth trans- formation.
+The distance between the two sensor poses is  m.
+For each point in the point cloud, we compute its distance to the closest point after registration.
+The color-coded distance is shown in (a) and the histogram in (b).
+The place where points have a distance smaller than  m is marked by red circles.
+This correspondence is rare in large-scale and/or outdoor scenarios where mapping algorithms are often applied.
+As shown in Fig.
+4, most points are about  m away from their closest points in the real-world dataset.
+Although al- ternative distance can be calculated by finding the clos- est points or abstractly described by hand-crafted descrip- tors or learning-based features , they can be inac- curate because point-to-point correspondence may not exist in the first place.
+When two point clouds are scanned at dif- ferent sensor poses, it is very unlikely that the same point would exist in both point clouds due to the sparsity of Li- DAR scanning.
+This makes the correspondence found by the methods above inaccurate.
+Thus, we ask the question: How can we constrain the pairwise relations of globally reg- istered point clouds while not relying on inaccurate point- to-point correspondence?
+Distance metric.
+We approach the question by consid- ering the points in a single point cloud.
+When the point cloud S is transformed by different transformation matrices T , the point-to-point correspondence is preserved because they are from the same local point cloud.
+After transforma- tion, the distance between the two point clouds can be easily calculated by averaging the L2 distance between each cor- responding point.
+The metric can be defined as a function of two transformations T , T ′ and one single point cloud S: 1 |S| ∥T s − T ′s∥2.
+d(T, T ′, S) = (cid:88) s∈S Note that Eq. not only measures the distance between the two point clouds after transformation but also reflects the difference (inconsistency) between the two transforma- tions.
+This is desired in our problem because a relatively ac- curate pairwise transformation is available from each neigh- bor frame to the anchor frame.
+We want to constrain the estimation of L-Net so that the pairwise relations are pre- served in the global sensor poses.
+5 Temporal batch arrangementRandom batch arrangementSpatial batch arrangementTemporal batch arrangementRandom batch arrangementSpatial batch arrangementTemporal batch arrangementRandom batch arrangementSpatial batch arrangement+.Distance to closest point (m)020040060080010001200Number of points Baselines.
+We compare our method with baselines that fall into three different categories: multiway registra- tion is a multiple registration method, ICP , DGR , HRegNet , GeoTransformer , and KISS-
+ICP are pairwise registration algorithms that can run incrementally to obtain the global pose estimation, and LeGO-LOAM is a SLAM method.
+We also do abla- tion studies to compare the effectiveness of each proposed technique in Sec. .
+Warm start.
+Following DeepMapping , this step has the same function as the front-end initialization in SfM be-
+fore bundle adjustment (BA).
+In fact, DeepMapping2 can be seen as the deep learning version of BA for LiDAR map- ping.
+Note that just like BA in SfM is affected by the ini- tial solution’s quality, DeepMapping2 is also affected by the “warm start” quality.
+Nonetheless, DeepMapping2 can be seamlessly integrated into almost any mapping front-end such as ICP, KISS-ICP, and Lego-LOAM described in the following sections, and always improves ATE without man- ual hyperparameter tuning. .
+KITTI dataset KITTI is a widely-used authoritative benchmark to evaluate SLAM-based algorithms .
+We employ the two most complex and challenging scenes from the dataset, where lots of places are revisited multiple times and the ex- plored area is relatively large.
+Meanwhile, there are dy- namic objects on the road, further increasing the difficulties.
+Quantitative comparisons.
+From Tab. 1, we see that DeepMapping2 can perform well even with very trivial map initialization, like incremental ICP.
+There are significant im- provements in the map quality when comparing the opti- mized map and the initialization, e.g., DeepMapping2 im- proves LeGO-LOAM by % in terms of translation on drive 0018.
+In general, our method is robust to initializa- tion.
+No matter what category of methods is used to initial- ize the map, the performance of our method is consistent.
+Qualitative comparisons.
+As shown in Fig.
+1, although multiway registration and DGR perform well at the start of the trajectory, the error is accumulated as the number of frames increases, leading to a noticeable drift.
+While the loop closure module in LeGO-LOAM is supposed to cor- rect the drift, we can still see the errors on the trajectory, es- pecially when the number of frames in drive 0027 exceeds 4,000.
+On the other hand, the qualitative results produced by our approach do not have a noticeable difference from those provided by the GPS sensor. .
+NCLT dataset NCLT is a large-scale dataset collected at the Uni- versity of Michigan’s North Campus.
+The point clouds are collected using a Velodyne HDL-32E 3D LiDAR mounted on a Segway robot.
+In total, the NCLT dataset has a robot (a) Poor global registration (b) Perfect global registration .
+Illustration of consistency loss.
+Red puzzle represents different versions of anchor frames and blue puzzle represents the neighbor frames.
+The loss measures the euclidean distance of all the corresponding points of different versions of anchor frames that transformed from different poses, as indicated by the two- way arrows.
+Red points in the figure show one of the points for illustration.
+Fig.
+5 depicts the idea of this metric.
+Two versions of an- chor frames are shown.
+A′ is transformed by the global pose estimated by L-Net.
+A′′ is transformed by each neighbor frame’s global pose and relative transformation.
+In Fig.
+5a, the point clouds are poorly registered so the distances in- dicated by the arrows are large.
+In Fig.
+5b, however, all corresponding points overlap so the distance is zero.
+Consistency loss.
+Following this line of thought, we de- sign the local-to-global consistency loss to measure the in- consistency between the local and global registrations.
+We denote the pairwise transformation between Si and Sj as T j
+i , and the global pose of Si as T G
+i .
+Also, recall that neigh- bor Ni is defined as the indices of neighbor frames of Si.
+We formulate the consistency loss as LC = 1 K|Ni| K (cid:88) (cid:88)
+i=1 j∈Ni d(T G j T
+i j , T G i , Si).
+It is worth noting that loss in Eq. solves the two chal- lenges mentioned above altogether.
+Global inference cue is provided while avoiding point-to-point correspondence.
+Because each T i j is computed pairwisely and is considered more accurate than pairwise relations in the global estima- tion, by minimizing LC, the network can get more informa- tion from the initialization and have a faster convergence.
+4. Experiment Dataset.
+We use three datasets for a comprehensive eval- uation: KITTI dataset for evaluations in outdoor scenarios, NeBula odometry dataset for evaluations in indoor environments where GPS signal is not available, and NCLT dataset for evaluations in both scenarios.
+Metrics.
+For quantitative evaluations, we use the ab- solute trajectory error (ATE) following DeepMap- ping .
+For qualitative evaluations, we visualize both the registered map and the trajectory in the bird’s eye view.
+6 .
+Mapping results on NCLT dataset.
+The red boxes indicate the places where our method has a better mapping quality than LeGO-LOAM.
+The ATEs are also listed.
+Other labels and legends follow Fig.
+1. Best viewed in color. .
+Quantitative result on the KITTI dataset.
+The quality of the predicted trajectory is measured by absolute trajectory error (ATE) compared with the GPS trajectory.
+Results on two trajec- tories are listed.
+“T-ATE” means translation ATE (m) “R-ATE” means rotation ATE (deg).
+The last two rows are our results.
+Method Incremental ICP Multiway DGR LeGO-LOAM HRegNet GeoTransformer ICP+DM KISS-ICP ICP+DM2 KISS-ICP+DM2 LeGO-LOAM+DM2 Drive 0018 Drive 0027 T-ATE (m)↓ R-ATE (◦)↓ T-ATE (m)↓ R-ATE (◦)↓                                             trajectory with a length of  km and maintains 27 dis- crete mapping sessions over the year.
+Each mapping session includes both indoor and outdoor environments.
+We select an interval of the trajectory for better illustration.
+Qualitative results As shown in Fig.
+6, although LeGO- LOAM can produce a relatively satisfactory map, it still misaligns point clouds in some areas of the trajectory.
+In the red boxes in Fig. 6, the optimized map by DeepMap- ping2 has better alignment than that from LeGO-LOAM, which is also proved by the ATEs reported under the maps.
+Quantitative results The translation and rotation ATEs of different methods on NCLT are reported in Tab.
+2. Incre-
+mental ICP does not have good map quality.
+Hence, when using it as initialization, our method does not have a better map than LeGO-LOAM, despite the fact that it reduces the errors by nearly one-half.
+Nevertheless, our method can still improve the map from LeGO-LOAM and have lower ATEs.
+It is worth noting that the slightly better map quality by mainly results from the smaller area and more frames in the trajectories (shown by the scale in Fig. 6).
+However, this is not always expected in all implementations.
+Compar- .
+Quantitative results on the NCLT dataset.
+The notation is the same as in Tab.
+1.
+The last two rows are our results.
+Method T-ATE (m)↓ R-ATE (◦)↓
+Incremental ICP Multiway DGR LeGO-LOAM ICP+DM2 LeGO-LOAM+DM2             ing the results in KITTI and NCLT, we find our method hav-
+ing a consistent improvement to the initialization regardless of the sampling density of the environment. .
+NeBula dataset NeBula odometry dataset is provided by Team CoSTAR.
+The dataset is used to test the multi-robot sys- tem in real-world environments such as the DARPA Sub- terranean Challenge .
+In each scene of the dataset, a ground-truth survey-grade map is provided by DARPA and the trajectory is produced by running LOCUS  .
+Vi- sual odometry and kinematic odometry are also included.
+We test different methods on the data collected in Lava Beds National Monument.
+The whole trajectory is  meters long and contains 37,949 LiDAR scans in total.
+Improvement to the odometry.
+Nebula is very chal- lenging because it contains a long indoor trajectory with- out any marker for loop closure detection.
+We first run ini- tialization on the dataset with incremental ICP and LeGO- LOAM.
+However, the mapping result is very poor (see Fig. 7) and cannot be used as a ”warm start” for DeepMap- ping2.
+We find, however, the provided kinematic odome- try gives a good mapping result but can still be optimized.
+Hence, we run DeepMapping2 with the initialization from the kinematic odometry.
+As shown in Fig. 7, the optimized map corrects the large misalignments at the two ends of the tunnel.
+It is very accurate qualitatively compared to the survey-grade map.
+This dataset does not provide the com- 7 LeGO-LOAMGPSLeGO-LOAM + DM2(ours)Multiway
+registrationNCLTTranslation ATE:  (m) Rotation ATE:  (deg)Translation ATE:  (m) Rotation ATE:  (deg)Translation ATE:  (m) Rotation ATE:  (deg) .
+Mapping result on NeBula dataset.
+Several parts of the map are zoomed in for a clearer demonstration.
+As far as we know, we are the first to show this quality of mapping result of the trajectory in the Nebula dataset.
+Other labels and legends follow Fig.
+1. .
+Ablation study on the KITTI dataset.
+The experi- ment is done by combining different components in the pipeline of DeepMapping2.
+All the results reported are from the 50th epoch of the training.
+The method without DeepMapping loss fails to converge so its result is not reported.
+DM loss Components Batch org.
+Con.
+loss T-ATE (m)↓ R-ATE (◦)↓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓    —     —  5.
+Conclusion Limitation.
+DeepMapping2 requires good loop closure to arrange batches.
+However, sometimes in large-scale envi- ronments, using a self-supervised loop closing method such as TF-VPR is time-comsuming.
+One alternative is to use pretrained PointNetVLAD with some geometric verification, such as ICP.
+Another option is to obtain loop closure from the pre-built map used in the warm-start step.
+Also, although our convergence rate is improved by the consistency loss, the computation time of our method is still longer than other state-of-the-art methods like LeGO- LOAM.
+However, our framework allows GPU-based paral- lel optimization for speed boosting via distributed data par-
+allel training as in the supplementary.
+Summary.
+DeepMapping2 adds loop closure-based batch organization and self-supervised consistency loss to DeepMapping, which can achieve excellent mapping per- formance in large-scale scenes.
+We believe our work can motivate more research in self-supervised LiDAR map op- timization.
+The current pipeline can be used as a generic learning-based map optimization method in the back-end of almost any point cloud SLAM methods.
+Future works in-
+clude adopting ideas like keyframe-based SLAM, and gen- eralizing DeepMapping2 to multi-agent SLAM.
+Acknowledgment.
+This work is supported by NSF CMMI- 1932187, CNS-2121391, EEC-2036870, and IIS-2238968. .
+ATE versus training epoch on drive 0027 in KITTI.
+The legend indicates the ATEs with different components in Tab. 3. plete trajectory
+so we cannot do a quantitative analysis. .
+Ablation study We do experiments on the KITTI dataset to analyze how the proposed techniques influence the mapping quality.
+We compare the quantitative results when one or two of the components are missing from the pipeline.
+Batch organization As shown in Tab. 3, batch organiza- tion plays an important role in mapping.
+The first version of DeepMapping (DM) constructs a map with batches or- ganized sequentially.
+Drifts will occur when encountering large-scale scenarios with many revisits.
+On the other hand, our method can have a better mapping quality with batch organization due to implicit loop closure.
+Consistency loss.
+Despite the benefits of local-to-global consistency loss mentioned in Sec. , it requires accurate pairwise registrations to work.
+Row 1 and row 3 in Tab. 3 show that adding consistency loss alone to DeepMapping loss does not lead to a significant improvement.
+This is be- cause the pairwise registration from off-the-shelf algorithms is prone to errors for non-adjacent point clouds.
+Compar-
+ing row 2 to row 5 in Tab. 3, only when batch organization groups spatially adjacent frames together, can consistency loss work ideally and have the best mapping quality.
+It can also be seen from Fig.
+8 that consistency loss speed-ups the convergence.
+8 Kinematic odometrySurvey-grade mapKinematic odometry + DM2 (ours)LeGO-LOAMLava Beds National MonumentICPICP

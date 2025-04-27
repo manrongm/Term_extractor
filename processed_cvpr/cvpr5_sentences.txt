@@ -1,0 +1,337 @@
+PREPRINT 1 DIVE:
+Inverting Conditional Diffusion Models for Discriminative Tasks Yinqi Li, Hong Chang, Member, IEEE, Ruibing Hou, Member, IEEE, Shiguang Shan, Fellow, IEEE, and Xilin Chen, Fellow, IEEE 5 2 0 2 r p A 4 2 ] V C .
+s
+c [ 1 v 3 5 2 7 1 . 4 0 5 2 : v i X r a Abstract—Diffusion models have shown remarkable progress in various generative tasks such as image and video genera- tion.
+This paper studies the problem of leveraging pretrained diffusion models for performing discriminative tasks.
+Specifically, we extend the discriminative capability of pretrained frozen generative diffusion models from the classification task , to the more complex object detection task, by “inverting” a pretrained layout-to-image diffusion model.
+To this end, a gradient-based discrete optimization approach for replacing the heavy prediction enumeration process, and a prior distribution model for making more accurate use of the Bayes’ rule, are proposed respectively.
+Empirical results show that this method is on par with basic discriminative object detection baselines on COCO dataset.
+In addition, our method can greatly speed up the previous diffusion-based method , for classification without sacrificing accuracy.
+Code and models are available at https://github.com/LiYinqi/DIVE.
+Index Terms—Diffusion model, generative modeling, discrim- inative Task, object detection, visual recognition.
+I. INTRODUCTION R ECENTLY, generative models such as diffusion mod- els –, autoregressive models –, and gen- erative adversarial networks (GANs) – have gained increasing interest in the research community due to their ability to synthesize photorealistic images.
+This remarkable generation ability implies that these methods could accurately model the data distribution and learn effective image repre- sentations.
+Leveraging pretrained generative models, some works – synthesize a set of training samples and then use the synthetic training set to train corresponding models for dis- criminative tasks.
+Some other works – utilize the trained generative model to extract features and learn dis- criminative heads upon.
+Notably, both of these two families of approaches still rely on and train discriminative models to perform discriminative tasks.
+Instead, in this work, we study Y. Li, H. Chang (corresponding author), S. Shan and X. Chen are with Key Laboratory of Intelligent Information Processing, Institute of Computing Technology, Chinese Academy of Sciences, Beijing, 100190, China, and University of Chinese Academy of Sciences, Beijing 100049, China.
+R. Hou is with Key Laboratory of Intelligent Information Processing, Institute of Computing Technology, Chinese Academy of Sciences, Beijing, 100190, China.
+E-mail: yinqi.li@vipl.ict.ac.cn, {changhong, houruibing, sgshan, xlchen}@ict.ac.cn Preprint.
+© 2025 IEEE.
+Personal use of this material is permitted.
+Permis-
+sion from IEEE must be obtained for all other uses, in any current or future media, including reprinting/republishing this material for advertising or pro- motional purposes, creating new collective works, for resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.
+(a) Enumeration-based Diffuser Classifier , .
+(b) Directly extending (a) to the object detection task.
+(c) Our proposed optimization-based prior-integrated framework.
+Fig.
+1: Repurposing pretrained conditional diffusion models for discriminative tasks without tuning model parameters.
+Ldiffusion and Lprior represent the training loss of the diffusion model , which is the lower bound of the modeled data distribution p(x|y) and p(y).
+whether purely pretrained generative models could accomplish discriminative tasks.
+That is, we focus on directly convert- ing pretrained generative models to “discriminative models”, without finetuning the model parameters or training additional discriminative heads.
+We believe that such a study could more intrinsically reveal the discriminative ability of pretrained generative models.
+through the Bayes’
+The classical way of such a generative-to-discriminative conversion is rule, which accom- plishes the discriminative task arg maxy p(y|x) by calculating arg maxy p(x|y)p(y), where y is the task label and x is the input image .
+Based on this approach, recently, , convert pretrained class- (and text-) conditional diffusion models, a family of likelihood-based generative models, to generative classifiers.
+For a C-way classification task under Test ImageClass-conditional Diffusion ModelConditional...goldfinchtigerbeeInputConditionalInputpersonpersonLayout-conditional Diffusion Modelbusbusbus...Test ImageConditionalInputLayout-conditional Diffusion ModelPrior Layout ModelTest Image PREPRINT 2 the assumption of a uniform prior p(y), their solution is to query the model C times to obtain the likelihood of each class and then pick the highest one, as shown in (a).
+In this paper, we explore how such an inversion approach can be applied to more complex discriminative tasks, such as object detection, as shown in (b).
+We argue that this idea is interesting because it provides a purely generative- based approach to the complex object detection task, helping researchers understand pretrained diffusion models from the perspective of discriminative ability, and by-productively offer- ing a novel evaluation metric for diffusion models.
+Meanwhile, previous diffusion-based classification methods , cannot be directly extended due to the following challenges: the prior label distribution of detection datasets, i.e., object layouts, is not uniform and thus can not be ignored; more critically, it is impossible to enumerate all potential detection labels for a test image, as the combinations of objects and their locations are vast and almost countless.
+To solve the first problem, we train a diffusion model to model the prior p(y).
+Together with the pretrained conditional diffusion model p(x|y), we obtain the discriminative predic- tion p(y|x) through posterior maximization.
+For the second label y as the problem, rather than testing each potential previous work does, we propose to treat y as a to-be-optimized result and find it by maximizing the posterior objective.
+Specifically, we freeze the parameters of the trained diffusion models while allowing the conditional input to be a learnable embedding, and use the gradient method to optimize it.
+The overall framework is illustrated in (c) and described in detail in Section III.
+We name this method Diffusion model InVErsion (DIVE) since it inverts a y-to-x model to x-to-y. We mainly introduce and evaluate our method in the con- text of the standard object detection task.
+Experiments on COCO show that using our method to invert a diffusion model achieves competitive results against basic discriminative detectors such as Faster R-CNN .
+In addition, we apply our optimization-based method to the image classification task.
+Compared to the previous enumeration-based method , our method significantly improves the speed while maintaining accuracy.
+Although there are still performance and efficiency gaps between our approach and the discriminative models, we hope that this work could help researchers further recognize the discriminative ability of pretrained generative models, and could serve as a potential novel solution for complex discriminative tasks.
+Our contributions can be summarized as follows: • We extend the paradigm of inverting diffusion models for discriminative tasks from classification to object detection.
+To the best of our knowledge, this is the first work to invert an image-generation model for the object detection task.
+•
+We propose learning modules to make the inversion paradigm theoretically more accurate and implementation- ally more feasible for the more complex detection task.
+•
+We empirically show that our method not only achieves competitive results with basic discriminative detectors but also performs faster than enumeration-based generative clas- sifiers.
+II.
+RELATED WORK A. Diffusion Models Diffusion models are a type of generative models that approximate data distribution by gradually adding noise to the data in a forward process and learning to reverse this process through a Markov chain to generate new data , .
+Diffusion models have gained superior attention in various generative tasks, including image generation –, , , image editing –, and video generation –, etc., due to their ability of synthesizing high-fidelity contents.
+B. Generative Models for Discriminative Tasks Driven by the superior content generation capacity, recently, there has been an increase in using generative models to assist or perform discriminative tasks.
+Typical works can be categorized as: Generating images to train discriminative models – , –; Extracting representations from pretrained generative models followed by learnable discriminative heads –, –; Generating task labels conditioned on images with architecture modification and additional training –; Leveraging the attention maps from the model to accomplish segmentation-related tasks , –, which are mainly based on text-to-image diffusion models , .
+Among these works, is only applicable under specific architectures, - require additional training, and some of them even contain discriminative models.
+In sum, they do not intrinsically reveal the discriminative ability of pretrained image-generation models.
+Unlike all these works, some recent methods directly con- vert image-generation diffusion models to perform discrimi- native tasks using Bayes’ rule .
+, build standard (or zero-shot) image classifiers by converting class- (or text- , ) conditional diffusion models, and – focus on building robust diffusion classifiers.
+On the other hand, , extend this paradigm to image-text-matching tasks and use it to evaluate text-to-image generation models.
+In this work, we further explore whether other more complex discriminative tasks like object detection, i.e., without a set of predefined possible class , or text , labels for the test image, can be accomplished under the model inversion paradigm.
+C. Generative Model Inversion Generative model inversion usually refers to finding the initial noise representation of a given image, with which one can reconstruct that image using the generative model , .
+This is often applied for editing real images, by manipu- lating the inverted noise representations –.
+For GANs, the inversion can be accomplished through optimization-based approaches that optimize the initial noise by minimizing the reconstruction loss –; encoder-based approaches that learn an encoder mapping images to latent noises –; or combination of the two approaches , .
+For diffusion PREPRINT 3 Fig.
+2: Illustration of the training framework of layout-conditional image generation model (left) and prior layout model (right).
+Bounding boxes in image x are for visualization only.
+models, the inversion can be done through a generalized de- terministic forward diffusion process proposed in DDIM .
+Following improvement works include exacter and faster in- versions , and extension to text-conditional mod- els , .
+Whereas these works invert an image to the noise space for the purpose of exact reconstruction, this work inverts diffusion models to the conditional input space to produce discriminative predictions.
+Recently, – invert diffusion models to the conditional input space, but their goals are to invert the concept or the full content , of the given image to texts, and use the inverted texts to generate new images, i.e., still towards the reconstruction goal which is different from ours of performing discriminative task.
+III.
+METHOD
+In this section, we first review the background of conditional diffusion models and then introduce our method of repurpos- ing these models to perform discriminative tasks in the context of object detection.
+– A. Conditional Diffusion Model Preliminaries 1)
+Diffusion Model: Diffusion models are likelihood-based generative models trained to reverse a diffusion process.
+The forward process, defined as a Markov chain structure, gradually adds noise to the clean image x0 for a number of timesteps t = 1 · · · T .
+During the reverse process, the model learns to predict the amount of noise ϵ added to the image , namely ϵθ(xt, t), or ϵθ(xt, t, vθ(y)) for conditional diffusion models, where xt is the noisy image and y is the conditioning input such as class label, and vθ(·) maps y to embeddings.
+Specifically, the model can be trained by optimizing a variational bound of the conditional log-likelihood : max θ log pθ(x|y)
+≈ min θ Eϵ∼N (0,1),t (cid:2)||ϵ − ϵθ(xt, t, vθ(y))||2 (cid:3) , 2 with x, y from training data (we use x to represent x0 for simplicity) and t sampled uniformly from {1 · · · T }.
+2) Conditional Branch: The conditional branch encodes the input y into the denoising network, facilitating controllable image synthesis, such as class-to-image, text-to-image, and layout-to-image generation.
+The encoding of class labels can be easily implemented using a learnable embedding layer that maps integer class indices to embedding vectors, as a branch of works do , , , , .
+The Latent Diffusion Model (LDM) can deal with a variety of conditioning inputs, including image layouts such as detection labels.
+Building on this capability, we propose a model inversion approach in this paper.
+As illustrated in (left), similar to the encoding process of class labels, each bounding box (mmin, nmin, mmax, nmax) with the corresponding class c in an image is firstly mapped to embedding vectors through learnable vocabularies.
+These box and class embeddings form a sequence.
+Since different images usually contain varying numbers of objects, the sequences are padded with [none] embeddings to achieve a fixed length.
+The sequence is then processed by a transformer encoder and later integrated into the main denoising network through cross- attention layers .
+The vocabularies and the transformer encoder are trained as components of the overall diffusion model.
+B. Conditional Diffusion Model Inversion for Discriminative Task Given the pretrained conditional diffusion models pθ(x|y), following , , we use them to perform discriminative tasks using the Bayes’ rule: arg max y pθ(y|x) = arg max y pθ(x|y)p(y).
+A theoretical issue arises: the conditional diffusion mod- els only capture the conditional likelihood pθ(x|y) without considering the prior p(y).
+In the case of a class-conditional Layout Encoder (2, 2, 97, 190, bicycle) (37, 166, 215, 228, dog)… (none, none, none, none, none)Denoising Network012…personbicycledog…nonenoneBoxClassVocabulariesEmbedding Mapping… … (2, 2, 97, 190, bicycle) (37, 166, 215, 228, dog)… (none, none, none, none, none)Embedding Mapping… … 012…personbicycledog…nonenoneBoxClassVocabulariesDenoising Network… … … … Layout Emb.
+SequenceLayout Sequence PREPRINT 4 Fig.
+3: Using trained layout-conditional image generation model and the prior layout model for object detection.
+diffusion model trained on balanced classification datasets like ImageNet-1k , it is reasonable to disregard p(y) in Eq.
+when converting the model to a “Diffusion Classifier” by calculating each class’s posterior , because the prior is a uniform distribution (i.e., the same for each possible class).
+Unfortunately, for the object detection task, such a uniform prior distribution does not hold at all.
+For example, rare layouts, such as a bicycle on top of a person or things with unusual aspect ratios, should have a relatively lower prior probability.
+Thus, p(y) could not be ignored when using Eq. to obtain diffusion detectors.
+1)
+Prior Modeling: To solve the above issue, we propose to model the underlying prior distribution of the labels in the training dataset.
+Ideally, the learned model could tell a reasonable p(y) value for any detection layout y.
+We construct a diffusion model pϕ(y) to model the prior label distribution.
+Unlike conditional image generation models, this prior model is a label generation model operating within the label space.
+Specifically for object detection, the input is a sequence of noised layout embeddings, and the model is trained to predict the added noise sequence: max ϕ log pϕ(y)
+≈ min ϕ Eϵ∼N (0,1),t (cid:2)||ϵ − ϵϕ(vθ(y)t, t)||2 2 (cid:3), as illustrated in (right).
+The embedding mapping pro- cess of the prior model uses the frozen pretrained vocabularies from the layout-conditional model, and the architecture of the denoising network here is a transformer , which is similar to the layout encoder in the layout-conditional model.
+With the learned prior and the pretrained conditional model, theoretically, we can accurately compute the maximum of Bayes’ posterior according to Eq. to create an object detector.
+Another challenge is that there are countless potential detection labels for a given test image.
+For one thing, the number of objects is undetermined.
+Moreover, even for a single object, the number of possible bounding boxes on the image increases quadratically with respect to its size.
+Therefore, a non-enumeration-based approach is needed.
+2) Optimization-based Diffusion Model Inversion: Rather than trying the countless possible predictions and then choos-
+ing the one with the highest posterior value, we propose to directly optimize the prediction y by maximizing the posterior objective.
+By substituting Eq. and into Eq. , we obtain y∗ = arg min y (cid:8)Eϵ∼N (0,1),t (cid:2)||ϵ − ϵθ(xt, t, vθ(y))||2 (cid:2)||ϵ − ϵϕ(vθ(y)t, t)||2 2 2 (cid:3) (cid:3)(cid:9), + Eϵ∼N (0,1),t where we simply add the losses of the two diffusion models.
+A practical issue is that the embedding mapping (vocabulary lookup) operation vθ(·) is not differentiable.
+Therefore, we turn to the embedding space to deploy our learnable param- eters v, and restrict them to lie in the discrete output space of vθ(·), by using the nearest embeddings in corresponding vocabularies NNvalue(v) to replace these learnable parameters v. Furthermore, during backward propagation, we copy the gradients from the replacement NNvalue(v) to the original learn- able parameters v. This discrete optimization trick enables the gradient to flow back to our learnable parameters, similar to the training of discrete autoencoders –.
+Formally, Eq. is implemented as: v∗ = arg min v (cid:8)Eϵ∼N (0,1),t + Eϵ∼N (0,1),t (cid:2)||ϵ − ϵθ(xt, t, v′)||2 (cid:2)||ϵ − ϵϕ(v′ t, t)||2 2 2 (cid:3) (cid:3)(cid:9), v′ := sg [NNvalue(v) − v] + v, where sg is the stop-gradient operator, and NN represents the nearest neighbor, using cosine distance as the default metric.
+The whole framework is illustrated in .
+After optimization, the final prediction y∗ can be obtained by finding the indices of the nearest embeddings of v∗ in the pretrained vocabularies: y∗ = NNindex(v∗).
+Layout Encoder Denoising NetworkNearest Emb. Replacement… … 012…personbicycledog…nonenoneBoxClassVocabularies… … … … gradientDenoising Network… … Layout Emb.
+Sequence PREPRINT 5 3)
+Implementation: a) Calculation of the Expectations: When learning v using Eq.
+at each step, the noises and timesteps are always sampled from the corresponding distributions, similar to the training procedure of the diffusion models.
+We update v for a number of optimization steps.
+To obtain v∗, we cannot directly compare the loss values of each update because their noise and timestep values differ.
+Therefore, we pre-saved a set of fixed noises and timesteps and use them to periodically evaluate the loss value during the optimization process.
+These values serve as a monitor for selecting the v∗. All the results reported in Section IV are obtained in this way.
+b)
+Other Details: We empirically find in our preliminary experiments that initializing the learnable embeddings v with the [none] embeddings in the frozen vocabularies works well on both classification and detection tasks.
+Thus, we leave this design unchanged.
+For the object detection task, when getting detected objects from the optimized sequence, we drop none- value-contained objects and illegal objects (i.e., those where mmax ≤ mmin or nmax ≤ nmin).
+Algorithm 1 summarizes the pseudo-code of the optimization process for the object detection task.
+Algorithm 1: DIVE algorithm for object detection Input: pretrained layout-to-image model ϵθ(xt, t, v) with embedding vocabularies vθ : y → v, pretrained prior layout model ϵϕ(vt, t), a set of timesteps T used for inversion (same between the two models), test image x, maximum optimization steps K, monitoring frequency Output: prediction y of the given image x 1 # Pre-save two sets of fixed noises for evaluation 2 Eforθ = {ϵforθ ∼ N (0, 1)}range(T ) 3
+Eforϕ = {ϵforϕ ∼ N (0, 1)}range(T ) 4 # Optimization loop 5 y = [none, none, · · · , none]; v = vθ(y) 6 monitor values = [], corresponding embs = [] 7 for k in range(K) do 8 # In-vocabulary discrete optimization v = stop gradient (NNvalue(v) − v) + v t ∼ T , ϵforθ ∼ N (0, 1), ϵforϕ ∼ N (0, 1) xt = addn(x, t, ϵforθ), vt = addn(v, t, ϵforϕ)
+L = ||ϵforθ − ϵθ(xt, t, v)||2 Update v to minimize L # Periodically evaluate the optimized v if k % monitoring frequency == 0 then monitor values.append(eval(v)) corresponding embs.append(v) 2 + ||ϵforϕ − ϵϕ(vt, t)||2 2 17 18 Function eval(v): 19 v = NNvalue(v), drop none and illegal boxes Calculate val losses over {T } like line10-12 but uses saved fixed noises in Eforθ, Eforϕ return averaged val losses 22 # Get final result 23 v∗ = corresponding embs[argmin(monitor values)] 24 return y = NNindex(v∗), drop none and illegal boxes 9 10 11 12 13 14 15 16 20 21 IV.
+EXPERIMENTS We conduct experiments in this section to assess the efficacy of the proposed Diffusion model InVErsion (DIVE) method from the following three aspects: • Performing object detection through using diffusion model only (Section IV-A).
+•
+Speeding up previous Diffusion Classifier method on image classification task (Section IV-B).
+• Providing a self-contained evaluation metric for conditional diffusion models (Section IV-C).
+A. DIVE for Object Detection In this subsection, we aim to answer the following questions to evaluate our method for the standard object detection task: •
+How does our diffusion model inversion method compare to other diffusion-model-based methods and purely discrimina- tive methods?
+•
+How do the two proposed components, prior modeling and discrete optimization, affect the final result?
+1)
+Setup: a) Dataset and Evaluation Protocol: We conduct exper- iments using the object detection dataset COCO 2017 , containing 118k training and 5k validation images.
+Although our optimization-based method has already made performing detection implementable, due to the still high compute cost of generative methods, we evaluate DIVE on a subset of 500 images.
+We report average precision (AP), a metric averaged over multiple Intersection over Union (IoU) thresholds, which is regarded as the single most important metric when evaluat- ing performance on COCO .
+Other metrics (AP at single thresholds of  and , and on objects of small, medium, and large sizes) are also reported for thoroughly analyzing our method, following the definitions in .
+b) Pretrained Layout-to-Image Diffusion Model: Since there is no publicly available pretrained layout-to-image diffu- sion model on the COCO object detection dataset1, we retrain a model using the official code from LDM .
+The denoising network adopts UNet architecture, and the layout encoder is a transformer .
+Following its implementation, we train the model in the latent space of VQGAN with a down- sampling factor of 8 (named LDM-8).
+The model is trained at an image resolution of 256 × 256, and the input layout sequence has a fixed padding length of 100 objects.
+Object coordinates are kept in integer precision, meaning there are 256 + 1 embeddings stored in the bounding box vocabulary.
+We add sequence-length learnable positional encodings to the embedded layout (box and class) sequence.
+During training, the objects in an image are randomly shuffled in different iterations since they should not have a fixed order, i.e., objects are in equivalent positions in the sequence.
+Such a model, with other designs unchanged, has a size of 363M parameters.
+We train the model over 200k iterations (∼220 epochs), taking about 5 days with 8 Nvidia A100 GPUs.
+1Some works , , – train layout-to-image models on COCO- Stuff dataset (sometimes dubbed COCO), but that dataset is not suitable for the object detection task .
+Some works , extend pretrained text-to-image models to support positional inputs, but inverting such models is not suitable for the standard detection task because they involve captions.
+PREPRINT 6 TABLE
+I: Influence of optimization step of DIVE.
+The speed is evaluated on a Nvidia 3090 GPU.
+We observe a ∼ speedup ratio if switching to a more advanced A100 GPU, as summarized in Section IV-B4.
+Optimization step Time per image AP 400 18min  1000 45min  2000 h  4000 3h  Fig.
+4: Visualization of DIVE detection results with corresponding convergence optimization steps shown below, yielded from the monitor introduced in Section III-B3.
+The maximum optimization step for all images is set as a fixed number (2000) here for simplicity.
+The average convergence step of the test set is about 960.
+Images fed to the networks are in 256 × 256 resolution and shown here in their original aspect ratios for better visualization.
+c)
+Prior Layout Diffusion Model: The prior layout dif- fusion model shares a similar architecture with the layout encoder in the layout-to-image model.
+Both are transformers, and we simply inherit the implementation, resulting in a model size of 58M.
+The differences lie in their function - in the prior model, the transformer serves as the denoising network, while in the layout-to-image model, it functions as the conditional encoding branch.
+We train the prior model over 500k iterations (∼270 epochs), taking about 3 days with 4 Nvidia 3090 GPUs.
+d) DIVE Details: We inherit the original LDM’s hyper- parameter choices in their code when using the trained LDM to optimize our embeddings, unless stated otherwise.
+Following , we use evenly spaced timesteps for improving learning and monitoring efficiency.
+The even interval is 5, thus, we have 200 different timesteps {2, 7, · · · , 997}.
+The monitor activates after a loop over these different timesteps.
+We conduct experiments with a batch size of 50, consisting of 5 steps of gradient accumulation due to the GPU memory limit.
+The learning rate is set to  with AdamW optimizer .
+We use a single Nvidia 3090 GPU to invert each image.
+The computational cost with respect to the optimization step of DIVE is discussed in the next paragraph.
+e) DIVE Optimization Step and Computational Cost: We test a group of optimization steps to assess its influence.
+Table I shows the quantitative results, where all images use the same optimization step in each trial.
+We do not observe significant AP gains when the steps exceed 2000.
+We note that the computational cost is relatively higher than common discriminative detectors since DIVE requires several times of backward propagation through the whole network to optimize the result.
+Although the computational cost of the detection task is currently not the main focus of this work, which is to make the detection task doable using pretrained frozen image generation models and check their discriminative ability, the high cost of DIVE pushes us to explore whether there is potential for reduction without compromising the detection performance.
+To this end, we check the convergence step of some im- ages and show them in together with the detection visualization results.
+It can be seen that for some “easier” test images with larger and fewer objects, the optimization process converges more quickly.
+For “harder” ones, DIVE requires more steps to converge.
+Based on this observation, we can conclude that using an adaptive optimization-step strategy would be a feasible way to reduce the overall computational cost while preserving detection performance.
+For example, we can use an early stopping strategy to halt the optimization process if the monitor value (loss) does not decrease for a number of steps.
+We further check the average convergence step of the test set, which is about 960, indicating that the early stopping method could reach a maximum of ∼ 2× speedup ratio overall.
+Currently, for simplicity, the reported DIVE results of the following experiments are obtained using a fixed 2000 steps of optimization for all images.
+2) Comparison to Discriminative Detectors: a)
+Baselines: We first compare our purely generative method to generative-discriminative-mixed methods that also leverage a pretrained image-generation diffusion model.
+Syn- thetic Data trains a discriminative detection model using synthetic training data generated from the layout-to-image model.
+Diffusion Feature uses the pretrained diffusion model to extract features, serving as the backbone in discriminative object detectors.
+These baselines are essentially discriminative approaches, and we use Faster R-CNN as their backend.
+For the Diffusion Feature method, in addition to LDM-8, we also use the text-to-image model Stable Diffusion (SD v), which is trained on a web-scale dataset much larger than COCO, serving as the feature-extraction module, following .
+We further compare with widely recognized purely discriminative object detectors Faster R-CNN and DETR , and a more recent method, DiffusionDet (DiffDet S @ Neval), that deploys the diffusion process in the proposal boxes space based on discriminative image features, where S and Neval are two hyper-parameters introduced in the paper .
+We adopt various backbones (ResNet-50 and ResNet-101 ) and optimized architectures (feature pyra- mid network (FPN) and dilated last stage (DC5) ) for these detectors.
+We use detectron2 to implement 172 steps924 steps928 steps1208 steps260 steps1052 steps1592 steps PREPRINT 7 TABLE II: Object detection on COCO validation set.
+We compare to generative-discriminative hybrid methods that also use image generation diffusion models.
+We also compare to advanced purely discriminative methods.
+T stands for time per image, which is evaluated on a Nvidia 3090 GPU.
+Method Backbone T AP AP50 AP75 APS APM APL Generative + discriminative methods: Synthetic Data Diffusion Feature LDM-8 Diffusion Feature SD 90ms  47ms  41ms  R50                Generative methods: DIVE (ours)
+LDM-8 h       Discriminative methods:  R50 Faster R-CNN 90ms   R101-FPN 29ms
+Faster R-CNN DETR  38ms  R50 R101-DC5 47ms    DETR DiffDet (1@300) R101-FPN 37ms    DiffDet (4@500) R101-FPN 41ms                         Faster R-CNN and DiffDet baselines and use the official code to implement DETR baselines.
+The Faster R-CNN and DiffDet models are trained using the 3× schedule (∼37 epochs), which is the typical setting in detectron2.
+DETR models are trained for over 200 epochs, as transformer-based architectures generally require longer training schedules.
+These discrim- inative detectors are trained at a resolution of 256 × 256, using random cropping and horizontal flip augmentations, and are trained from scratch, consistent with the layout-to-image diffusion model setup.
+Although it is difficult to make truly fair comparisons due to differences in architectures and training costs, our comparisons aim to thoroughly evaluate the inverted diffusion model regarding its strengths and weaknesses.
+b) Results: Table II shows the comparison results2.
+Com- pared to other generative-discriminative-mixed methods that use the same pretrained diffusion model, DIVE outperforms Synthetic Data and is competitive with Diffusion Feature (LDM-8).
+The corresponding visualization results of these methods are displayed in the left part of .
+The Diffusion Feature baseline equipped with the SD backbone performs better than our DIVE and other LDM-8-based meth- ods.
+This is because the text-to-image SD was pretrained on a larger dataset than LDM-8’s COCO, incorporating richer prior knowledge into the network.
+Compared to purely discriminative detectors, DIVE achieves competitive results against the basic discriminative detector Faster R-CNN R50, but falls behind stronger detectors that use deeper backbones or modern architectures.
+Notably, to the best of our knowledge, we are the first to show that using a frozen pretrained image generation model can successfully tackle the challenging object detection task and achieve competitive performance compared to discriminative methods.
+Furthermore, we conduct a deeper analysis of DIVE by comparing it to Faster R-CNN R50, which achieves a compet- itive average performance.
+An interesting phenomenon is that, although falling behind Faster R-CNN R50 under AP50, DIVE 2The relatively lower reproduced results of discriminative detectors is because we use a smaller image size of 256 × 256, which is common for generative models, for fair comparisons.
+TABLE III:
+Ablation studies of DIVE on the object detection task.
+Method DIVE w/o Prior Model w/o In-vocabulary Opt.
+w/o both Decoupling classes and boxes AP      AP50 AP75           performs better under AP75 and slightly wins overall AP.
+This phenomenon indicates that DIVE has higher precision in true positive bounding box predictions while leaving some objects undetected.
+These undetected objects are usually small and medium objects, as indicated by poorer APS and APM values.
+Not coincidentally, the Synthetic Data and Diffusion Feature baselines also suffer from this issue.
+We conjecture that this is because LDM and SD are trained in the latent space, which has a downsampling factor of 8.
+In the compressed modeling space, smaller objects are resized to be even smaller.
+3)
+Ablation Study: In this subsection, we study the impact of the proposed components in our method.
+Besides ablating the prior model, we also study the impact if the discrete optimization trick were not used, i.e., using Eq.
+as the objective without the in-vocabulary discrete optimization trick from Eq.
+(v′ is v in this case).
+We conduct the ablation studies on a smaller subset of 100 images.
+It can be seen from Table III that quantitatively, both components are important to the overall performance.
+The qualitative results in tell more about the reason, and we analyze them below.
+a)
+Prior Model: From , it can be seen that if we do not integrate the prior model into the inversion process, the inverted sequences (predictions) contain many redundant objects and illegal boxes.
+The synthetic images tell the reason.
+These redundant objects do not hurt the generation process of the conditional model (e.g., the first two lines), which is an interesting phenomenon similar to the findings in the literature of attacking text-to-image diffusion models – .
+However, these redundancies will negatively affect the detection performance, resulting in many false positives.
+Only if the prior model tells the optimization process about which types of layouts are more common could we achieve better detection results (DIVE default).
+b)
+In-vocabulary Discrete Optimization: In the case of continuous optimization in the embedding space (i.e., w/o using Eq. ), the optimization process only needs to re- construct (learn the content of) the given image.
+This case can be analogized to Textual Inversion , which learns to inject new words for the given images into a pretrained text- to-image model without considering new-word semantics.
+For our situation, if we attempt to decode to see what these “new words” are (by finding nearest neighbors in the vocabulary), as shown in right most, sometimes, we could get correct classes (e.g., the first line “person”), but in many other cases, classes are difficult to interpret (e.g., the last line “cow”), and boxes are hard to complete, even with the help from the prior model.
+This is because the reconstruction purpose dominates the optimization (best reconstruction performance in ), leaving words’ interpretability untouched.
+PREPRINT 8 Fig.
+5: Visualization of the object detection results.
+Besides comparing DIVE with other generative baselines that use the same pretrained diffusion model as ours, we also show the influences of the prior model and in-vocabulary discrete optimization method.
+For these ablations, we show at the bottom some additional dropped objects (none-value-contained and illegal boxes) in the inverted sequence for clearer visualization of different methods’ behavior.
+And on the right, we show generated images by feeding the full inverted sequence to the pretrained layout-to-image model.
+Zoom in for better visualization.
+c) Decoupling classes and bounding boxes: Considering that the trained prior model may overfit the training data distri- bution, this ablation decouples the classes and bounding boxes in the sequence.
+Specifically, we train two prior distribution models separately, one for classes and the other for boxes, and use them together during inversion.
+However, note that this strategy may not be a natural and proper way to model the prior layout distribution, as it separates the relationships between classes and boxes.
+For example, it cannot distinguish “a bicycle on a person” and “a person on a bicycle” with the same box layouts.
+Nevertheless, it can still learn what boxes are legal compared to not using any prior models.
+The last line of Table III presents the result.
+It falls between the results of the default (un-decoupling) method and the “w/o Prior Model” method, which aligns with the above hypothesis.
+B. DIVE for Image Classification In this subsection, we compare our optimization-based method with the previous enumeration-based method Diffu- sion Classifier on the image classification task regarding accuracy and speed.
+1) Setup: Following the setup in , we use pretrained Diffusion Transformer (DiT) as the conditional diffusion model to be inverted, which is a class-conditional model trained on ImageNet-1k .
+Same as the setup in for a fair comparison, we use DiT-XL/2 at the resolution 256 × 256 and evaluate on a subset of 2000 images (2 images per class).
+Given that ImageNet-1k’s label distribution is uniform, the prior modeling model is unnecessary in this case.
+The number of different timesteps for DIVE here is set to 250 to align with TABLE IV: Image classification on ImageNet-1k.
+The speeds are tested on an A100 GPU.
+The accuracy of Diffusion Classifier is from , and its speed is tested using the official code.
+Method Time per image Accuracy Generative + discriminative methods: Synthetic Data Diffusion Feature 9 ms 31 ms Generative methods: Diffusion Classifier DIVE (ours) ∼1100 s 80 s Discriminative methods: AlexNet ResNet-18 ResNet-50 ResNeXt101 ViT-L/32 ViT-B/16 Swin-B 8 ms 8 ms 9 ms 15 ms 12 ms 9 ms 21 ms            the Diffusion Classier.
+We optimize our embeddings over 200 steps with a batch size of 25, taking about 80 seconds to invert an image on a single A100 GPU.
+2) Results: Table IV shows the comparison results.
+We compare to Diffusion Classifier , discriminative classi- fiers , –, and generative-discriminative hybrid methods Synthetic Data and Diffusion Feature.
+Syn- thetic Data trains a standard ResNet-50 using a training dataset generated by DiT-XL/2.
+Diffusion Feature, following the base- line design in , uses the pretrained DiT-XL/2 network as the feature extractor and trains a modified ResNet-18 on top of the features using the ImageNet real dataset.
+It can be seen from w/o In-voc.
+Opt.
+None boxes: (none, 57, 175, 197, person), (none, 36, 208, 175, laptop), ...w/o Prior ModelDIVEGround TruthSynthetic DataIllegal boxes: (254, 165, 209, 75, person), (256, 165, 2, 254, cup), ...
+None boxes: (0, 142, none, 256, person), ...Diffusion Feat.
+Predictionw/o In-voc.
+Opt.w/o Prior ModelDIVEGenerated Image Using The Full Inverted SequenceNone boxes: (181, none, none, 252, train), (none, 168, none, none, microwave), ...Illegal boxes: (242, 68, 3, 2, bicycle), (215, 170, 178, 152, none), ...
+None boxes: (none, none, 205, none, none), ...
+None boxes: (162, 111, none, 197, cow), (none, none, none, none, airplane), ...Illegal boxes: (171, 102, 43, 207, kite), (116, 155, 69, 74, person), ...
+None boxes: (none, 109, none, none, none), ...
+PREPRINT 9 Table IV that DIVE achieves nearly the same accuracy as the Diffusion Classifier.
+This result verifies the effectiveness of the proposed optimization-based method for purely generation- based image classification, representing an ideal alternative to the enumeration-based method.
+Notably, our optimization-based method achieves a ∼ 14× speedup compared to the enumeration method while maintain- ing accuracy.
+This is because the enumeration method needs to try all possible predictions of the test dataset, which causes a significant computational cost.
+Compared to discriminative models that directly map the test image to a prediction label, generative methods still fall behind in efficiency due to the cost of exploring possible labels.
+Potential directions for further accelerating these generative methods include reducing the exploration steps or parameters of the pretrained model.
+To determine the maximum speedup ratio achievable by using an early stopping strategy to halt DIVE’s optimization process, we check the convergence steps of test images here, as done in the previous detection section IV-A1e.
+We find that the average convergence step of the test set here is about 106 (max is 200), indicating that reducing the exploration steps could further achieve a maximum of ∼ 2× speedup overall.
+3)
+Ablation of In-vocabulary Discrete Optimization: We ablate the in-vocabulary optimization method here again to verify its effectiveness.
+Without this optimization component, we achieve a lower accuracy of , indicating its importance for the optimization-based approach.
+4) Influence of GPU:
+Readers may note that we used different GPUs for the previous detection and classification experiments.
+There are no other reasons for this but only to schedule our limited resources more efficiently.
+Specifically, we tested the speeds of using different GPUs for different tasks before conducting our formal experiments.
+As summarized in Table V, we observed that switching from 3090 to A100 achieves a larger speedup ratio on the classification task than on the detection task, leading to the previous choices.
+Here, we conduct repeated experiments to assess task performances influenced by switching GPUs.
+Table V shows the results, where the detection experiments are conducted at the ablation study’s experimental scale (c.f. Table III).
+It can be seen that the detection AP and classification accuracy fluctuate slightly.
+C. DIVE for Conditional Diffusion Model Evaluation Following , , we use our proposed DIVE to evaluate different conditional diffusion models from the perspective of discriminative ability.
+While using DIVE as a general evaluation metric for generative models may be controversial - not applicable to non-likelihood-based models like GANs - it has the advantage of not relying on external models such as the commonly used ImageNet-pretrained InceptionV3 for computing FID .
+Nevertheless, the main aim of this subsection is to see whether the discriminative ability of DIVE aligns with other widely used metrics for evaluating generative models.
+1)
+Setup: We evaluate both types of conditional diffusion models mentioned earlier.
+For class-conditional models, we compare DiT-XL/2 with LDM-4 , where the former, TABLE V: Influence of GPU on different tasks.
+Task GPU Time per image AP / Acc Detection Classification 3090 A100 3090 A100 90 min 50 min 240 s 80 s     TABLE VI:
+Comparing conditional diffusion models with differ- ent evaluation metrics.
+Accuracy and AP are used for DIVE metrics, respectively.
+Other numbers in table (a) are from .
+Prec. stands for Precision.
+(a) Comparing class-conditional models Model #Params FID↓ IS↑ Prec.↑ Recall↑ DIVE↑
+LDM-4 DiT-XL/2 400M  675M          (b) Comparing layout-conditional models
+Model #Params FID↓ Prec.↑ Recall↑ DIVE↑
+LDM-8-S LDM-8 65M  363M        used in the previous subsection, is based on the transformer architecture , while the latter is based on the convolu- tional UNet architecture .
+For layout-conditional models, we compare the one used in Section IV-A (LDM-8) with another smaller LDM (LDM-8-S) trained ourselves.
+For other evaluation metrics compared, we use Fr´echet Inception Dis- tance (FID) , Inception Score (IS) , and Preci- sion/Recall .
+2) Results: The results are presented in Table VI.
+It can be observed that the results from our discriminative metric align with most other metrics, such as FID, which assesses distribution similarity between real and generated images.
+An exception occurs at DIVE vs. Precision in Table VI(a).
+This suggests that a model exhibiting greater generative diversity (high Recall) rather than better image realism (high Precision) may have a stronger discriminative ability (high DIVE).
+V. CONCLUSION In this paper, we proposed an optimization-based approach to invert conditional diffusion models to produce discrimina- tive labels under the framework of Bayes’ rule.
+We empirically show that the proposed optimization-based approach is much faster than the previous enumeration-based method in the image classification task, and makes it feasible to use purely pretrained generative models for accomplishing the more com- plex object detection task.
+We hope that the conclusion of this paper could help recognize the internal discriminative ability of pretrained image generation models.
+Future research could further accelerate the proposed optimization-based approach or extend it to more complex dense tasks, such as semantic seg- mentation.
+However, note that simply extending the proposed approach to dense tasks would create a large optimization space, and the contribution of a single conditional pixel to the final objective is relatively small, which may be problematic and needs to be addressed.
+Adding some regularization terms might offer a feasible solution.
+PREPRINT 10

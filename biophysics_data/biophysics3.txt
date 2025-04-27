@@ -1,0 +1,1296 @@
+5
+2
+0
+2
+
+r
+p
+A
+4
+
+]
+t
+f
+o
+s
+.
+t
+a
+m
+-
+d
+n
+o
+c
+[
+
+1
+v
+0
+0
+2
+3
+0
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+The strain-stiffening critical exponents in polymer networks and their universality
+
+Zibin Zhang, Eran Bouchbinder2, and Edan Lerner1
+1Institute for Theoretical Physics, University of Amsterdam,
+Science Park 904, 1098 XH Amsterdam, the Netherlands
+2Chemical and Biological Physics Department, Weizmann Institute of Science, Rehovot 7610001, Israel
+
+Disordered athermal biopolymer materials, such as collagen networks that constitute a major
+component in extracellular matrices and various connective tissues, are initially soft and compliant
+but stiffen dramatically under strain. Such network materials are topologically sub-isostatic and
+feature strong rigidity scale separation between the bending and stretching response of the con-
+stituent polymer fibers. Recently, a comprehensive scaling theory of the athermal strain-stiffening
+phase transition has been developed, providing predictions for all critical exponents characterising
+the transition in terms of the distance to the critical strain and of the small rigidity scales ratio.
+Here, we employ large-scale computer simulations, at and away from criticality, to test the analytic
+predictions. We find that all numerical critical exponents are in quantitative agreement with the
+analytically-predicted ones. Moreover, we find that all predicted exponents remain valid whether
+the driving strain is shear, i.e., volume-preserving, or dilation, and independent of the degree of the
+network’s sub-isostaticity, thus establishing the universality of the strain-stiffening phase transition
+with respect to the symmetry of the driving strain and the network’s topology.
+
+I.
+
+Introduction
+
+and hence are of prime importance.
+
+Natural and manmade network materials, composed
+of interacting fibers/filaments, are widespread [1]. These
+materials achieve quite remarkable mechanical properties
+and functionalities with relatively low volume fractions,
+i.e., without approaching the space-filling limit. The lat-
+ter is particularly important in living systems, where nat-
+urally emerging biomaterials avoid the high costs associ-
+ated with protein-based self-assembly.
+In many cases,
+network materials are initially soft and compliant, but
+stiffen dramatically in response to mechanical strain [2–
+5]. That is, their elastic moduli increase by several orders
+of magnitude over rather narrow intervals of strain, a
+generic phenomenon termed strain-stiffening, see Fig. 1.
+Consider, for example, tissues such as skin, which are soft
+in their undeformed state, but stiffen significantly under
+strain to avoid damage [1, 2].
+In a biological context,
+strain-stiffening is not only important for self-protection,
+but also for cell-cell communication, cell fate and mor-
+phology, and tissue development [6–10].
+
+The vast majority of network materials that feature
+a strain-stiffening transition are intrinsically disordered.
+Among these, one can distinguish between disordered
+networks composed of semiflexible polymers, where sig-
+nificant thermal bending fluctuations — hence entropic
+effects — play important roles, and disordered athermal
+polymer networks, where thermal fluctuations are neg-
+ligible. In the context of synthetic/manmade materials,
+disordered athermal networks include cellulose and poly-
+meric fiber networks in paper, nonwoven fabrics and var-
+ious textiles [1]. A prominent example in a biological
+context is that of collagen networks, which are predomi-
+nantly athermal [1, 4]. Disordered collagen networks are
+present everywhere in our bodies [1, 4], being a major
+component in extracellular matrices and in various con-
+nective tissues (e.g., cartilage, tendons and ligaments),
+
+In addition to their disordered nature, athermal poly-
+mer networks that exhibit a strain-stiffening transition
+are characterized by two other generic features; first,
+these disordered networks are topologically sub-isostatic,
+i.e., their degree of connectivity (average network coordi-
+nation) is below the Maxwell threshold [11]. This implies
+that such networks can be deformed with no energetic
+cost, i.e., without involving any stretching or compression
+of the constituent polymers to leading order, due to the
+existence of zero (floppy) modes [12]. Consequently, from
+a topological perspective, these networks are floppy, fea-
+turing vanishing elastic moduli. However, realistic ather-
+mal polymer networks feature small, yet finite, elastic
+moduli in their unstrained state, which imply that they
+are stabilized by additional weak interactions on top of
+polymer fibers stretching/compression.
+
+Indeed, the second generic property of such systems
+is that the polymer fibers feature finite bending rigidity,
+preventing them from being floppy, but rather posses a
+small elastic resistance in the absence of strain. As the
+resistance of the polymer fibers to elongation/shortening
+(stretching/compression) is much larger than to bend-
+ing, these networks generically exhibit strong rigid-
+ity/stiffness scale separation. Understanding how these
+generic features endow athermal polymer networks with
+intriguing universal properties is an important challenge.
+
+Strain-stiffening in athermal polymer networks has
+been studied through various experimental, theoretical
+and computational approaches [2–4, 6, 14–28]. Progress
+has been made in a series of important works that iden-
+tified and highlighted the critical nature of the strain-
+stiffening transition [4, 13]. That is, these works indi-
+cated that strain-stiffening in athermal polymer networks
+is a strain-driven phase transition. Very recently, build-
+ing on this physical picture, a comprehensive scaling the-
+ory of the transition has been developed [29], offering
+
+ 
+ 
+ 
+ 
+ 
+ 
+2
+
+nectivity (bonds per node) z < zc = 2 ¯d, where the lat-
+ter is the Maxwell rigidity criterion in ¯d spatial dimen-
+sions [11]. That is, these networks are sub-isostatic, char-
+acterized by δz ≡ zc − z > 0. The bonds feature stretch-
+ing/compression rigidity that is much larger than their
+bending rigidity, giving rise to a dimensionless rigidity
+scales (bending-to-stretching) ratio κ ≪ 1 (the latter in-
+volves a lengthscale, the average bond length, see Ap-
+pendix). The networks are driven by an applied strain
+tensor that is parameterized by an amplitude ϵ and whose
+symmetry (e.g., shear vs. dilation) remains unspecified
+for now. In the absence of bending interactions, κ = 0,
+sub-isotatic networks undergo a sharp rigidity transition
+at a critical strain ϵc, upon which the elastic modulus
+K associated with ϵ jumps discontinuously from zero to
+a finite value [21, 22]. In the presence of weak bending
+interactions, κ ≪ 1, such networks undergo a strong —
+yet continuous — strain-stiffening transition as a func-
+tion of ϵ, see Fig. 1. The challenge is to understand this
+driven phase transition in terms of δz, κ and ∆ϵ ≡ ϵc − ϵ,
+and to elucidate its dependence on the imposed straining
+symmetry.
+
+The strain-stiffening transition is manifested through
+various physical observables. At the macroscopic scale,
+the network is characterized by its energy U and its
+derivatives with respect to the strain ϵ, most notably the
+stress σ (first derivative) and the differential modulus K
+(second derivative), see Appendix for explicit definitions.
+The behavior of K(ϵ, κ) (at a given δz) is illustrated in
+Fig. 1 using experimental data for a reconstituted col-
+lagen network [13]. It is observed that an initially soft
+network dominated by bending interactions, K(ϵ, κ) ∼ κ
+for ϵ ≪ ϵc, undergoes power-law, apparently singular stiff-
+ening with increasing strain ϵ for ϵc − ϵ ≫ δϵ∗(κ), where
+δϵ∗(κ) ≪ ϵc is a characteristic strain scale that quantifies
+the proximity to the critical strain ϵc. For ϵc −ϵ ≪ δϵ∗(κ),
+i.e., near the critical point, the apparently singular stiff-
+In addition to these macroscopic
+ening is regularized.
+observables, the network is also characterized by its in-
+ternal deformation and state of disorder, which give rise
+to the macroscopic behaviors.
+
+Very recently, a comprehensive scaling theory of the
+strain-stiffening transition has been developed, offering
+analytic predictions for all of the above-mentioned phys-
+ical observables [29]. Here, we briefly discuss the concep-
+tual framework underlying the theory and its main pre-
+dictions. As explained above, a central quantity is the
+network’s energy U (ϵ, κ). The theory first focuses on the
+critical state, ϵ = ϵc, and obtains U (ϵc, κ) as follows; the
+entire network is decomposed into a stiff sub-network,
+characterized by the stiff stretching/compression inter-
+actions, and a soft sub-network, characterized by the
+soft/weak bending interactions, that are coupled at the
+network’s nodes. The basic idea is to use the smallness
+of κ ≪ 1 to derive the scaling properties of U (ϵc, κ) by
+constructing it in two steps. First, the stiff sub-network
+is strained to the critical strain ϵ = ϵc, where a finite elas-
+tic modulus emerges, yet featuring Ustiff(ϵc, κ = 0) = 0.
+
+FIG. 1. The strain-stiffening transition in athermal
+polymer networks. Experimental data (circles) obtained
+for reconstituted collagen networks under shear (extracted
+from the dataset in Fig. 2E of [13] that corresponds to a pro-
+tein concentration of 0.90 mg/mL and a polymerization tem-
+perature of 37◦ C). Shown is the differential elastic modulus,
+denoted by K, as a function of the applied strain, denoted
+by ϵ, on a double-logarithmic scale. In the absence of strain,
+or when ϵ is very small, the network is soft and its modulus
+is proportional to κ (horizontal dashed line), a dimensionless
+measure of the small bending-to-stretching ratio of individ-
+ual polymer fibers. As ϵ is increased, the network undergoes
+dramatic power-law stiffening in terms of the strain distance
+from a critical strain ϵc (α = 3/2 is theoretically predicted, see
+Eq. (6)). The critical strain ϵc (vertical dashed-dotted line)
+is accompanied by a characteristic strain scale δϵ∗(κ) (double
+arrow), which follows a scaling relation with κ (β = 2/3 is
+theoretically predicted, see Eq. (5)). (inset) A zoom in on a
+two-dimensional computer network, composed of nodes and
+bonds (see details in the text), driven to the critical strain in
+the absence of bending energy (κ = 0). Here, as in the ex-
+perimental data in the main panel, shear straining is applied,
+indicated by the two oppositely oriented black arrows. Bonds
+in blue/green experience stretching/compression, where the
+bond’s thickness represents the magnitude. Shearing-induced
+anisotropy is evident.
+
+analytic predictions for all the scaling exponents charac-
+terizing it. In this work, we numerically test the recently
+predicted strain-stiffening scaling relations, the values of
+the critical exponents and their degree of universality.
+We find great quantitative agreement with all analytic
+predictions, and also demonstrate their universality with
+respect to the symmetry of the driving strain and the
+degree of iso-staticity.
+
+II. Theoretical predictions
+
+We considered disordered elastic networks composed
+of nodes connected by bonds, representing the polymer
+fibers, whose topology is quantified by the average con-
+
+10-210-1100100101102Second, the soft sub-network is added at ϵ = ϵc, giving
+rise to nodal displacements of characteristic size u∗, ac-
+companied by Ustiff(ϵc, κ) > 0 and Usoft(ϵc, κ) > 0.
+
+The introduction of the soft sub-network gives rise to
+net/resultant nodal forces of scale Fsoft ∼ κ, which are
+balanced by the nodal forces generated by the stiff sub-
+network. The crucial point is that the stiff sub-network’s
+response to the perturbation introduced by the soft sub-
+network is dominated by a fourth-order anharmonicity,
+Ustiff(ϵc, κ) ∼ u4, where u is a characteristic nodal dis-
+placement. The origin of this striking result is that while
+some of the zero (floppy) modes of the stiff sub-network
+are destroyed at the critical strain ϵc, an extensive num-
+ber of them persist, i.e., they are uncoupled to the strain,
+and dominate the response to the isotropic perturbation
+introduced by the soft sub-network. The energy of these
+zero modes vanishes to order u2. The cubic contribution
+∼ u3 vanishes to ensure stability and hence the quar-
+tic contribution dominates. Mechanical equilibrium re-
+quires Fstiff ∼ u3 = Fsoft ∼ k, implying that the nodal dis-
+placements induced by the introduction of the soft sub-
+network satisfy
+
+u∗(κ) ∼ κ1/3 .
+
+(1)
+
+The fundamental result in Eq. (1) has major implica-
+tions. First, it implies that Ustiff(ϵc, κ) ∼ u4
+∗ ∼ κ4/3. Since
+the soft sub-network undergoes a κ-independent defor-
+mation for sufficiently small κ, it satisfies Usoft(ϵc, κ) ∼ κ,
+which implies
+
+U (ϵc, κ) = Ustiff(ϵc, κ) + Usoft(ϵc, κ) ∼ Usoft(ϵc, κ) ∼ κ .
+
+For the stress, one obtains [29]
+
+σ(ϵc, κ) ∼ κ2/3 ,
+
+(2)
+
+(3)
+
+which is dominated by bond stretching/compression,
+fstiff ≫ fsoft ∼ κ (where bond force f should be distin-
+guished from net/resultant nodal forces, which satisfy
+Fstiff = Fsoft), in striking contrast to the energy in Eq. (2),
+which is dominated by bond bending. Yet another impli-
+cation of Eq. (1) is dK(ϵc, κ)/dϵ ∼ κ−2/3 [29], which shows
+how κ > 0 regularizes the singular behavior of the differ-
+ential modulus K as the critical strain ϵc is approached.
+The behavior of dK(ϵc, κ)/dϵ is intimately related to
+the disordered nature of the elastic networks under dis-
+cussion. Another fundamental manifestation of the dis-
+order of these systems is that their deformation is highly
+non-affine. That is, the deformation of such disor-
+dered systems does not follow the globally applied strain,
+but rather reveals additional ‘relaxational deformation’
+termed non-affine displacements of characteristic magni-
+tude un.a., which satisfies [29]
+
+n.a.(ϵc, κ) ∼ κ−2/3 .
+u2
+
+(4)
+
+3
+
+dK(ϵc, κ)/dϵ ∼ κ−2/3 immediately implies that K(ϵ, κ) −
+K(ϵc) ∼ κ−2/3(ϵ − ϵc) for ϵ sufficiently close to ϵc.
+
+To obtain predictions away from the critical strain, it is
+essential to quantify what ‘sufficiently close to ϵc’ actually
+means. The theory of [29] suggests that there exists a
+characteristic strain scale δϵ∗(κ) around ϵc, which allows
+to quantify the proximity to ϵc and satisfies
+
+δϵ∗(κ) ∼ κ2/3 ,
+
+(5)
+
+see Fig. 1. The existence of a characteristic κ-dependent
+strain scale δϵ∗(κ) near ϵc allows to construct a scaling
+theory also away from the critical point in terms of the
+scaled variable (ϵc − ϵ)/δϵ∗(κ). This analysis gave rise to
+the following predictions [29]
+
+K(ϵ, κ) ∼ κ (ϵc − ϵ)−3/2
+n.a.(ϵ, κ) ∼ (ϵc − ϵ)−1
+u2
+
+for
+for
+
+ϵc − ϵ ≫ δϵ∗(κ) , (6)
+ϵc − ϵ ≫ δϵ∗(κ) . (7)
+
+The analytic predictions in Eqs. (1)-(7) provide a com-
+prehensive scaling theory of the strain-stiffening transi-
+tion, including all of the major critical exponents. The
+theory also reveals the singular perturbation nature of
+the critical state, as manifested in various divergencies
+as κ → 0 (e.g., the susceptibility du∗(κ)/dκ diverges as
+κ−2/3 in this limit, see also Appendix). The derivation
+leading to the above predictions makes no reference to
+space dimensionality, to the symmetry of the strain ten-
+sor and to δz, and hence predicts that the latter appear
+only affect the pre-factors. Consequently, the theory pre-
+dicts the scaling relations and critical exponents listed
+above are universal with respect to space dimensionality
+¯d, the symmetry of the strain tensor and the network’s
+topology quantified by δz.
+
+III. Numerical validation of the critical exponents
+under shear straining
+
+The analytic predictions in Eqs. (1)-(7) call for numer-
+ical validation. Some preliminary support to the pre-
+dictions in Eqs. (6)-(7) is obtained through comparison
+to numerical results available in the literature (see [29],
+in particular Table 1 therein). This agreement not only
+provides support to the values of the scaling exponents
+in Eqs. (6)-(7), but also supports the validity the two-
+step procedure and the decomposition of the system into
+interacting stiff and soft sub-networks, where the latter
+is viewed as a (singular) perturbation on top of the for-
+mer. This is the case because the results available in the
+literature were obtained by numerically straining κ > 0
+disordered networks, without invoking the two-step pro-
+cedure and the aforementioned sub-networks decompo-
+sition. Yet, a direct and comprehensive test of the pre-
+dictions in Eqs. (1)-(4) at criticality, and of Eqs. (5)-(7),
+away from criticality, are currently missing.
+
+Equations (1)-(4) offer predictions for the κ dependence
+of basic quantities at the critical strain ϵc. The prediction
+
+Numerically testing the analytic prediction is highly
+challenging, especially at criticality. The reason is that
+
+4
+
+FIG. 2. Numerical validation of the strain-stiffening critical exponents under shear. The physical quantities
+theoretically predicted in Eqs. (1)-(4) are calculated in 2D computer simulations of disordered elastic networks with δz = 0.5
+(see text and Appendix for details) under shear strain γ (see inset in panel(a)) and plotted as a function of κ at the critical
+strain-stiffening state γc. (a) The characteristic nodal displacement u∗(γc, κ). (b) The energies Ustiff(γc, κ) and Usoft(γc, κ) of
+the stiff and soft sub-networks, respectively. (c) The shear stress σ(γc, κ). (d) The non-affine displacements squared u2
+n.a.(γc, κ).
+The values of the critical exponents, indicated by the power-law triangles, are all in excellent quantitative agreement with the
+analytic predictions in Eqs. (1)-(4).
+
+as discussed above. Moreover, the strong rigidity scale
+separation implied by the smallness of κ poses another
+challenge. We overcome these difficulties by performing
+large-scale computer simulations that realize the same
+two-step procedure invoked in the theoretical deriva-
+tion [29].
+
+In Fig. 2, we numerically test the predictions in
+Eqs. (1)-(4) for the critical strain-stiffening transition in
+2D ( ¯d = 2) under shear straining. That is, the applied
+strain tensor corresponds to simple shear deformation
+(see inset in Fig. 2a and Appendix), which is parame-
+terized by a strain amplitude γ. The presented results
+were obtained for disordered networks of N = 6400 nodes
+with δz = 0.5, averaged over an ensemble of a few tens
+of independent realizations of the disorder. Results at
+the critical strain γc are presented for the characteris-
+tic nodal displacement u∗(κ) in panel (a), for the ener-
+gies Ustiff(ϵc, κ) and Usoft(ϵc, κ) of the stiff and soft sub-
+networks, respectively, in panel (b), for the shear stress
+σ(ϵc, κ) in panel (c) and for the non-affine displacements
+squared u2
+n.a.(ϵc, κ) in panel (d). The κ dependence of all
+of these quantities are in great quantitative agreement
+with the analytic predictions in Eqs. (1)-(4), for suffi-
+ciently small κ.
+
+We then set out to test the prediction for the charac-
+teristic strain scale in Eq. (5), applied to shear straining,
+i.e., for δγ∗(κ). The most natural way to achieve this is
+through testing Eqs. (5)-(7), predicted to be valid away
+from criticality, i.e., for γc − γ ≫ δγ∗(κ). The reason
+for this is that the predictions in Eqs. (6)-(7) involve the
+rescaled variable ∆γ/δγ∗(κ) ≡ (γc−γ)/δγ∗(κ). In Fig. 3a,
+we present results for the differential shear modulus G —
+which is the relevant response quantity coupled to γ (i.e.,
+the relevant K in Eq. (6) is G) — as a function of ∆γ
+for various κ values (see legend). These results were ob-
+tained by bringing the networks to the critical state at γc
+
+FIG. 3. Numerical validation of the characteristic
+strain scale near the critical strain and of the strain-
+stiffening power-law scaling relations away from crit-
+icality under shear. Numerical tests of the predictions in
+Eqs. (5)-(7) under shear with δz = 0.5. (a) The differential
+shear modulus G(∆γ, κ) vs. ∆γ = γc − γ for various κ val-
+ues (see legend). (b) The non-affine displacements squared
+u2
+n.a.(∆γ, κ) for various κ values (see legend). (c) The same
+as panel (a), but with a rescaled ∆γ/κ2/3 x-axis, according to
+the prediction δϵ∗(κ) ∼ κ2/3 in Eq. (5) for the characteristic
+strain scale near the critical strain. Excellent data collapse
+for ∆γ/κ2/3 ≫ 1 is observed (note the power-law triangle),
+(d) The same as panel (b), but
+as predicted by Eq. (6).
+for rescaled x- and y-axes, as indicated. Excellent data col-
+lapse is observed (note the power-law triangle), as predicted
+by Eqs. (4), (5) and (7).
+
+at ϵc the network’s energy is vanishingly small and its
+landscape is flat, dominated by quartic anharmonicity,
+
+10-710-510-310-210-11310-710-510-310-1010-810-610-4113410-710-510-310-510-410-32310-710-510-310010110210310423(a)(b)(c)(d)10-610-410-210010-510-310-13210-310-110110310-510-310-13210-610-410-21001001021041110-310-110110310-310-210-111(a)(b)(c)(d)5
+
+FIG. 4. Numerical validation of the strain-stiffening critical exponents under dilation and universality with
+respect to δz. The same as Fig. 2, but for dilation quantified by the volumetric strain amplitude η (see inset in panel (a)) and
+two values of δz (see legend). Note that all quantities are computed at the critical strain-stiffening strain ηc and that in panel
+(c) the hydrostatic tension −p(ηc, κ) is plotted. The values of the critical exponents, indicated by the power-law triangles, are
+all in excellent quantitative agreement with the analytic predictions in Eqs. (1)-(4).
+
+following the two-step procedure and then reducing the
+strain γ (back-straining) to achieve the desired ∆γ val-
+ues. Equations (5)-(6) predict together that the different
+G curves of Fig. 3a would collapse on a single power-
+law curve with a −3/2 exponent for ∆γ/κ2/3 ≫ 1, once
+plotted against the rescaled variable ∆γ/κ2/3. This is
+done in Fig. 3c, revealing excellent agreement with the
+prediction, thus proving strong support to Eqs. (5)-(6).
+A similar procedure can be followed to test the predic-
+tions in Eqs. (5) and (7). To that aim, we plot u2
+n.a. as
+a function of ∆γ for various κ values in Fig. 3b. Equa-
+tions (4), (5) and (7) then predict that replotting these
+n.a. against the rescaled variable ∆γ/κ2/3
+curves as κ2/3 u2
+would result in a collapse onto a single curve, featuring
+a constant for ∆γ/κ2/3 ≪ 1 and a power-law with a −1
+exponent for ∆γ/κ2/3 ≫ 1. Such a replotting, presented
+in Fig. 3d, reveals excellent agreement with the predic-
+tions, and with other simulational results [22]. Note that
+a series of works [20, 24–27, 30] persistently predicted
+n.a. ∼ (∆γ)−3/2, which is inconsistent with our findings.
+u2
+Taken together, Figs. 2-3 provide strong support to all of
+the analytic strain-stiffening predictions in Eqs. (1)-(7)
+under shear straining.
+
+IV. Universality with respect to the network’s
+topology and the symmetry of the driving strain
+
+As mentioned above, the predictions in Eqs. (1)-(7)
+are expected to be independent of the symmetry of the
+strain tensor and the network’s topology quantified by
+δz.
+In the previous section, the predictions have been
+verified under shear straining for a single value of δz.
+Our goal here is to consider a different symmetry of the
+applied strain, specifically dilatational straining, and to
+vary δz as well. Dilatational strains are particularly in-
+teresting, not just because they are very different from
+volume-preserving shear strains, but also because recent
+
+work [30] suggested that strain-stiffening critical expo-
+nents might differ between shear and dilation.
+
+In Fig. 4, we numerically test the predictions in
+Eqs. (1)-(4) for the critical strain-stiffening transition
+in 2D ( ¯d = 2) under dilatational (volumetric) straining.
+That is, the applied strain tensor corresponds to pure
+dilatational deformation (see inset in Fig. 4a and Ap-
+pendix), which is parameterized by a strain amplitude
+η. The presented results were obtained for disordered
+networks of N = 6400 nodes with two δz values (see leg-
+end), averaged over an ensemble of a few tens of indepen-
+dent realizations of the disorder. The results presented
+in Fig. 4 for the various observables at the critical strain
+ηc follow the same format of Fig. 2, except that the hy-
+drostatic tension −p(κ) — which is the relevant stress
+component under dilation — is plotted in panel (c) in-
+stead of the shear stress. The numerical results are in
+excellent quantitative agreement with the predictions in
+Eqs. (1)-(4), for both values of δz used.
+
+The results presented in Fig. 4 provide strong support
+for the universality of the strain-stiffening transition with
+respect to the network’s topology and the symmetry of
+the driving strain.
+If this is the case, then the predic-
+tions in Eqs. (5)-(7) should equally hold when applied
+to dilatational straining involving the rescaled variable
+∆η/δη∗(κ) ≡ (ηc − η)/δη∗(κ). This is indeed demon-
+strated in Fig. 5, which remarkably mirrors the simple
+shear results of Fig. 3, where the differential bulk modu-
+lus K is used for K instead of G. The results presented
+in Fig. 5 for a single value of δz = 0.5 are also shown
+in the Appendix to be valid for another δz value. Over-
+all, the numerical results presented above provide strong
+support to the analytic predictions in Eqs. (1)-(7), also
+demonstrating the independence of all scaling relations
+and critical exponents of the symmetry of the applied
+strain and the network’s topology. Additional supporting
+results in relation to quantities not included in Eqs. (1)-
+(7) are provided in Sect. S-2 of the Appendix. Our find-
+
+10-710-510-310-210-11310-710-510-310-1010-810-610-4113410-710-510-310-510-410-310-22310-710-510-310110210310410523(a)(b)(c)(d)6
+
+transition, possibly being divergent in the κ → 0 limit, as
+shown for isostatic isotropic spring networks in [31]. The
+possible existence of another characteristic strain scale
+above the critical point should be clarified as well. More-
+over, while we established the δz-independence of the
+critical exponents, it would be interesting to clarify the
+dependence of the pre-factors on δz. Recent work in this
+direction indicates that the scaling laws tested here are
+valid in the regime κ/δz2 ≪ 1 [31].
+
+Finally, while experiments fall short of quantitatively
+probing many of the theoretically-predicted quantities,
+and even the experimental determination of the critical
+strain ϵc is not direct, it would be interesting to systemat-
+ically analyze experimental data for the differential mod-
+ulus K(ϵ, κ) — similar to the one shown in Fig. 1 — in
+light of the prediction in Eq. (6). Attempts to test the
+predicted universality of the strain-stiffening transition
+with respect to the symmetry of the driving strain would
+be also of interest.
+
+ACKNOWLEDGMENTS
+
+E.B. acknowledges support from the Israel Science
+Foundation (ISF Grant No. 403/24), the Ben May Center
+for Chemical Theory and Computation and the Harold
+Perlman Family.
+
+FIG. 5. Numerical validation of the characteristic
+strain scale near the critical strain and of the strain-
+stiffening power-law scaling relations away from crit-
+icality under dilation. The same as Fig. 3, but for dila-
+tion. Here, the distance from the critical point corresponds
+to ∆η = ηc − η and the differential bulk modulus K(∆η, κ) is
+plotted in panels (a) and (c). Excellent agreement with the
+theoretical predictions in Eqs. (4)-(7) is demonstrated.
+
+ings thus strongly support the recently developed theory
+of the strain-stiffening transition in athermal disordered
+networks.
+
+V. Discussion
+
+In this work, we provided compelling numerical sup-
+port to a comprehensive theory of the strain-stiffening
+phase transition in polymer networks, including all scal-
+ing relations and critical exponents in Eqs. (1)-(7), and
+additional physical quantities discussed in the Appendix.
+In addition, the universality of the theoretical predictions
+with respect to the network’s topology, as quantified by
+the degree of connectivity δz below the Maxwell thresh-
+old, and the symmetry of the driving strain — i.e., shear
+and dilatational straining — has been demonstrated.
+
+The conceptual decomposition of the system into inter-
+acting stiff and soft sub-networks and the accompanying
+two-step straining procedure, which underlay the theory,
+are also useful in the context of the computer simulations
+as they allow to determine the critical ϵc ambiguously
+and accurately — which is difficult to do otherwise —
+and make the computations more efficient as energy mini-
+mization is substantially less demanding in the absence of
+weak bending interactions upon forward-straining (since
+the energy of the stiff sub-system vanishes identically for
+ϵ < ϵc). Future work should extend the present 2D nu-
+merical simulations to three dimensions (3D).
+
+Future work should also address the possible existence
+of a κ-dependent lengthscale ξ(κ) associated with the
+
+10-610-410-210-410-310-210-13210-310-110110-410-310-210-13210-710-510-310-11021031041051110-310-110110-210-110011(a)(b)(c)(d)Appendix A: Computer simulations
+
+In this section, we provide technical details regard-
+ing the computer simulations used to test the theoretical
+predictions.
+In Sect. A 2, the symmetry of the driving
+strain and the differential elastic moduli are discussed.
+In Sect. A 3, the sub-network decomposition and the two-
+step straining procedure are discussed.
+
+1. The initial isotropic networks
+
+To generate disordered computer networks, we first
+create packings of harmonic discs — similarly to the ones
+studied, e.g., in [32] —, at a packing fraction of 1.0. We
+then adopt the network of contacts between the harmonic
+discs to form an initial disordered network of nodes and
+edges, featuring z > zc. The edges of these initial random
+networks are then diluted to achieve a target z < zc fol-
+lowing the algorithm described in [33], which maintains
+low fluctuations in the local connectivity of nodes.
+
+2. The symmetry of the driving strain and the
+differential elastic moduli
+
+As discussed in the main text, we tested the strain-
+stiffening theoretical predictions in large-scale numerical
+simulations for two qualitatively different straining sym-
+metries. The first corresponds to simple shear straining,
+see Fig. A1a.
+It corresponds to a homogeneous (space
+independent) 2D deformation gradient tensor
+
+7
+
+FIG. A1. Two symmetries of the driving strain. (a)
+A simple shear strain applied to a 2D network of an initial
+linear size L. (b) A bulk expansion/dilation applied to the
+same network. See text for details and discussion.
+
+where we used the fact that the volume V is fixed under
+simple shear straining.
+
+While the homogeneous deformation gradient tensor
+Fs(γ) corresponds to an affine deformation, the intrinsic
+disorder of the network implies that the actual network’s
+deformation contains a non-affine contribution. This is
+manifested in various physical observables, including G
+that takes the form [34]
+
+G = GBorn −
+
+1
+V
+
+(cid:0)Fγ · H−1 · Fγ
+
+(cid:1) ,
+
+(A4)
+
+∂2U
+where GBorn ≡ 1
+∂γ2 corresponds to the affine contribu-
+V
+tion and the second term corresponds to the non-affine
+contribution. In the latter, H−1 is the inverse of the Hes-
+sian matrix H ≡ ∂2U
+∂x∂x and Fγ ≡ − ∂2U
+∂γ∂x is the non-affine
+force. Finally, we define the non-affine displacements as
+
+Fs(γ) =
+
+(cid:19)
+
+(cid:18) 1 γ
+0 1
+
+.
+
+(A1)
+
+un.a. ≡ −H−1 · Fγ .
+
+(A5)
+
+The latter is parameterized by a strain amplitude γ and
+is applied according to x = Fs(γ) · X to a reference 2D
+network of an initial linear size L (composed of N nodes).
+Here, X is the coordinate describing the reference, un-
+strained network and x describes the strained network
+(note that since Fs(γ) is independent of X, we also have
+dx = Fs(γ) · dX, which is the conventional definition of
+the deformation gradient tensor as relating vectorial line
+elements/edges in the unstrained and strained configura-
+tions).
+
+Denoting the energy of the network by U , the shear
+
+stress is defined as
+
+The non-affine displacements squared u2
+the main text, are then defined as
+
+n.a., discussed in
+
+u2
+n.a. ≡
+
+1
+N
+
+N
+(cid:88)
+
+i=1
+
+u(i)
+
+n.a. · u(i)
+
+n.a. ,
+
+(A6)
+
+where i is a nodal index and u(i)
+n.a. corresponds to the
+Cartesian non-affine displacement vector associated with
+node i.
+
+The second straining symmetry we consider corre-
+sponds to bulk expansion/dilation, see Fig. A1b. In this
+case, the 2D deformation gradient tensor takes the form
+
+σ ≡
+
+1
+V
+
+DU
+Dγ
+
+,
+
+(A2)
+
+Fd(η) =
+
+(cid:18) eη 0
+0 eη
+
+(cid:19)
+
+,
+
+(A7)
+
+where V is the volume of the network and the operator
+D/Dγ denotes a derivative with respect to γ under me-
+chanical equilibrium conditions. The differential shear
+modulus is defined as
+
+G ≡
+
+Dσ
+Dγ
+
+=
+
+1
+V
+
+D2U
+Dγ2 ,
+
+(A3)
+
+which is parameterized by the strain amplitude η, corre-
+sponding to the logarithmic (Hencky) strain (see below).
+An obvious and important difference compared to the
+simple shear case is that the volume of the network is no
+longer constant during straining. Denoting the volume
+of the unstrained network by Ω = L ¯d, we have V = eη ¯dΩ
+
+(a)(b)(according to Eq. (A7)) for the volume of the strained
+network, where ¯d is space dimension (we keep ¯d in the
+expressions below, while Fd(η) in Eq. (A7) and the actual
+numerical simulations are 2D, i.e., ¯d = 2). These relations
+indeed indicate that η = log (cid:0)V 1/ ¯d/Ω1/ ¯d(cid:1) = 1
+¯d log (cid:0)V /Ω(cid:1),
+i.e., that η is the logarithmic (Hencky) strain. Note that
+under simple shear, which is volume preserving, we had
+V = Ω throughout the straining process.
+
+The relevant stress component under dilation is the
+
+pressure, given by
+
+p ≡ −
+
+DU
+DV
+
+= −
+
+DU
+Dη
+
+∂η
+∂V
+
+= −
+
+1
+¯dV
+
+DU
+Dη
+
+.
+
+(A8)
+
+Note that in the main text we report the hydrostatic
+tension −p. The differential bulk modulus is then defined
+as
+
+K ≡ −V
+
+Dp
+DV
+
+=
+
+1
+¯d2V
+
+D2U
+Dη2 + p .
+
+Similarly to Eq. (A4), we have
+
+K = KBorn −
+
+(cid:0)Fη · H−1 · Fη
+
+1
+¯d2V
+∂η2 and Fη ≡ − ∂2U
+∂2U
+
+(cid:1) + p ,
+
+where KBorn ≡ 1
+¯d2V
+displacements are defined similarly to Eqs. (A5)-(A6).
+
+∂η∂x . The non-affine
+
+(A9)
+
+(A10)
+
+3. Sub-network decomposition and the two-step
+straining procedure
+
+As explained in the main text, we decompose the total
+energy of the network into a stiff sub-network contribu-
+tion Ustiff, emerging from stretching/compression of the
+network’s bonds/edges, and a soft (bending) sub-network
+contribution Usoft. For the former, we have
+
+Ustiff(x) =
+
+1
+2
+
+(cid:88)
+
+µ
+edges ij
+
+(rij − lij)2 ,
+
+(A11)
+
+where ij corresponds to each pair of interacting nodes,
+forming a bond (a network’s edge). lij is the rest-length
+of the bond and rij is the deformed length, obtained from
+the nodal positions x of the strained network. Here, µ is
+the stretching/compression stiffness of the bonds.
+
+As explained in the main text, the stiff sub-network
+is forward-strained to the critical point ϵc. Then, the
+soft sub-network is added and a new equilibrium state is
+found through energy minimization (see details below).
+The soft sub-network features the following bending in-
+teraction energy
+
+Usoft(x) =
+
+1
+2
+
+(cid:88)
+
+κθ
+angles ijk
+
+(cid:104)
+
+θijk − θ(0)
+ijk
+
+(cid:105)2
+
+,
+
+(A12)
+
+where κθ is the bending rigidity. Here, θijk corresponds
+to the angle formed at network’s node j, featuring bonds
+
+8
+
+with two adjacent nodes i and k. Likewise, θ(0)
+ijk is the
+corresponding rest-angle defined at the undeformed state
+corresponding to ϵ = 0. We normalized all lengths by
+ℓ ≡ (Ω/N )1/ ¯d and set κ ≡ κθℓ2/µ ≪ 1, extensively used in
+the main text.
+
+A characteristic displacement scale u⋆, defined at ϵc,
+is obtained as follows: for each network we compute the
+magnitude of the node-wise displacements |u(i)
+⋆ | between
+the κ = 0 state and the κ > 0 state. The node-wise dis-
+tribution of |u(i)
+⋆ | is broad; in order to reliably extract
+a typical scale from this noisy observable, we compute
+the median of |u(i)
+⋆ | over the network’s N nodes. That
+median is then averaged over all our networks, to obtain
+u⋆ reported in Figs. 2a and 4a of the main text.
+
+Physical observables computed away from the criti-
+cal strain, i.e., at strains ϵ < ϵc, are obtained by back-
+straining the network (with the two interacting sub-
+networks) from ϵc to a desired strain ϵ in small strain
+steps, minimizing the energy in each step. Through-
+out the athermal and quasistatic straining process, Lees-
+Edwards boundary conditions are employed [22]. Energy
+minimization in each strain step is performed using the
+FIRE minimization technique [35]. The minimization
+process is terminated either when the typical compres-
+sive/tensile forces in the stiff sub-network’s edges drop
+below 10−10µℓ (for networks below the critical strain),
+or when the ratio of the typical net force on the net-
+work nodes, to the typical compressive/tensile forces in
+the stiff sub-network edges, drops below 10−8.
+
+Appendix B: Additional supporting results
+
+In this section, we aim at proving additional support-
+ing results, either for quantities discussed in the main
+text or for other quantities not discussed therein, but for
+which theoretical predictions are available.
+
+1. Additional support to the universality with
+respect to δz
+
+In Fig. 5 in the main text, we provide numerical vali-
+dation of the characteristic strain scale near the critical
+strain and of the strain-stiffening power-law scaling re-
+lations away from criticality under dilation for δz = 0.5
+(i.e., z = 3.5). In Fig. B1, we demonstrate that these the-
+oretical predictions remain valid as δz is varied, which in
+conjunction with Fig. 4 in the main text, provide strong
+support to the universality of the theory with respect to
+δz.
+
+9
+
+FIG. B1. The same as Fig. 5 in the main text (where δz = 0.5), but for δz = 1. Excellent agreement with the theoretical
+predictions in Eqs. (4)-(7) is demonstrated, which together with Fig. 4 in the main text, provide strong support to the
+universality of the theory with respect to δz.
+
+2. Numerical validation of the prediction
+dK(ϵc, κ)/dϵ ∼ κ−2/3
+
+In the main text, the theoretical prediction [29]
+
+dK(ϵc, κ)
+dϵ
+
+∼ κ−2/3
+
+(B1)
+
+is stated.
+In Fig. B2, we provide numerical validation
+of this prediction for both shear and dilation, i.e., for
+dG(γc, κ)/dγ and dK(ηc, κ)/dη.
+
+3. The geometric operator defining
+states-of-self-stress and the associated eigenvalue
+
+A basic object characterizing the strain-stiffening tran-
+sition for κ = 0, not discussed in the main text, is the
+state-of-self-stress (SSS). A SSS corresponds to a set of
+putative bond forces of magnitude fij that exactly bal-
+ance each other on every node in the network [36], i.e.,
+(cid:80)
+neighbors j(i) njifij = 0. Here, nji is a unit vector point-
+ing from node j to node i and the right-hand-side corre-
+sponds to vanishing nodal resultant forces. It is conve-
+nient to write the above relation in the form S T |f ⟩ = |0⟩,
+where S T is an operator accounting for the network’s ge-
+ometry and |f ⟩ corresponding to the scalar bond forces.
+
+FIG. B2. Numerical validation of the theoretical prediction
+in Eq. (B1), for both shear (panel (a), dG(γc, κ)/dγ for z =
+3.5) and dilation (panel (b), dK(ηc, κ)/dη for z = 3.0, 3.5, see
+legend).
+
+Consider then the operator SS T , featuring an eigenvalue
+λ, i.e., SS T |f ⟩ = λ|f ⟩. In the absence of soft bending in-
+teractions (corresponding to κ = 0), strain-stiffened net-
+works feature a single SSS at the critical strain ϵc, cor-
+responding to λ = 0 [37, 38]. The introduction of the
+soft sub-network with κ > 0 at ϵc = 0 gives rise to a fi-
+nite λ ∼ u2
+∗ [29]. Equation (1) in the main text then
+
+10-710-510-310-110-510-410-310-210-13210-310-110110310-510-410-310-210-13210-710-510-310-11021031041110-310-110110310-210-110011(a)(b)(c)(d)10-710-510-310-11001011022310-710-510-310010110210332(a)(b)implies [29]
+
+4. The differential modulus at criticality and its
+singular perturbation nature
+
+10
+
+λ(ϵc, κ) ∼ κ2/3 .
+
+(B2)
+
+In Fig. B3, we a provide numerical validation of this pre-
+diction for both shear and dilation, i.e., for λ(γc, κ) and
+λ(ηc, κ), and two values of δz.
+
+FIG. B4. K(ϵc, κ) vs. κ > 0 (circles) under shear straining and
+z = 3.5 (panel (a)), under dilatational straining and z = 3.5
+(panel (b)) and z = 3.0 (panel (c)). The corresponding value
+for K(ϵc, κ = 0) are shown by the horizontal dashed lines.
+
+In the main text, it is stated that for κ = 0, the differ-
+ential modulus features a jump discontinuity at critically,
+attaining a finite value K(ϵc, κ = 0).
+
+Moreover,
+
+it is stated therein that for κ > 0 and
+for ϵ sufficiently close to ϵc, one has K(ϵ, κ) − K(ϵc) ∼
+κ−2/3(ϵ − ϵc). Here, K(ϵc) corresponds to K(ϵc, κ → 0+).
+It was shown in [29] that in fact K(ϵc, κ → 0+) differs
+from K(ϵc, κ = 0) and satisfies
+
+K(ϵc, κ → 0+) = K(ϵc, κ = 0) − ∆K ≡ K(ϵc) ,
+
+(B3)
+
+with ∆K > 0. The existence of a finite ∆K is yet another
+manifestation of the singular perturbation nature of the
+soft/weak bending interactions associated with κ > 0.
+
+Here, we provide numerical support to the prediction
+in Eq. (B3) for both shear and dilation. This is achieved
+by plotting G(γc, κ = 0) vs. G(γc, κ > 0) for z = 3.5 in
+Fig. B4a, and K(ηc, κ = 0) vs. K(ηc, κ > 0) for z = 3.5 in
+Fig. B4b and for z = 3.0 in Fig. B4c. In the κ → 0+ limit,
+the data in the three panels appear to be consistent with
+K(ϵc, κ → 0+)/K(ϵc, κ = 0) = 1/3, suggested in [28].
+
+FIG. B3. Numerical validation of the theoretical prediction
+in Eq. (B2), for both shear (ϵc = γc) and dilation (ϵc = ηc),
+and two values of z (see legend)
+
+.
+
+[1] C. R. Picu, Network materials: structure and properties
+
+(Cambridge University Press, 2022).
+
+[2] C. Storm, J. J. Pastore, F. C. MacKintosh, T. C. Luben-
+sky, and P. A. Janmey, Nonlinear elasticity in biological
+gels, Nature 435, 191 (2005).
+
+[3] K. A. Erk, K. J. Henderson, and K. R. Shull, Strain stiff-
+ening in synthetic and biopolymer networks, Biomacro-
+molecules 11, 1358 (2010).
+
+[4] A. Sharma, A. J. Licup, K. A. Jansen, R. Rens, M. Shein-
+man, G. H. Koenderink, and F. C. MacKintosh, Strain-
+controlled criticality governs the nonlinear mechanics of
+fibre networks, Nature Physics 12, 584 (2016).
+
+[5] M. Vatankhah-Varnosfaderani, A. N. Keith, Y. Cong,
+H. Liang, M. Rosenthal, M. Sztucki, C. Clair,
+
+S. Magonov, D. A. Ivanov, A. V. Dobrynin, and S. S.
+Sheiko, Chameleon-like elastomers with molecularly en-
+coded strain-adaptive stiffening and coloration, Science
+359, 1509 (2018).
+
+[6] I. Levental, P. C. Georges, and P. A. Janmey, Soft bio-
+logical materials and their impact on cell function, Soft
+Matter 3, 299 (2007).
+
+[7] J. P. Winer, S. Oake, and P. A. Janmey, Non-linear elas-
+ticity of extracellular matrices enables contractile cells to
+communicate local position and orientation, PloS one 4,
+e6382 (2009).
+
+[8] R. K. Das, V. Gocheva, R. Hammink, O. F. Zouani, and
+A. E. Rowan, Stress-stiffening-mediated stem-cell com-
+mitment switch in soft responsive hydrogels, Nature ma-
+
+10-710-610-510-410-310-510-410-310-22310-710-510-300.010.020.0310-710-510-300.050.10.150.210-710-510-300.020.040.060.080.10.12(b)(c)(a)terials 15, 318 (2016).
+
+[9] Y. L. Han, P. Ronceray, G. Xu, A. Malandrino, R. D.
+Kamm, M. Lenz, C. P. Broedersz, and M. Guo, Cell con-
+traction induces long-ranged stress stiffening in the ex-
+tracellular matrix, Proc. Natl. Acad. Sci. U. S. A. 115,
+4075 (2018).
+
+[10] Y. Wang, Y. Du, and F. Xu, Strain stiffening retards
+growth instability in residually stressed biological tissues,
+J. Mech. Phys. Solids 178, 105360 (2023).
+
+[11] J. C. Maxwell, L. on the calculation of the equilibrium
+and stiffness of frames, Philos. Mag. 27, 294 (1864).
+[12] G. D¨uring, E. Lerner, and M. Wyart, Phonon gap and
+localization lengths in floppy materials, Soft Matter 9,
+146 (2013).
+
+[13] A. J. Licup, S. M¨unster, A. Sharma, M. Sheinman, L. M.
+Jawerth, B. Fabry, D. A. Weitz, and F. C. MacKintosh,
+Stress controls the mechanics of collagen networks, Proc.
+Natl. Acad. Sci. U. S. A. 112, 9573 (2015).
+
+[14] C. P. Broedersz and F. C. MacKintosh, Modeling semi-
+flexible polymer networks, Rev. Mod. Phys. 86, 995
+(2014).
+
+[15] G. D¨uring, E. Lerner, and M. Wyart, Length scales and
+self-organization in dense suspension flows, Phys. Rev. E
+89, 022305 (2014).
+
+[16] R. Rens, C. Villarroel, G. D¨uring, and E. Lerner, Mi-
+cromechanical theory of strain stiffening of biopolymer
+networks, Phys. Rev. E 98, 062411 (2018).
+
+[17] M. Merkel, K. Baumgarten, B. P. Tighe, and M. L. Man-
+ning, A minimal-length approach unifies rigidity in un-
+derconstrained materials, Proc. Natl. Acad. Sci. U.S.A.
+116, 6560 (2019).
+
+[18] A. J. Licup, A. Sharma, and F. C. MacKintosh, Elas-
+tic regimes of subisostatic athermal fiber networks, Phys.
+Rev. E 93, 012407 (2016).
+
+[19] R. Rens, M. Vahabi, A. J. Licup, F. C. MacKin-
+tosh, and A. Sharma, Nonlinear mechanics of athermal
+branched biopolymer networks, J. Phys. Chem. B 120,
+5831 (2016).
+
+[20] A. Sharma, A. J. Licup, R. Rens, M. Vahabi, K. A.
+Jansen, G. H. Koenderink, and F. C. MacKintosh, Strain-
+driven criticality underlies nonlinear mechanics of fibrous
+networks, Phys. Rev. E 94, 042407 (2016).
+
+[21] M. F. J. Vermeulen, A. Bose, C. Storm, and W. G. Ellen-
+broek, Geometry and the onset of rigidity in a disordered
+network, Phys. Rev. E 96, 053003 (2017).
+
+[22] R. Rens, Theory of rigidity transitions in disordered
+materials (PhD thesis, Univeristy of Amsterdam, the
+Netherlands, 2019).
+
+11
+
+[23] M. Wyart, H. Liang, A. Kabla, and L. Mahadevan, Elas-
+ticity of floppy and stiff random networks, Phys. Rev.
+Lett. 101, 215501 (2008).
+
+[24] J. L. Shivers, S. Arzash, A. Sharma, and F. C. MacK-
+intosh, Scaling theory for mechanical critical behavior in
+fiber networks, Phys. Rev. Lett. 122, 188003 (2019).
+[25] S. Arzash, J. L. Shivers, and F. C. MacKintosh, Shear-
+induced phase transition and critical exponents in three-
+dimensional fiber networks, Phys. Rev. E 104, L022402
+(2021).
+
+[26] J. L. Shivers, A. Sharma, and F. C. MacKintosh, Strain-
+controlled critical slowing down in the rheology of disor-
+dered networks, Phys. Rev. Lett. 131, 178201 (2023).
+[27] S. Chen, T. Markovich, and F. C. MacKintosh, Effective
+medium theory for mechanical phase transitions of fiber
+networks, Soft Matter 19, 8124 (2023).
+
+[28] S. Chen, T. Markovich, and F. C. MacKintosh, Field
+theory for mechanical criticality in disordered fiber net-
+works, Phys. Rev. Lett. 133, 028201 (2024).
+
+[29] E. Lerner and E. Bouchbinder, Scaling theory of critical
+strain-stiffening in disordered elastic networks, Extreme
+Mech. Lett. 65, 102104 (2023).
+
+[30] S. Arzash, A. Sharma, and F. C. MacKintosh, Mechanics
+of fiber networks under a bulk strain, Phys. Rev. E 106,
+L062403 (2022).
+
+[31] E. Lerner, Effects of coordination and stiffness scale sep-
+aration in disordered elastic networks, Phys. Rev. E 109,
+054904 (2024).
+
+[32] E. Lerner, E. DeGiuli, G. During, and M. Wyart, Break-
+down of continuum elasticity in amorphous solids, Soft
+Matter 10, 5085 (2014).
+
+[33] G. Kapteijns, E. Bouchbinder, and E. Lerner, Unified
+quantifier of mechanical disorder in solids, Phys. Rev. E
+104, 035001 (2021).
+
+[34] J. Lutsko, Generalized expressions for the calculation of
+elastic constants by computer simulation, Journal of ap-
+plied physics 65, 2991 (1989).
+
+[35] E. Bitzek, P. Koskinen, F. G¨ahler, M. Moseler, and
+P. Gumbsch, Structural relaxation made simple, Phys.
+Rev. Lett. 97, 170201 (2006).
+
+[36] C. Calladine, Buckminster fuller’s “tensegrity” structures
+and clerk maxwell’s rules for the construction of stiff
+frames, Int. J. Solids Struct. 14, 161 (1978).
+
+[37] G. D¨uring, E. Lerner, and M. Wyart, Length scales and
+self-organization in dense suspension flows, Phys. Rev. E
+89, 022305 (2014).
+
+[38] R. Rens, C. Villarroel, G. D¨uring, and E. Lerner, Mi-
+cromechanical theory of strain stiffening of biopolymer
+networks, Phys. Rev. E 98, 062411 (2018).
+
+

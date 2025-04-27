@@ -1,0 +1,637 @@
+(average iou
+(e.g., leaves
+(e.g., the ground
+(e.g., the horse region
+(e.g., the windshield
+(i.e., crf18
+(i.e., vsr
++ frame adapt
+..., m type
+010010010101011101010011bitstreammotionvectorpartitionmapcrf15crf25crf35 practical scenarios
+2) bitstream-aware enhancement (bae) network
+2. related work
+28 fps
+4. codec-aware enhancement framework
+5 2 0 2 r
+5. experiments
+7 input+
+= [m v
+[2, 20, 42] con-
+] v c
+a abstract
+a bae network
+a baseline
+a bilstm-based detector
+a bitstream-aware enhancement (bae) network
+a block-wise manner
+a codec- aware enhancement framework
+a codec-aware framework
+a compression-aware adapta- tion
+a compression-aware adaptation
+a compression-aware adaption
+a compu- tation bottleneck
+a cost-effective alternative
+a critical need
+a distinct preference
+a fair comparison
+a favorable solution
+a guided soft alignment scheme
+a hierarchical adapta- tion mechanism
+a hierarchical adaptation mechanism
+a hierarchical adaptation paradigm
+a higher crf results
+a learnable mask
+a multi-frame quality enhancement mechanism
+a negligible decrease
+a notice- able computation burden
+a plug-and-play enhancement module
+a plug-and-play manner
+a plug-and-play module
+a psnr gain
+a range
+a reduc- tion
+a representative standard
+a separate model
+a set
+a significant performance drop
+a single expert layer
+a single model
+a single multiplicative scaling parameter
+a single task
+a single unified model
+a static convolution matrix
+a throughput
+a unified framework
+a versatile codec-aware enhancement framework
+a versatile solution
+a video sequence
+a wide range
+a widely adopted technique
+a “meta” network
+ablation studies
+accumulated warp- ing errors
+accurate edges
+accurately segmenting objects
+action recognition
+ad- dress multiple compression levels
+adaptively en- hance videos
+additional computational costs
+aging codec information
+all baseline models
+all types
+already compressed videos
+amplifying compression artifacts
+an efficient alternative
+an extension
+an increase
+an svm-based detector
+ance compression efficiency
+as- signs
+as- sist
+available codec information
+aware refined features
+b frames
+baseline models
+better accuracy
+better segmentation accuracy
+block-wisely perform motion estimation
+both enhancement performance
+both sequence
+both sequence-wise and frame-wise compression
+both stdf
+boundary similarity
+caa) network
+caa) network gϕ
+channel dimension
+charbonnier penalty loss
+chen et al
+china zhiwei xiong
+ciaf leverages motion vectors
+codec informa- tion
+codec information
+codec-aware video super
+color distortion
+color distortions
+com- plex regions
+com- pressed videos
+compact representations
+compared methods
+competitive performance
+compres- sion settings
+compressed data
+compressed input
+compressed input frames
+compressed inputs
+compressed video enhancement
+compressed video frames
+compressed video quality enhancement
+compressed videos
+compressed videosenhanced videos
+compression arti- facts
+compression artifacts
+compression factors
+compression-aware adaptation network
+computation bottleneck
+consistent improvement
+consistent improvements
+corresponding author
+corresponding tasks
+crf40, crf45
+crfi frame adaptation
+current frame
+current frames
+data transmission
+davis datasets
+de- tection
+decoding loops
+depth estimation
+dif- ferent visual quality
+different complexity
+different compression levels
+different compression settings
+different crfs
+different filters
+different inputs
+different regions
+distinct activations
+diverse compression levels
+diverse inputs
+down- stream tasks
+down- stream vsr models
+downstream applications
+downstream tasks
+downstream vision models
+downstream vision tasks
+dynamic neural networks
+dynamic parameters
+dynamic transfer
+e.g., autonomous driving
+e.g., inaccurate mask
+e.g., lower psnr values
+e.g., trees
+each block
+each channel
+each compression level
+each expert
+each expert layer
+each frame
+each input frame
+each method
+en- hance
+ensemble strategy
+especially near-motion ones
+especially the boundaries
+existing compressed video enhancement solutions
+existing enhancement methods
+existing solutions
+existing video enhancement methods
+experimental results
+experimental settings compression settings
+expert (moe) structure
+extensive experimental results
+f ↑
+fea- tures
+ferent compression settings
+ferent downstream tasks
+first esti- mate sequence-adaptive parameters
+flat regions
+flexible enhancement
+frame adaptation
+frame levels
+frame-wise auxiliary param- eters △θi
+frame-wise crf
+frame-wise crfi
+full bitstream
+fur- ther
+further assessment
+further vi- sual analysis
+fθi (intro-
+fθi = gϕi(crfi
+fθs = gϕs
+g speed/ms
+generalization ability
+guided sft layer
+h.264 standard
+hance videos
+hierarchical adjustment
+hierarchical quality adjustment video quality
+hierarchical structure
+high compression
+high-quality frames
+higher quantization errors
+higher values
+highly compressed scenarios
+hp i
+i.e., crf
+i.e., video super
+i/p frames
+icon- vsr
+in- ference speed
+in-loop and post-processing methods
+inaccurate bound- aries
+inaccurate boundaries
+inaccurate masks
+increased pixel loss
+increasing complexity
+independent filters
+independent parameters
+inference speed
+input features
+input mfqe  stdf
+input videos
+instance segmentation
+internet videos
+intra-frame information
+irregular shapes
+its effectiveness
+its effectivness
+its parameters
+its practicality
+its reference frames
+its substitu- tion
+its versatility
+jclee}@mail.ustc.edu.cn zwxiong@ustc.edu.cn
+l = 1 t i=1
+large size
+lel expert layers
+li et al
+limited improvement
+long-range dependencies
+lower complexity
+lower crfi
+lower values
+m 8×8
+m v denotes
+mac- roblocks
+mask m type
+meth- ods
+method raft
+mfqe  fur- ther
+mixed compression settings
+more accurate results
+more compact output
+more effective support
+more fine-grained and high-frequency details
+more practical solutions
+more qualitative comparisons
+more severe degradations
+more visually pleasant results
+more visually pleasing results
+motion estimation
+motion vector
+motion vector alignment
+motion vectors
+moving objects
+multi- frame quality enhancement
+multiple binary masks
+multiple compression settings
+multiple downstream tasks
+multiple filters
+multiple groups
+multiple target domains
+mv alignment
+nearly 85%
+net- work
+network parameters
+no improvement
+notable psnr gains
+object detection
+occurring unseen compression levels
+ond best results
+only 61%
+optical flow
+optical flow es-
+optical flow esti- mation
+optical flow estimation
+other methods
+our 6 frame
+our approach
+our codec-aware enhancement framework
+our contribu- tions
+our evaluations
+our framework
+our method
+our tasks
+ours deaot
+ours qdmn
+par- allel expert layers
+parallel branches
+parallel network branches
+parameter combination
+partition map
+partition maps
+perceptual quality
+poor visual quality
+posing challenges
+practical downstream tasks
+practical sce- narios
+practical scenarios
+pre-trained models
+predicted optical flow
+prehensive experiments
+pressed videos
+previous and future reference frames
+previous methods
+propa- gate information
+psnr gain
+psnr gains
+qualitative comparisons
+qualitative results
+quality adjustment
+quality en- hancement
+quality enhancement
+quality enhancement methods
+quality enhancement performance quantitative results
+quality fluctuations
+quantitative results
+ra refine
+re- gions
+real-time cloud computing
+real-time processing
+real-world scenarios
+recent approaches
+recent codecs
+recent methods
+reconstruc- tion
+reconstructed frames
+red and blue boxes
+red arrows
+redundancy reduction
+redundant computations
+ref- erence frames
+reference features
+reference frames
+refined features
+region complexity
+region-aware refine- ment
+region-aware refinement
+representative baselines
+representative methods
+residual matrices
+robust performance
+robustness and generalization ability
+s(m type
+s2svr strug- gles
+s2svr+ metabit+
+sce- narios
+semantic segmentation
+separate en- hancement models
+separate models
+separate refinement
+separate submodels
+sequence adapta- tion
+sequence adaptation
+sequence-adaptive pa- rameters
+sequence-adaptive parameters
+sequence-wise crf
+severe distortions
+short video platforms
+similar computation cost
+similar content
+similar performance
+similar priors
+slice type
+slice type yields
+smaller blocks
+sparse convolution
+spatial complexity guidance
+spatial priors
+spatio-temporal deformable convolution
+specific crfs
+specific crfs values
+specified objects
+static models
+static objects
+sub-optimal performance
+suboptimal performance
+subsequent frames
+such a training strategy
+sup- press coding artifacts
+supplementary mate- rials
+supplementary materials
+temporal and spatial clues
+temporal and spatial priors
+temporal relationships
+test samples
+test-adaptive ones
+the 1st column
+the 1st row
+the 2nd row
+the 3rd row
+the 4th row
+the 5th row
+the abil- ity
+the above metrics
+the above objectives
+the accuracy
+the afore- mentioned methods
+the aforementioned methods
+the aforementioned works
+the applicability
+the artifacts
+the average accuracy
+the average psnr
+the bae network
+the bandwidth constraint
+the baseline
+the basis
+the best performance
+the bit- stream
+the bitstream
+the black dashed lines
+the caa network
+the caa network gϕ
+the calf
+the captured videos
+the car
+the case
+the channel di- mension
+the cloud
+the compared methods
+the compressed in- puts
+the compressed inputs
+the compressed video
+the compressed videos
+the compression artifacts
+the condition
+the condition to re-weight parameters
+the conflicts
+the constant rate factor
+the correla- tions
+the crf
+the crf value
+the crf values
+the crfs values
+the crucial role
+the current frame
+the current input frame
+the decoder side
+the disparity
+the distortions
+the domain-agnostic model
+the dynamic parame-
+the early mixture
+the effectiveness
+the en- hancement network
+the encoding
+the enhancement blocks
+the enhancement network
+the enhancement performance
+the entropy
+the epe and f1-all loss
+the evaluation
+the feasibility
+the feature representation ability
+the features
+the flops
+the flower
+the follow- ing criteria
+the following metrics
+the following sec
+the format
+the frame compression level
+the frame- adaptive bae network
+the frame-adaptive bae network
+the frame-adaptive expert layer fθi
+the frame-wise en- hancement network
+the frame-wise parameters generator
+the framework
+the gener- alization ability
+the generalization ability
+the implementation
+the inaccuracies
+the input
+the input and output features
+the input image
+the input sequence
+the intra
+the intra-frame correlations
+the j
+the kitti-2015 dataset
+the length
+the loss function
+the mismatch
+the mispredicted optical flow
+the model complexity
+the most popular multimedia formats
+the motion vectors
+the moving car
+the need
+the network
+the network capability
+the number
+the obtained fθi
+the offset field
+the offsets
+the op- tical flow
+the opera- tions
+the output
+the output features
+the par- tition map
+the parameters
+the partition map
+the peak quality frame
+the performance
+the post- processing methods
+the predicted output
+the primary downstream tasks
+the proposed codec- aware framework
+the proposed codec-aware enhancement framework
+the proposed method
+the qual- ity fluctuation
+the qualitative results
+the quality
+the quality en- hancement performance
+the quality fluctuation
+the random locations
+the reds4 dataset
+the reds4 datasets
+the refined features
+the region complexity
+the region-aware refinement
+the region-aware refinement module
+the regions
+the relationship
+the removed region
+the representative baseline methods
+the results
+the robustness
+the same architecture
+the same sequence
+the same training dataset
+the segmentation results
+the sequence
+the sequence compression level
+the sequence- adaptive
+the sequence-adaptive expert layer
+the sequence-wise crf
+the sequence-wise crfs
+the sequence-wise weight generator
+the size
+the specific loss function
+the subsequent bae network
+the sum
+the superior quality enhancement performance
+the superiority
+the supplementary materials
+the temporal consistency
+the temporal relationship
+the texture complexity
+the uncompressed ground truth
+the versatility
+the versatility demand
+the video inpainting model
+the vos task
+the warped reference features
+the weight
+the weighted outputs
+the windshield
+their contributions
+their parameters
+these demands
+these expert layers
+these methods
+these parameters
+these regions
+these videos
+this issue
+this paper
+this work
+three types
+tition map
+to re- spond
+training dataset
+training splits
+two sub
+type=1 s(m type
+unavailable (e.g., limited access
+unseen sce- narios
+useful clues
+val dataset
+various downstream tasks
+various downstream vision tasks
+varying compression levels
+varying levels
+varying sizes
+versatile com- pressed video enhancement
+versatility evaluation
+video compression
+video inpainting
+video object removal
+video object segmentation
+video quality
+video super
+video super- resolution
+visu- alize
+visual content
+visual quality
+visually pleasant results
+vos baselines
+vos models
+vsr models
+weighting expert layer parameters
+weights output features
+×4 video
+×4 vsr
+“clean” data
+∗ hi + m (cid:88

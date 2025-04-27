@@ -1,0 +1,1054 @@
+LiDPM: Rethinking Point Diffusion for Lidar Scene Completion
+
+Tetiana Martyniuk1,2 Gilles Puy1,2 Alexandre Boulch1,2
+
+Renaud Marlet1,2,3
+
+Raoul de Charette1
+
+5
+2
+0
+2
+
+r
+p
+A
+4
+2
+
+]
+
+V
+C
+.
+s
+c
+[
+
+1
+v
+1
+9
+7
+7
+1
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Abstract— Training diffusion models that work directly on
+lidar points at the scale of outdoor scenes is challenging due
+to the difficulty of generating fine-grained details from white
+noise over a broad field of view. The latest works addressing
+scene completion with diffusion models tackle this problem by
+reformulating the original DDPM as a local diffusion process. It
+contrasts with the common practice of operating at the level of
+objects, where vanilla DDPMs are currently used. In this work,
+we close the gap between these two lines of work. We identify
+approximations in the local diffusion formulation, show that
+they are not required to operate at the scene level, and that a
+vanilla DDPM with a well-chosen starting point is enough for
+completion. Finally, we demonstrate that our method, LiDPM,
+leads to better results in scene completion on SemanticKITTI.
+The project page is https://astra-vision.github.io/
+LiDPM .
+
+I. INTRODUCTION
+
+Lidars are key sensors for autonomous driving, measuring
+accurate distances to the vehicle environment. However,
+lidar point clouds are sparse, leaving wide gaps between
+scanned points. Yet, filling these gaps benefits downstream
+tasks like mapping [1], [2] or object detection [3]–[5].
+Besides, acquisition patterns vary with sensor models (e.g.,
+beam count) and placement, affecting the transferability of
+perception algorithms (e.g., detection, segmentation). There
+are several ways to tackle these domain gaps, such as
+domain adaptation [6], domain generalization [7], or scene
+completion [8], the latter allowing simulating new sensors
+by resampling the completed scene using different scan
+patterns. Moreover, beyond completion, generating entirely
+new scenes can be used to create or augment datasets.
+
+Diffusion for point clouds offers an attractive solution for
+both completion and generation. In particular, direct diffusion
+on points, i.e., moving points in 3D space without resorting to
+a latent scene encoding, has shown promising results [9]. One
+of the main advantages is that it inherently generates points,
+in contrast to approaches based on voxels (discretizing space)
+or surfaces (requiring reconstructions prior to training).
+
+diffusion
+
+denoising
+probabilistic models
+Using
+(DDPMs)
+[10] as a basis, point diffusion has been
+mainly studied on small shapes (<10K pts) [11], [12], with
+architectures that hardly scale to large point clouds. To scale
+to automotive scenes (>100K pts), LiDiff [9] reformulated
+the problem as a local diffusion process. However, it then
+only allows scene completion, not generation. Besides, this
+local formulation introduces unnecessary approximations.
+
+In this paper, we propose a new method, called LiDPM,
+these two perspectives, extending
+
+that brings together
+DDPMs to scenes. Our contributions are as follows:
+
+1 Inria, 2 valeo.ai, 3 LIGM, ENPC, Univ Gustave Eiffel, CNRS, France
+
+(a) LiDPM† (ours) w/o refinement, implementing global diffusion
+
+(b) LiDiff† [9] w/o refinement, implementing local diffusion
+
+Scene-level point diffusion for completion. Our LiDPM†
+Fig. 1.
+formulation (top) follows the general DDPM paradigm, yielding more
+realistic and accurate completions than LiDiff† local diffusion [9] (bottom).
+
+• We analyze the approximations and limitations of for-
+
+mulating the problem as a local diffusion.
+
+• We show that a vanilla DDPM can be used for a global
+thus unifying point
+
+diffusion on large point clouds,
+diffusion frameworks for shapes (objects) and scenes.
+• We demonstrate that LiDPM outperforms local diffusion
+for scene completion on SemanticKITTI [13]. Fig. 1
+illustrates the quality of our results.
+
+II. RELATED WORK
+
+A. Diffusion on points
+
+Over the past years, diffusion has been applied to various
+generative tasks, from image or video synthesis to speech
+generation. Most methods are based on DDPMs [10], which
+define a forward process that gradually adds Gaussian noise
+to the input, and a reverse process that learns to recover the
+input from the noise.
+
+Methods
+
+that apply DDPMs directly to the point
+clouds [11], [12], [14] operate by moving points in 3D space,
+addressing generation or completion at the point level. In
+PVD [11], the conditioning for completion (concatenating
+sparse and noisy point cloud) imposes separate training for
+
+ 
+ 
+ 
+ 
+ 
+ 
+relying on custom strategies to train CNNs [15], [16].
+While these methods could benefit from lightweight 2D
+networks, they were also inherently limited to visible areas
+within the field of view. Therefore, a large body of works
+now addresses the scene completion task in the 3D space
+for denser completions, also fueled by the emergence of
+SemanticKITTI [13], which first provided a benchmark by
+aggregating lidar scans. MID [2] trains a network that, given
+a single scan, estimates a signed distance field from voxels
+to the complete scene. The actual scene completion is then
+obtained via the Marching Cubes algorithm [17]. LODE [18]
+also operates at the voxel level, estimating voxel occupancy.
+Aside from our main objective, some methods also leverage
+and infer semantics [19]–[22] and are surveyed in the work
+of Rold˜ao et al. [23]. However, as they operate primarily
+on voxels, these methods offer accuracy limited to the voxel
+resolution. A particular case is Local-DIFs [24], which learns
+an implicit function that can be queried at arbitrary positions.
+
+Point-based scene completion. Closer to us, some methods
+operate directly on point clouds, but mainly focus on object
+completion [25]–[27], with few addressing large-scale point
+clouds like automotive lidar scans [28]. Typically, learning-
+based surface reconstruction algorithms train on meshes
+or very dense point clouds, relying on surface- or point-
+oriented normals. They implicitly estimate density [25] or
+occupancy [27] in continuous space but do not scale to
+scenes and still suffer from voxel-like discretization when
+reconstructing surfaces via the Marching Cubes algorithm.
+Some works tackle scene-level surface reconstruction [29],
+[30], but unlike our approach, they require dense input point
+clouds at inference, e.g., aggregated scans; in contrast, we
+only use a single sparse lidar scan. Few methods specifically
+address point-based scene completion with diffusion models,
+such as LiDiff, as previously discussed.
+
+III. METHOD
+
+LiDPM addresses the task of pointwise scene completion.
+It aims at predicting a dense point cloud pd from a sparse
+point cloud ps, typically a lidar scan. Beyond upsampling,
+this task is generative in that ps may suffer from large
+holes due to scene occlusions or sensor limitations, requiring
+synthesizing missing structures. To that end, we formulate
+the task as a denoising problem, which aims to reconstruct
+pd conditioned on the sparse input ps.
+
+LiDiff [9] followed by subsequent works [31], [32] argues
+that the DDPM formulation [10] cannot be applied to large-
+scale lidar point clouds due to variations along the point
+cloud axes that result in a loss of details in the denoised
+reconstruction. Thus, they reformulate the diffusion process
+as local point denoising. Different from these works, we
+show that a careful formulation of the point diffusion process
+and relevant design choices allow an extension of DDPM
+to point cloud completion of large-scale urban scenes. Our
+diffusion process is formulated using global point denoising.
+In this section, we first present preliminaries about
+DDPMs and their use for data generation (Sec. III-A). In
+
+Fig. 2. Point diffusion methods. PVD [11] (top) applies DDPM at the
+object level. LiDiff [9] (middle) uses local diffusion to work at the scene
+level. LiDPM (bottom) makes it possible to use DDPM at the scene level.
+
+completion and generation (Fig. 2, top). Furthermore, all the
+above methods focus on shapes (objects) and do not naturally
+scale to scene-level generation and completion.
+
+Recently, LiDiff [9] proposed scaling the diffusion process
+to large scenes to complete automotive lidar scans. The
+authors scale up the backbone and argue for a novel “local
+diffusion” formulation. By doing so, LiDiff can complete
+scenes but at the cost of approximations, which (i) prevent
+using the same formulation for generation (Fig. 2, middle)
+and (ii) require additional regularization to stabilize training.
+We study these limitations in the Appendix.
+
+In comparison, we show that we can unify the practices
+between the different scales (shapes/objects and scenes). In-
+stead of a custom diffusion, we build on the original DDPM
+formulation (closer to the current practice for shapes), scale
+the backbone to allow scene completion (from a dense to a
+sparse CNN), and use conditioning to allow both completion
+and generation (Fig. 2, bottom).
+
+B. Scene Completion
+
+Historically, scene completion was first achieved by com-
+pleting depth or lidar data in the image space, typically
+
+addition+concatenationDensePCEstimatednoise tSparsePCSparse CNNInitialize for CompletionShape scaleCompletion and generationwith different modelsLarge scaleLargescaleClassifier-free guidanceTrainingInferenceLiDPMLiDiffPVDNo regularization neededNo regularizationneededRegularization for stabilitySingle training forgeneration and completion InitializeInitialize for GenerationDense CNNUpdate PC t → t-1NormalnoiseNormalnoiseDensePC0DistributionSparsePCEstimatednoise tSparsePCSparse CNNRescale noiset → t-1++Forward diffusionat  step tNormalnoiseDensePCSparsePCEstimatednoise tInitializeUpdate PC t → t-1==Forward diffusionat  step t=(    )Forward diffusionat t0 stepForward diffusionat  step tCompletion onlyClassifier-free guidanceSparsePCSec. III-B, we detail our method, coined LiDPM, which
+extends DDPM to lidar point cloud completion.
+
+A. Preliminaries on Diffusion Models
+
+DDPMs [10] are generative models that iteratively trans-
+form data into Gaussian noise (forward process) and learn
+to reverse this process through a Markov chain of denoising
+steps (reverse process), possibly conditioned by another
+signal, such as a lidar scan for scene completion.
+
+The forward diffusion process gradually corrupts a data
+point x0, e.g., a complete point cloud, over T discrete time
+steps, by adding Gaussian noise:
+
+(cid:112)
+
+xt =
+
+1 − βt xt−1 +
+
+(cid:112)
+
+βt εt =
+
+√
+
+¯αt x0 +
+
+(cid:112)
+
+1 − ¯αt ε1,
+
+(1)
+
+where βt > 0 is a variance schedule controlling the noise level
+at each step 0 < t ≤ T , εt ∼ N (0, I), and ¯αt = ∏t
+i=1(1 − βi).
+For a large enough T , xT is nearly indistinguishable from
+the Gaussian noise N (0, I).
+
+The reverse diffusion process seeks to sample from the
+original data distribution by starting from xT ∼ N (0, I).
+Sampling can be done iteratively applying the following
+formula from t = T to t = 1:
+
+(cid:18)
+
+xt −
+
+xt−1 =
+
+1
+√
+αt
+
+1 − αt
+√
+1 − ¯αt
+where αt = 1 − βt and zt ∼ N (0, I) if t > 1 or z1 = 0 other-
+wise. The network εθ in Eq. (2) is trained by minimizing
+
+εθ (xt ,t)
+
+βt zt ,
+
+(2)
+
+(cid:112)
+
++
+
+(cid:19)
+
+L (θ ) = Ex0,ε ∥ε − εθ (xt ,t)∥2 =
+= Ex0,ε ∥ε − εθ (
+¯αt x0 +
+
+√
+
+(cid:112)
+
+1 − ¯αt ε,t)∥2.
+
+(3)
+
+B. LiDPM
+
+Building on this diffusion process, we propose to solve
+scene completion by learning a diffusion model generating
+dense point clouds pd conditioned on sparse lidar scans ps.
+Contrary to the local point denoising methods [9], [31],
+we show that the original diffusion process can be left intact
+assuming only one approximation on the starting point of
+the diffusion, leading to a simple and efficient formulation
+of scene completion.
+
+Diffusion on points. In our work,
+the forward process
+satisfies Eq. (1) with x0 = pd, denoted as pd
+0 to emphasize
+the step 0. The network is trained using Eq. (3). The
+reverse denoising process satisfies Eq. (2) where our sole
+approximation is on its starting point. While it is possible to
+T ∼ N (0, I), we propose to begin the diffusion
+start from pd
+process from an intermediate step 0 < t0 < T . Even though
+requires knowledge of pd
+computing the starting point pd
+0,
+t0
+we show experimentally that good results are obtained by
+starting from
+
+˜pd
+t0
+
+= (cid:112) ¯αt0 ˜ps + (cid:112)1 − ¯αt0 z,
+where ˜ps is obtained by duplicating K times the preprocessed
+point cloud ps (see Sec. IV, Implementation details), and
+z ∼ N (0, I). The factor K is chosen so that the number of
+
+(4)
+
+points in ˜ps and preprocessed pd have the same order of
+magnitude (typically K = 10, as in LiDiff).
+Conditioning on ps. We use classifier-free guidance [33]
+to ensure that the details captured in ps are preserved in the
+generated point cloud. In practice, the update εθ (pd
+t ,t) in the
+reverse denoising process is replaced by
+t ,t, ps) = (1 − γ) εθ (pd
+
+t ,t, 0) + γ εθ (pd
+
+t ,t, ps),
+
+˜εθ (pd
+
+(5)
+
+where γ > 0 (we set γ = 6, as in LiDiff), and εθ is conditioned
+with ps or with the all-zero point cloud 0.
+
+The network εθ has the architecture proposed in LiDiff,
+but with all batch normalization layers replaced by instance
+normalization. Indeed, in this architecture, εθ takes as input
+widely different point clouds for conditioning: ps or 0.
+the statistics of the features may vary
+We noticed that
+significantly when passing ps or 0, potentially corrupting the
+running statistics and leading to instabilities during inference.
+To avoid this issue, we use instance normalization layers in
+which the statistics of the features are computed for each
+instance during training and inference. We elaborate on this
+in Sec. IV-D.
+
+IV. RESULTS
+
+Dataset. We train and evaluate our diffusion model on
+SemanticKITTI [13], preparing ground-truth point clouds as
+in LiDiff [9] by aggregating scans using the provided ego-
+poses and excluding moving objects. Training is done on
+sequences 00-10, with sequence 08 reserved for validation.
+
+Implementation details. We train our diffusion model for
+40 epochs using a batch size of 8 and Adam optimizer [34]
+learning rate of 2 · 10−4 and no weight
+with a constant
+decay. The diffusion parameters are linearly interpolated
+between β1 = 3.5 · 10−5 and β1000 = 0.007, as in LiDiff. The
+MinkUNet εθ [35] (adapted as in LiDiff) is trained with
+and without conditioning, selected randomly per iteration,
+with conditioning used 10% of the time. The voxel size of
+εθ is 5 cm. The point clouds pd and ps are cropped at a
+range of 50 m. The sizes of ps and pd are limited to 18K
+and 180K points, with farthest point sampling and uniform
+sampling applied to ps and pd, respectively. The generation
+via DPM-Solver [36] is done in 20 sampling steps. Before
+subsampling and K-duplicating ps to obtain ˜ps, we add 1000
+points uniformly sampled from a flat disc of radius 3.5 m at
+the ground height to compensate for points close to the car
+removed during the data preprocessing. Unless mentioned
+otherwise (with †), the diffusion output is densified with the
+refinement network of LiDiff used off-the-shelf.
+
+Metrics. For evaluation, we follow LiDiff. We report Cham-
+fer distance (CD), Jensen-Shannon divergence (JSD) com-
+puted in BEV and in 3D space, and occupancy IoU for
+different voxel sizes (0.5, 0.2 or 0.1 m).
+
+A. Comparison to existing methods
+
+Diffusion only. We first evaluate the quality of our learned
+global diffusion model, LiDPM†. We compare it to the local
+
+TABLE I
+SEMANTICKITTI VALIDATION SET. BASELINES, METRICS AND
+GROUND-TRUTH DATA ARE FROM LIDIFF [9].
+
+Method
+
+Output
+
+JSD↓
+3D
+
+JSD↓
+BEV
+
+Vox. IoU↑
+
+0.5
+
+0.2
+
+0.1
+
+CD↓
+
+LMSCNet
+
+[37] Voxel
+
+LODE
+MID
+
+[18] Surface
+[2] Surface
+
+-
+
+-
+-
+
+0.431 32.2 23.1 3.5 0.641
+
+0.451 43.6 47.9 6.1 1.029
+0.470 45.0 41.0 17.0 0.503
+
+-
+
+0.498 21.2 8.0
+
+PVD
+LiDiff†
+LiDPM† (ours)
+LiDiff
+LiDPM (ours)
+†: diffusion-only, i.e., without post-processing (refinement).
+
+[11] Points
+1.4 1.256
+[9] Points 0.564 0.444 42.5 33.3 11.1 0.434
+Points 0.532 0.440 45.5 43.9 16.1 0.446
+[9] Points 0.573 0.416 40.7 38.9 24.8 0.376
+Points 0.542 0.403 44.4 44.0 27.6 0.377
+
+TABLE II
+ABLATION STUDIES.
+
+(a) Effect of t0, starting point of the diffusion.
+
+Start t0 CD↓
+
+Diffusion only
+
+Diffusion + Refinement
+
+Voxel IoU↑
+
+CD↓
+
+Voxel IoU↑
+
+0.5
+
+0.2
+
+0.1
+
+0.5
+
+0.2
+
+0.1
+
+1000
+500
+300
+100
+50
+
+0.600 34.3 31.3 12.8 0.535 34.1 30.6 17.9
+0.437 42.0 42.3 17.7 0.370 41.7 39.8 26.4
+0.439 43.2 44.7 20.1 0.375 43.0 42.4 30.7
+0.474 40.7 45.2 22.0 0.427 39.1 42.2 28.0
+0.490 38.1 43.7 22.2 0.440 37.3 39.9 28.7
+
+(b) Effect of the number of DPM-Solver [36] steps.
+
+Steps
+
+50
+20
+10
+5
+
+CD↓
+
+0.437
+0.428
+0.443
+0.447
+
+IoU 0.5
+
+IoU 0.2
+
+IoU 0.1
+
+43.9
+44.9
+41.7
+41.2
+
+45.1
+44.8
+43.2
+42.1
+
+19.4
+18.2
+20.7
+20.9
+
+diffusion model, LiDiff†, and to PVD [11], whose results
+on SemanticKITTI were obtained by LiDiff authors [9]. No
+refinement is used after diffusion for any of these methods.
+The results are reported in Tab. I. We notice that LiDPM†
+performs better than the other diffusion-only methods on
+all metrics, except for the Chamfer distance (CD), where
+it is just 1 cm away from LiDiff†. We also remark that our
+method’s IoU for voxels of size 0.5 m and 0.2 m is already
+better than the IoU obtained by LiDiff after refinement.
+
+Complete method. We then compare to all baselines, still in
+Tab. I. We include the refinement step used for densification
+in LiDiff and LiDPM. We notice that LiDPM outperforms
+all the others in terms of JSD BEV and IoU at 0.2 m and
+0.1 m. LiDPM is also better than LiDiff in JSD 3D and IoU at
+0.5 m, and reaches an equivalent CD. We only notice a slight
+performance drop for LiDPM before and after refinement in
+JSD 3D and IoU at 0.5 m. The qualitative results presented
+in Fig. 4 show that the generated point clouds with LiDPM
+exhibit less spurious structures than those generated with
+LiDiff, in particular far away from the center of the scenes.
+
+BatchNorm
+
+InstanceNorm
+
+Fig. 3. Effect of normalization. Using batch normalization layers (left)
+leads to instabilities with points generated at far ranges. This is solved when
+using instance normalization layers instead (right). Note the scale difference.
+
+B. Hyperparameter study
+
+Reduced evaluation set. For simplicity and faster eval-
+uations, we conduct this study on a small subset of the
+validation sequence: 10 scans equally spaced in time.
+
+Start of the diffusion t0. We generate point clouds using
+Eq. (2) for different starting points t0, as defined in Eq. (4),
+and not using the DPM-Solver. We show in Tab. II(a) that
+the best results are observed for t0 around 300. Starting the
+diffusion with t0 = 50 prevents the network from completing
+the point cloud (low recall), as the starting point cloud ˜pd
+is
+t0
+not noisy enough to fill all the gaps present in ps. In contrast,
+picking t0 close to T improves the recall, but the original
+structures in ps are less preserved (lower precision). Starting
+at t0 = 300 is a sweet spot to optimize the Chamfer distance
+and the voxel IoU. The conclusion remains the same after
+post-processing the results with the refinement network.
+
+DPM-Solver. For t0 = 300, we study the achievable speedup
+to generate a point cloud by using the DPM-Solver. We test
+the number of steps to generate the point clouds, between 5
+and 50 (see Tab. II(b)). We notice that 20 steps are enough
+while the results degrade when going below.
+
+C. Statistics of the predicted noise ε
+
+In LiDiff, the authors notice that the predicted noise at
+the output of εθ has a mean and standard deviation very
+far from the expected values of 0 and 1. They introduce
+regularization losses to enforce this behavior (see Appendix).
+the network εθ naturally
+In our method, we notice that
+predicts the noise with zero mean. Its standard deviation is
+only slightly underestimated (closer to 0.6 than 1).
+
+D. Preventing instabilities
+
+When training our network εθ with batch normalization
+layers, we noticed instabilities where points were generated
+at very far ranges. We identified that it was due to the batch
+statistics, which could be quite different whether εθ was
+conditioned or not. To avoid this issue, we replaced all batch
+normalization layers by instance normalization layers. The
+different behaviors are illustrated in Fig. 3.
+
+V. CONCLUSION
+
+We have shown that vanilla DDPM can be applied to
+complete outdoor lidar point clouds, meaning that local point
+diffusion, as used in prior work [9], [31], is not necessary
+the scene level. LiDPM surpasses existing point-level
+at
+
+LiDiff† (no refinement)
+
+LiDPM† (no refinement)
+
+LiDiff
+
+LiDPM
+
+Fig. 4. Qualitative results. We show results from local diffusion of LiDiff w/o refinement (first column), after global diffusion at scene level with LiDPM
+w/o refinement (second column), with LiDiff including refinement (third column), and with LiDPM followed by refinement (last column).
+
+diffusion-based methods on SemanticKITTI. In addition, by
+following DDPM formulation, LiDPM opens the door to
+unconditional generation, as presented in Fig. 5. This is
+achieved by deactivating the conditioning (setting γ = 0 in
+Eq. (5)) and replacing the input scan ˜ps with 180K-point
+clouds sampled from arbitrary shapes.
+
+Fig. 5. Pure generation with LiDPM. We generate scenes unconditionally,
+from arbitrary point clouds following a straight, crossing, or turn shape.
+
+APPENDIX
+We present here the formulation of the diffusion pro-
+cess as a local denoising, as discussed and used in prior
+work [9], [31]. We then highlight our concerns, arguing
+that this approach can be more complex and may introduce
+approximations in the denoising process.
+
+A. Formulation of the diffusion process as a local denoising
+0, the forward process
+
+Starting from a dense point cloud pd
+
+in LiDiff [9] satisfies
+
+t = pd
+pd
+
+0 +
+
+(cid:112)
+
+1 − ¯αt ε,
+
+(6)
+
+which is obtained by considering point offsets with respect
+to the ground truth pd
+xt = pd
+
+0, setting
+t − pd
+0
+
+x0 = 0
+
+and
+
+(7)
+
+in Eq. (1). The endpoint of this forward local diffusion
+process, or, equivalently, the starting point of the reverse
+denoising process, pd
+
+T , is thus a noisy version of pd
+0.
+
+(8)
+
+Second, conditioning εθ on xt as in Eq. (3) is not possible
+0 during generation. Therefore,
+t and trained to minimize
+
+as it would require knowing pd
+εθ is instead conditioned on pd
+(cid:104)
+∥ε − εθ (pd
+t ,t)) = Lmean(εθ (pd
+
+L (θ ) = E
+with Lreg(εθ (pd
+
+pd
+t
+
+t ,t)∥2 + λ Lreg(εθ (pd
+
+(cid:105)
+t ,t))
+
+,
+t ,t)) + Lstd(εθ (pd
+
+t ,t)) ,
+where λ > 0, and Lmean, Lstd return the mean and standard
+deviation of the entries in εθ (pd
+t ,t). When setting λ = 0, the
+LiDiff authors noticed that the mean and standard deviation
+of εθ were far from 0 and 1, while ε ∼ N (0, I). Thus, the
+regularization loss Lreg was introduced to guide the outputs
+of εθ towards these expected values.
+
+Third, using Eqs. (7) in (2), the reverse denoising becomes
+
+pd
+t−1 = pd
+
+0 +
+
+t − pd
+pd
+0√
+αt
+
+−
+
+(1 − αt ) εθ (pd
+t ,t)
+(cid:112)αt (1 − ¯αt )
+
+(cid:112)
+
+βt z .
+
++
+
+(9)
+
+Yet, this formula is unusable in practice as it requires access
+to the dense ground-truth point cloud pd
+0, which is unknown
+during generation. As a workaround, LiDiff replaces the
+0 by a noisy estimate ˜ps, obtained
+dense point cloud pd
+by noising K duplications of the sparse point cloud ps.
+Ultimately, the approximate reverse denoising process writes
+
+t−1 = ˜ps +
+pd
+
+t − ˜ps
+pd
+√
+αt
+
+−
+
+(1 − αt ) εθ (pd
+t ,t)
+(cid:112)αt (1 − ¯αt )
+
+(cid:112)
+
++
+
+βt z .
+
+(10)
+
+Finally, one needs to construct a starting point pd
+
+T of the
+reverse denoising process. According to the forward process
+in Eq. (6), a starting point can be constructed by sampling
+z ∼ N (0, I) and adding it to pd
+
+0, i.e.,
+
+T = pd
+pd
+
+0 +
+
+(cid:112)
+
+1 − ¯αT z ≃ pd
+√
+
+0 + z,
+
+(11)
+
+where we use the fact that
+Again, it would require knowing the ground truth pd
+
+1 − ¯αT ≃ 1, as in vanilla DDPM.
+0. Instead,
+
+the starting point is also approximated using ˜ps:
+
+T = ˜ps + z,
+pd
+
+where
+
+z ∼ N (0, I).
+
+(12)
+
+B. Limitations of local denoising paradigm
+
+While the above local point diffusion proved to work, it
+
+holds on major approximations, which we outline here.
+
+a. The justification of LiDiff to propose local point dif-
+fusion is that DDPM requires normalization, which leads
+to compression of data along some of the point cloud axes
+(Sec. 3.3 of LiDiff [9]). We believe this observation may be
+flawed. Not only could normalization be applied within fixed
+bounds, but it is actually not needed for DDPM, which can
+be formulated in the metric space (see Sec. III-B).
+
+b. A major limitation of local diffusion is the reliance on a
+noisy estimate ˜ps of the ground truth in Eq. (9) and Eq. (12),
+which hinders its use for data generation, thereby losing one
+of the major properties of diffusion models.
+
+c. Third, diffusion requires the predicted noise to converge
+to a zero-centered distribution. To compensate for the pre-
+dicted local noise not being zero-centered, the authors add an
+additional regularization term Lreg (Sec. 3.4 of LiDiff [9]),
+which further complexifies the optimization objective.
+
+In this work, we show that DDPM can be applied on
+non-normalized point clouds without
+losing details after
+generation. Hence, the local (re-)formulation is not required
+(observation a.). Moreover, since we follow the vanilla
+‘scene-level’ diffusion, our formulation does not require any
+additional regularization (observation b.). Last, a byproduct
+of our choices is that our simpler formulation opens up the
+possibility to generate point clouds (observation c.).
+
+ACKNOWLEDGMENT
+
+This work has been carried out using HPC resources from
+GENCI-IDRIS (grants AD011014484R1, AD011012883R3).
+We thank Mickael Chen, Corentin Sautier and Mohammad
+Fahes for the proofreading and valuable feedback.
+
+REFERENCES
+
+[1] M. Popovi´c, F. Thomas, S. Papatheodorou, N. Funk, T. Vidal-Calleja,
+and S. Leutenegger, “Volumetric occupancy mapping with probabilis-
+tic depth completion for robotic navigation,” RA-L, 2021.
+
+[2] I. Vizzo, B. Mersch, R. Marcuzzi, L. Wiesmann, J. Behley, and
+C. Stachniss, “Make it dense: Self-supervised geometric scan comple-
+tion of sparse 3D lidar scans in large outdoor environments,” RA-L,
+2022.
+
+[3] X. Wu, L. Peng, H. Yang, L. Xie, C. Huang, C. Deng, H. Liu, and
+D. Cai, “Sparse fuse dense: Towards high quality 3D detection with
+depth completion,” in CVPR, 2022.
+
+[4] Y. Xiong, W.-C. Ma, J. Wang, and R. Urtasun, “Learning compact
+representations for lidar completion and generation,” in CVPR, 2023.
+[5] Y. Shan, Y. Xia, Y. Chen, and D. Cremers, “Scp: Scene completion
+
+pre-training for 3d object detection,” in ISPRS, 2023.
+
+[6] B. Michele, A. Boulch, G. Puy, T.-H. Vu, R. Marlet, and N. Courty,
+“SALUDA: Surface-based automotive lidar unsupervised domain
+adaptation,” in 3DV, 2024.
+
+[7] J. Sanchez, J.-E. Deschaud, and F. Goulette, “Domain generalization
+of 3D semantic segmentation in autonomous driving,” in ICCV, 2023.
+[8] L. Yi, B. Gong, and T. Funkhouser, “Complete & Label: A domain
+adaptation approach to semantic segmentation of lidar point clouds,”
+in CVPR, 2021.
+
+[9] L. Nunes, R. Marcuzzi, B. Mersch, J. Behley, and C. Stachniss,
+“Scaling diffusion models to real-world 3d lidar scene completion,” in
+CVPR, 2024.
+
+[10] J. Ho, A. Jain, and P. Abbeel, “Denoising diffusion probabilistic
+
+models,” in NeurIPS, 2020.
+
+[11] L. Zhou, Y. Du, and J. Wu, “3d shape generation and completion
+
+through point-voxel diffusion,” in ICCV, 2021.
+
+[12] S. Mo, E. Xie, R. Chu, L. Hong, M. Niessner, and Z. Li, “Dit-3d:
+Exploring plain diffusion transformers for 3d shape generation,” in
+NeurIPS, 2023.
+
+[13] J. Behley, M. Garbade, A. Milioto, J. Quenzel, S. Behnke, C. Stach-
+niss, and J. Gall, “Semantickitti: A dataset for semantic scene under-
+standing of lidar sequences,” in CVPR, 2019.
+
+[14] S. Luo and W. Hu, “Diffusion probabilistic models for 3d point cloud
+
+generation,” in CVPR, 2021.
+
+[15] F. Ma and S. Karaman, “Sparse-to-dense: Depth prediction from sparse
+
+depth samples and a single image,” in ICRA, 2018.
+
+[16] M. Jaritz, R. De Charette, E. Wirbel, X. Perrotton, and F. Nashashibi,
+“Sparse and dense data with cnns: Depth completion and semantic
+segmentation,” in 3DV, 2018.
+
+[17] W. E. Lorensen and H. E. Cline, “Marching cubes: A high resolution
+
+3D surface construction algorithm,” in SIGGRAPH, 1987.
+
+[18] P. Li, R. Zhao, Y. Shi, H. Zhao, J. Yuan, G. Zhou, and Y.-Q. Zhang,
+“LODE: Locally conditioned eikonal implicit scene completion from
+sparse lidar,” in ICRA, 2023.
+
+[19] L. Rold˜ao, R. de Charette, and A. Verroust-Blondet, “LMSCNet:
+Lightweight multiscale 3D semantic completion,” in 3DV, 2020.
+[20] Z. Xia, Y. Liu, X. Li, X. Zhu, Y. Ma, Y. Li, Y. Hou, and Y. Qiao,
+“Scpnet: Semantic scene completion on point cloud,” in CVPR, 2023.
+[21] S. Song, F. Yu, A. Zeng, A. X. Chang, M. Savva, and T. Funkhouser,
+“Semantic scene completion from a single depth image,” in CVPR,
+2017.
+
+[22] X. Yan, J. Gao, J. Li, R. Zhang, Z. Li, R. Huang, and S. Cui, “Sparse
+single sweep lidar point cloud segmentation via learning contextual
+shape priors from scene completion,” in AAAI, 2021.
+
+[23] L. Roldao, R. De Charette, and A. Verroust-Blondet, “3d semantic
+
+scene completion: A survey,” IJCV, 2022.
+
+[24] C. B. Rist, D. Emmerichs, M. Enzweiler, and D. M. Gavrila, “Semantic
+scene completion using local deep implicit functions on lidar data,”
+T-PAMI, 2022.
+
+[25] R. Cai, G. Yang, H. Averbuch-Elor, Z. Hao, S. Belongie, N. Snavely,
+and B. Hariharan, “Learning gradient fields for shape generation,” in
+ECCV, 2020.
+
+[26] W. Yuan, T. Khot, D. Held, C. Mertz, and M. Hebert, “Pcn: Point
+
+completion network,” in 3DV, 2018.
+
+[27] A. Boulch, P.-A. Langlois, G. Puy, and R. Marlet, “NeeDrop: Self-
+supervised shape representation from sparse point clouds using needle
+dropping,” in 3DV, 2021.
+
+[28] R. Sulzer, L. Landrieu, A. Boulch, R. Marlet, and B. Vallet, “Deep
+surface reconstruction from point clouds with visibility information,”
+in ICPR, 2022.
+
+[29] I. Vizzo, X. Chen, N. Chebrolu, J. Behley, and C. Stachniss, “Poisson
+surface reconstruction for lidar odometry and mapping,” in ICRA,
+2021.
+
+[30] J. Huang, Z. Gojcic, M. Atzmon, O. Litany, S. Fidler, and F. Williams,
+
+“Neural kernel surface reconstruction,” in CVPR, 2023.
+
+[31] S. Zhang, A. Zhao, L. Yang, Z. Li, C. Meng, H. Xu, T. Chen, A. Wei,
+P. P. GU, and L. Sun, “Distilling diffusion models to efficient 3d lidar
+scene completion,” arXiv:2412.03515, 2024.
+
+[32] H. Cao and S. Behnke, “DiffSSC: Semantic lidar scan completion
+using denoising diffusion probabilistic models,” arXiv:2409.18092,
+2024.
+
+[33] J. Ho and T. Salimans, “Classifier-free diffusion guidance,” in NeurIPS
+
+Workshop, 2021.
+
+[34] D. P. Kingma and J. Ba, “Adam: A method for stochastic optimiza-
+
+tion,” in ICLR, 2015.
+
+[35] C. Choy, J. Gwak, and S. Savarese, “4D spatio-temporal ConvNets:
+
+Minkowski convolutional neural networks,” in CVPR, 2019.
+
+[36] C. Lu, Y. Zhou, F. Bao, J. Chen, C. Li, and J. Zhu, “DPM-Solver: A
+fast ODE solver for diffusion probabilistic model sampling in around
+10 steps,” in NeurIPS, 2022.
+
+[37] L. Roldao, R. de Charette, and A. Verroust-Blondet, “Lmscnet:
+Lightweight multiscale 3d semantic completion,” in 3DV, 2020.
+
+

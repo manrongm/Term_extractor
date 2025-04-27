@@ -1,0 +1,824 @@
+(a) category distribution
+(a) training paradigm
+(b) an example
+(b) context
+(c) an example
+(c) commentary benefits
+(c) pre-training scalability
+(d) sample ccs
+(e.g. talking-head
+(e.g., ar glasses
+(e.g., clips
+(e.g., prompt, previous asr
+(e.g., title, duration, category
+(streaming asr) data
+(tested model
+*equal contribution
+, “description
+-cc/qa livesports-3k-cc
+1,236 four- option mcqs
+1,702 events
+10 minutes
+10m clips
+12 videos
+120 frames
+128 gpus
+158k image qa samples
+16k to-
+2 fps
+2 fps frame rate
+240 sec-
+240 seconds
+2bytedance zejun
+3 sec- onds
+3) most asr transcriptions
+3. methodology
+30 seconds
+3k live ccs
+414 videos
+416 videos
+480 frames
+49 sports categories
+5 00:2000:1900:1800:17pre-trained llm2 fpsvisualtokenstext tokensoh
+5 2 0 2 r
+5. experiments
+526k video clips
+5m examples
+5m) streaming
+60 sec- onds
+60 seconds
+600 candidate videos
+62 questions
+7 youtube categories
+8 derstanding
+8 uniformly sampled frames
+[7, 72] (large-v3-turbo
+a 250× speed-up
+a 5-minute video
+a 60- second segment
+a b c d
+a b c d] answer
+a balanced distribution
+a basketball coach
+a broader range
+a capital letter
+a clip
+a complete response
+a comprehensive benchmark
+a comprehensive solution
+a confi- dence threshold
+a curated pool
+a curated set
+a data collection pipeline
+a data production pipeline
+a diverse set
+a fair comparison
+a flip
+a football game
+a frame
+a general video captioning approach
+a high-quality sft dataset
+a human commentator
+a hybrid strategy
+a judge
+a latency
+a learning rate
+a long-term ambition
+a maximum
+a model
+a new benchmark
+a new benchmark livesports-3k-cc
+a new capability
+a new clip
+a new livesports-3k benchmark1
+a newline character
+a novel streaming training approach
+a novice player
+a pairwise comparison approach
+a pairwise compe- tition approach
+a period
+a pool
+a possible way
+a precise criterion
+a prompt
+a real- time mode
+a red hat
+a resolution
+a result
+a sam- ple event
+a scalable data source
+a sentence
+a set
+a setting
+a shot
+a significant de- parture
+a special visual effect
+a speech rate
+a threshold
+a user prompt
+a valuable track
+a very high perplexity
+a very low perplexity
+a video
+a video llm
+a vision transformer
+a visual encoder
+a) ablation study
+ablation studies
+ablation study
+ablation study pre-training paradigm
+abnormal speech speed
+accurate asr word prediction
+action recognition
+active speaker detec- tion
+active speaker detection
+additional con- text
+additional context
+additional tracking
+advanced lmms
+all asr text
+all models
+all resources
+all video clip frames
+an asd removel example
+an au- toregressive manner
+an auxiliary evaluation
+an example
+an lmm
+an overall event
+an special eos indicator
+an untapped opportunity
+appropriate questions
+approximately 2 to 3 seconds
+archerytimelinegroundtruth asr
+as 4 remove asd
+asd removal
+asr data
+asr livesports-3k-cc win rate↑ video-mme
+asr pre-trained model
+asr quality
+asr text
+asr title
+asr title || prev
+asr transcriptions
+asr transcripts
+asr word timestamp gaps
+asr words
+associated user prompts
+at least 30 distinct words
+automatic extraction capabil- ities
+automatic speech recognition (asr) transcriptions
+autos sports
+b. b6
+basic dynamic resolution support
+be- yond
+bench- marks
+better asr quality
+better asrb1
+between 30 seconds
+both caption
+both captioning and streaming objectives
+both cc
+both commentary
+both pre-training and sft datasets
+c. aber
+candidate videos
+caption/qa sequences
+category distribu3on
+chatbot arena
+clippingword-wise interspace
+clips31m 30~60 clips15m clipsm clips
+clipsmaintain non-asd clipsprompt
+collect- ing
+com- mentary performance
+com- petitive performance
+commentary gen- eration
+commentary generation
+commentary generation - gpt-4o-08
+commentary quality
+common caption
+common sports
+common video understanding capability
+complete sentences
+content informativeness
+context information
+context input
+contextual information
+continuous commentary
+corporate video titles
+corre- sponding video frames
+corresponding frame intervals
+corresponding subtitles
+cost-effective techniques
+costly human annotations
+current or future actions
+cvpr25 workshop loveucvpr25
+d. raise hands
+data cura- tion
+de- tail
+de- tailed examples
+dense interleaving se- quences
+dense interleaving sequence
+depth estimation
+derstanding benchmarks
+dif- ferent models
+different pre-training paradigms
+dis- crepancies
+doubleteam defense
+downstream tasks
+each category
+each clip
+each element
+each event
+each gpt-4o
+each pair
+each sample
+each segment’s duration
+each training sample
+each type
+each video
+early large multimodal models
+early lmms
+effec- tive
+efficient filtering techniques
+english cc
+english detection
+english videos
+english-language content
+english-proficient annotators
+entire video frames
+evaluat- ing real-time video commentary
+evaluation protocols
+every 2 frames
+exclamation mark
+existing approaches
+experiments setup implemetation details
+extensive experiments
+extremely low latency
+face detection
+fair evaluation
+filtering low-quality talking-head videos
+fine-grained temporal correlations
+fine-tune livecc-7b
+first, recent video-text datasets
+fixed timestamps
+formal pre-training
+four recent large-scale video datasets
+free gpt-4o judging
+future work
+general qa
+general video and image datasets
+general video qa performance
+generated text
+generation-based method
+global video captions
+gpt crafted data
+gpt-4o-08-06-generated commentary
+great data
+ground-truth asr
+high visual quality
+high- quality supervised fine-tuning (sft
+high-quality live ccs
+higher-quality asr transcriptions
+his hands
+human- or llm-crafted video
+image dialogue
+image-text data
+increased pre-training data
+informal, verbal language
+ing algorithm
+ing set
+ing sft models
+input frames
+instance segmentation
+interactive multimodal conversation
+irrelevant events
+its cc
+its con- stituent words
+its huggingface release
+its scalability
+its strong performance
+its training paradigm
+judgepre-training data pipelinesft data pipelinea2
+key factors
+lacking punctuation
+lan- guage
+language model
+language pre-
+large language models
+large multimodal models
+large-scale training
+large-scale video-asr learning
+large-v3-turbo howto
+larger data size
+learning ambiguity
+less explored asr transcription data
+light-asd pipeline
+lin1∗ wei
+live-whisperx-526k dataset
+livecc data production pipeline
+livecc models
+livecc- 7b-base
+livesports-3k data collection
+llava-video-72b. livesports- 3k qa
+long sequences
+long-form streaming
+loss values
+low cost
+lv178k+live526k      lv178k+live526
+m videos
+mak- ing predictions
+many real-time applications
+many remaining videos
+mark- ing videos
+meaningful visual information
+medium- and long- length videos
+metadata filtering
+metadata filteringdownload cc2
+mike zheng
+million youtube video ids
+millionsof streaming speechtranscripts
+minimal modifications
+model (7b/8b) videomme
+model behavior
+model performance
+model-generated and groundtruth ccs
+modeling overview
+modeling training
+more accurate, word- level
+more fine-grained spatial- temporal learning
+most video llms
+multi- source data
+multimodal conversation samples
+multimodal omni models
+multiple choices
+national university
+neither approach
+new insights
+news mvideosb5
+no pre-asr context
+no previous asr
+non- predictive inputs
+notable gains
+novel real-time video commentary feature
+object detection
+ocr capabilities
+ocr-reliant questions
+one cate- gory lack
+ongoing sports action
+online action de- tection
+only 1– seconds
+only a few words
+only the streaming-style sequence
+only user query
+only videos
+onthis match
+open-ended text generation
+our 7b model
+our approach
+our bench- mark
+our comprehensive framework
+our default setting
+our filtering criteria
+our final livecc-7b-instruct model
+our live-whisper-526k and llava-video-178k datasets
+our live-whisperx-526k
+our live-whisperx-526k dataset
+our livecc model
+our method
+our model
+our model architecture
+our model training
+our models
+our newly introduced livesports-3k-qa
+our pre- trained model
+our pre-training strategy
+our primary goal
+our proposed live-cc-5m dataset
+our proposed live-whisperx-526k dataset
+our proposed live-whisperx-526k. livesports-3k cc
+our proposed livesports-3k benchmark
+our proposed paradigm
+our selection
+our streaming pre-training approach
+our training dataset
+our video sources
+our work
+overall ocr
+per- formance
+persistent face-speaking content
+photoshop?text stream
+poor asr qual- ity
+popular sports
+popular video llms
+popular video qa benchmarks
+potential in- formation leakage
+pre- training
+pre- training and live-whisperx-526k dataset
+pre-training ablation studies
+pre-training scalability
+pre-training subsets
+precise word-level timestamps
+previous asr
+previous asr text
+previous asr texts
+previous online video understanding tasks
+previous prompts
+previous sports benchmarks
+previous studies
+previous video captioning
+prior con- text
+prior lmms
+prior successes
+proactive response
+promptlive-whisperx-526k30~240s clipssft
+proprietary model apis
+pure text filteringa3
+py- torch
+qa accuracy
+qa bench- marks
+qa performance
+quali- fied events
+qualified videos
+query types
+query who
+question mark
+qwen-vl- 2b-instruct
+qwen2- vl
+real time?time125s124s126s127s128sthefrench
+real-life scenarios
+real-time applications
+real-time commentary
+real-time feedback
+real-time infer- ence
+real-time streaming capabilities
+real-time video (a) statistics
+real-time video com- mentary
+real-time video commentary
+reasonably accurate word-level timestamps
+recent advancements
+rich spatiotemporal semantics
+right y-axis
+scribes attackers
+se- quential frame inputs
+seamless streaming
+second range
+semantic consistency
+semantic segmentation
+semantically coherent events
+sequence pre-processing
+several large-scale youtube video datasets
+several studies
+sft data
+sft data pipeline
+sft models
+sft training
+short, incomplete asr words
+si- lence
+silent frames
+single-source (streaming commentary) data
+small-scale dense caption datasets
+small-scale instruction
+some asr texts
+sparse cc
+spatial/temporal grounding
+spatio-temporal representations
+specific areas
+specific content
+specific sports
+speech recognition
+sports categories
+sports videos
+stan- dard practice
+step a1
+step a2
+step a3
+storage efficiency
+streaming applications
+streaming mode
+streaming pre-training
+streaming qa
+streaming speech transcription
+streaming video
+streaming video frames
+streaming video llms
+streaming video under- standing evaluations
+streaming video understanding
+strong general video qa performance
+such data
+such videos
+sure generalizability
+synthetic data generation
+systematic eval- uation
+talking-head content
+talking-headfor scale ablation studiesb4
+targeted queries
+temporal correlations
+temporally-aligned, fine- grained vision-language modeling
+temporary pauses
+text coherence
+text perplexity
+text recognition tasks
+text tokens
+textual data
+that man
+that red hat guy
+the 1 to 4 words
+the 30∼60s live-cc- 1∼10m dataset
+the 5m scale
+the 7b/8b scale
+the ability
+the able-bodied game
+the above filtering steps
+the align- ment
+the asr event transcriptions
+the asr text
+the asr texts
+the asr words
+the asr-only pre-trained livecc-7b-base model
+the asr-transcribed ccs
+the ball
+the base version
+the baseline
+the batch size
+the beginning
+the benchmark
+the best balance
+the better prediction
+the broad gen- eralizability
+the camera
+the cases
+the category distribution
+the cc track
+the challenges
+the clip length
+the commentary
+the commentary task
+the condition
+the configurations
+the construction
+the content
+the context part
+the continuity
+the corresponding youtube closed captions
+the current clip
+the current segment
+the cvpr 2025 submission period
+the data collection process
+the datasets
+the default maximum clip length
+the details
+the difficulties
+the difficulty
+the distribution
+the ef- fectiveness
+the effectiveness
+the ellipsis
+the entire video
+the evaluation
+the evaluation metric
+the event
+the event clip
+the extended range
+the fact
+the fi- nal benchmark
+the fixed competition opponent
+the following baselines
+the following steps
+the formal pre
+the frame limit
+the free-form commentary
+the gap
+the given video clip
+the ground truth asr transcriptions
+the ground-truth ccs
+the highly visual-grounded nature
+the impact
+the increased data size
+the inherent audio channel
+the instruction
+the instruction fine-tuning stage
+the judge
+the key-value (kv) pairs
+the language category
+the large-scale auto-regressive 1welcome
+the last asr word
+the learning ambiguity
+the line
+the live-cc-5m pre- training set
+the live-whisperx-526k dataset
+the live-whisperx-526k sft set
+the livesports benchmark
+the livesports benchmarkword
+the livesports-3k benchmark
+the livesports-3k-cc track
+the livesports-3k-qa track
+the llm
+the llm backbone
+the logits
+the low-quality youtube cc
+the man
+the maxi- mum length
+the maximum clip length
+the maximum duration
+the maximum number
+the middle
+the minimum spatial resolu- tion
+the model
+the model’s confidence
+the model’s predictions
+the model’s task
+the most related work
+the objective
+the ongoing sports videos
+the orig- inal youtube cc
+the original youtube asr transcripts
+the overall accuracy
+the participants
+the pass
+the percentage
+the performance
+the player no.34b
+the pre
+the pre-training data
+the pre-training dataset
+the pre-training stage
+the preceding asr context
+the preceding ccs
+the predicted and groundtruth ccs
+the presence
+the prompts
+the proportion
+the pure text loss
+the qa track
+the qwen models
+the qwen2-vl conversation template
+the qwen2-vl-7b-base base model
+the qwen2-vl-7b-base checkpoint
+the range
+the ranking metric
+the real-time video commentary competition
+the real-world applications
+the real-world data
+the reference
+the released video ids
+the remaining 1,174 mcqs
+the response
+the results
+the scalability
+the selection criteria
+the sft
+the sft data
+the sft data quality
+the sft model initialization
+the sft stage
+the sft stages
+the signal
+the single-source
+the source
+the speech transcription
+the start
+the statistics
+the streaming asr
+the streaming characteristics
+the streaming training
+the streaming-based pre-training yields
+the style
+the success
+the supple- mentary material
+the supplementary material
+the talking head
+the temporal context
+the temporal dimen- sion
+the temporally synchronized asr words
+the text tokens
+the text/audio generation
+the three query types
+the time index
+the time interval
+the time intervals
+the training data
+the training engine
+the training sequence
+the transcript
+the usa
+the use
+the video
+the video commentary
+the video title
+the video-mme benchmark
+the videos
+the visual context length
+the visual em-
+the visual events
+the visual input frames
+the win rate
+the winning rates
+the words
+the youtube video
+the ❀ baseline
+their ac- cessibility
+their asr content
+their closed captions
+their dependency
+their interactions
+their timestamps
+their training
+their valuable temporal alignment
+their word set size
+these  mil- lion videos
+these asr transcripts
+these chal- lenges
+these clips
+these criteria
+these data samples
+these elements
+these filtering criteria
+these filters
+these limitations
+these results
+these table
+these three question types
+these videos
+they're trailing bytwo
+thinker) llava-video-7b llava-ov-7b
+this approach
+this condition
+this densely interleaved token sequence
+this ellipsis
+this example
+this field
+this goal
+this improvement
+this paper
+this paradigm
+this pipeline
+this process
+this prompt
+this track
+this work
+three criteria
+three duration groups
+three fundamental chal- lenges
+three fundamental el- ements
+three key advantages
+three query types
+timestamped asr para- graph
+title metadata
+title || prev
+token embedding space
+training data
+training efficiency
+training strategy
+training video llms
+two stages
+two tracks
+two videos
+usage terms
+vanced 72b models
+various models
+video annotations
+video clippingb2
+video comprehension
+video frames
+video ids
+video input
+video llm
+video llm training
+video llms
+video metadata
+video platforms
+video stream
+video title
+video titles
+video understanding
+video understanding models’ capabilities
+video&ccm idsyt-cc-msourceyt-cc
+video-asr data
+video-asr data curation
+video-asr streaming sequences
+video-language learning
+video-levelccfilteringm idsenglish detection>= word
+video-text pairs
+vision-language representation
+visual content
+visual encodercasual lm loss
+visual filtering
+visual frames
+visual grounding
+visual tokens
+visual-text alignment
+visually grounded asr transcription
+visually rele- vant
+when, what questions
+whether a question
+win rate
+win rate comparison
+word counts
+word generation
+word-level alignment
+word-level timestamped asr transcripts
+youtube cc
+youtube metadata
+youtube videos
+“hallucinated” streaming conversations

@@ -1,0 +1,1913 @@
+PREPRINT
+
+1
+
+DIVE: Inverting Conditional Diffusion Models
+for Discriminative Tasks
+
+Yinqi Li, Hong Chang, Member, IEEE, Ruibing Hou, Member, IEEE,
+Shiguang Shan, Fellow, IEEE, and Xilin Chen, Fellow, IEEE
+
+5
+2
+0
+2
+
+r
+p
+A
+4
+2
+
+]
+
+V
+C
+.
+s
+c
+[
+
+1
+v
+3
+5
+2
+7
+1
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Abstract—Diffusion models have shown remarkable progress
+in various generative tasks such as image and video genera-
+tion. This paper studies the problem of leveraging pretrained
+diffusion models for performing discriminative tasks. Specifically,
+we extend the discriminative capability of pretrained frozen
+generative diffusion models from the classification task [1],
+[2] to the more complex object detection task, by “inverting”
+a pretrained layout-to-image diffusion model. To this end, a
+gradient-based discrete optimization approach for replacing the
+heavy prediction enumeration process, and a prior distribution
+model for making more accurate use of the Bayes’ rule, are
+proposed respectively. Empirical results show that this method
+is on par with basic discriminative object detection baselines
+on COCO dataset. In addition, our method can greatly speed
+up the previous diffusion-based method [1], [2] for classification
+without sacrificing accuracy. Code and models are available at
+https://github.com/LiYinqi/DIVE.
+
+Index Terms—Diffusion model, generative modeling, discrim-
+
+inative Task, object detection, visual recognition.
+
+I. INTRODUCTION
+
+R ECENTLY, generative models such as diffusion mod-
+
+els [3]–[8], autoregressive models [9]–[12], and gen-
+erative adversarial networks (GANs) [13]–[15] have gained
+increasing interest in the research community due to their
+ability to synthesize photorealistic images. This remarkable
+generation ability implies that these methods could accurately
+model the data distribution and learn effective image repre-
+sentations.
+
+Leveraging pretrained generative models, some works [16]–
+[22] synthesize a set of training samples and then use the
+synthetic training set to train corresponding models for dis-
+criminative tasks. Some other works [23]–[29] utilize the
+trained generative model to extract features and learn dis-
+criminative heads upon. Notably, both of these two families
+of approaches still rely on and train discriminative models to
+perform discriminative tasks. Instead, in this work, we study
+
+Y. Li, H. Chang (corresponding author), S. Shan and X. Chen are with
+Key Laboratory of Intelligent Information Processing, Institute of Computing
+Technology, Chinese Academy of Sciences, Beijing, 100190, China, and
+University of Chinese Academy of Sciences, Beijing 100049, China.
+
+R. Hou is with Key Laboratory of Intelligent Information Processing,
+Institute of Computing Technology, Chinese Academy of Sciences, Beijing,
+100190, China.
+
+E-mail:
+
+yinqi.li@vipl.ict.ac.cn,
+
+{changhong,
+
+houruibing,
+
+sgshan,
+
+xlchen}@ict.ac.cn
+
+Preprint. © 2025 IEEE. Personal use of this material is permitted. Permis-
+sion from IEEE must be obtained for all other uses, in any current or future
+media, including reprinting/republishing this material for advertising or pro-
+motional purposes, creating new collective works, for resale or redistribution
+to servers or lists, or reuse of any copyrighted component of this work in
+other works.
+
+(a) Enumeration-based Diffuser Classifier [1], [2].
+
+(b) Directly extending (a) to the object detection task.
+
+(c) Our proposed optimization-based prior-integrated framework.
+
+Fig. 1: Repurposing pretrained conditional diffusion models for
+discriminative tasks without tuning model parameters. Ldiffusion and
+Lprior represent the training loss of the diffusion model [4], which is
+the lower bound of the modeled data distribution p(x|y) and p(y).
+
+whether purely pretrained generative models could accomplish
+discriminative tasks. That is, we focus on directly convert-
+ing pretrained generative models to “discriminative models”,
+without finetuning the model parameters or training additional
+discriminative heads. We believe that such a study could
+more intrinsically reveal the discriminative ability of pretrained
+generative models.
+
+through the Bayes’
+
+The classical way of such a generative-to-discriminative
+conversion is
+rule, which accom-
+plishes the discriminative task arg maxy p(y|x) by calculating
+arg maxy p(x|y)p(y), where y is the task label and x is
+the input image [30]. Based on this approach, recently, [1],
+[2] convert pretrained class- (and text-) conditional diffusion
+models, a family of likelihood-based generative models, to
+generative classifiers. For a C-way classification task under
+
+Test ImageClass-conditional Diffusion ModelConditional...goldfinchtigerbeeInputConditionalInputpersonpersonLayout-conditional Diffusion Modelbusbusbus...Test ImageConditionalInputLayout-conditional Diffusion ModelPrior Layout ModelTest Image 
+ 
+ 
+ 
+ 
+ 
+PREPRINT
+
+2
+
+the assumption of a uniform prior p(y), their solution is to
+query the model C times to obtain the likelihood of each class
+and then pick the highest one, as shown in Figure 1(a).
+
+In this paper, we explore how such an inversion approach
+can be applied to more complex discriminative tasks, such
+as object detection, as shown in Figure 1(b). We argue that
+this idea is interesting because it provides a purely generative-
+based approach to the complex object detection task, helping
+researchers understand pretrained diffusion models from the
+perspective of discriminative ability, and by-productively offer-
+ing a novel evaluation metric for diffusion models. Meanwhile,
+previous diffusion-based classification methods [1], [2] cannot
+be directly extended due to the following challenges: (1)
+the prior label distribution of detection datasets, i.e., object
+layouts, is not uniform and thus can not be ignored; (2) more
+critically, it is impossible to enumerate all potential detection
+labels for a test image, as the combinations of objects and
+their locations are vast and almost countless.
+
+To solve the first problem, we train a diffusion model to
+model the prior p(y). Together with the pretrained conditional
+diffusion model p(x|y), we obtain the discriminative predic-
+tion p(y|x) through posterior maximization. For the second
+label y as the
+problem, rather than testing each potential
+previous work does, we propose to treat y as a to-be-optimized
+result and find it by maximizing the posterior objective.
+Specifically, we freeze the parameters of the trained diffusion
+models while allowing the conditional input to be a learnable
+embedding, and use the gradient method to optimize it. The
+overall framework is illustrated in Figure 1(c) and described
+in detail in Section III. We name this method Diffusion model
+InVErsion (DIVE) since it inverts a y-to-x model to x-to-y.
+We mainly introduce and evaluate our method in the con-
+text of the standard object detection task. Experiments on
+COCO [31] show that using our method to invert a diffusion
+model achieves competitive results against basic discriminative
+detectors such as Faster R-CNN [32]. In addition, we apply
+our optimization-based method to the image classification task.
+Compared to the previous enumeration-based method [1], our
+method significantly improves the speed while maintaining
+accuracy. Although there are still performance and efficiency
+gaps between our approach and the discriminative models, we
+hope that this work could help researchers further recognize
+the discriminative ability of pretrained generative models,
+and could serve as a potential novel solution for complex
+discriminative tasks.
+
+Our contributions can be summarized as follows:
+
+• We extend the paradigm of inverting diffusion models for
+discriminative tasks from classification to object detection.
+To the best of our knowledge, this is the first work to invert
+an image-generation model for the object detection task.
+• We propose learning modules to make the inversion
+paradigm theoretically more accurate and implementation-
+ally more feasible for the more complex detection task.
+• We empirically show that our method not only achieves
+competitive results with basic discriminative detectors but
+also performs faster than enumeration-based generative clas-
+sifiers.
+
+II. RELATED WORK
+
+A. Diffusion Models
+
+Diffusion models are a type of generative models that
+approximate data distribution by gradually adding noise to
+the data in a forward process and learning to reverse this
+process through a Markov chain to generate new data [3],
+[4]. Diffusion models have gained superior attention in various
+generative tasks,
+including image generation [6]–[8], [33],
+[34], image editing [35]–[37], and video generation [38]–[40],
+etc., due to their ability of synthesizing high-fidelity contents.
+
+B. Generative Models for Discriminative Tasks
+
+Driven by the superior content generation capacity, recently,
+there has been an increase in using generative models to
+assist or perform discriminative tasks. Typical works can be
+categorized as:
+
+(1) Generating images to train discriminative models [16]–
+
+[22], [41]–[47];
+
+(2) Extracting representations from pretrained generative
+models followed by learnable discriminative heads [23]–[29],
+[48]–[51];
+
+(3) Generating task labels conditioned on images with
+
+architecture modification and additional training [52]–[59];
+
+(4) Leveraging the attention maps [60] from the model to
+accomplish segmentation-related tasks [19], [61]–[64], which
+are mainly based on text-to-image diffusion models [7], [8].
+Among these works, (4) is only applicable under specific
+architectures, (1)-(3) require additional training, and some of
+them even contain discriminative models. In sum, they do
+not intrinsically reveal the discriminative ability of pretrained
+image-generation models.
+
+Unlike all these works, some recent methods directly con-
+vert image-generation diffusion models to perform discrimi-
+native tasks using Bayes’ rule [30]. [1], [2] build standard (or
+zero-shot) image classifiers by converting class- [65] (or text-
+[7], [8]) conditional diffusion models, and [66]–[68] focus
+on building robust diffusion classifiers. On the other hand,
+[69], [70] extend this paradigm to image-text-matching tasks
+and use it to evaluate text-to-image generation models. In
+this work, we further explore whether other more complex
+discriminative tasks like object detection, i.e., without a set of
+predefined possible class [1], [2] or text [69], [70] labels for
+the test image, can be accomplished under the model inversion
+paradigm.
+
+C. Generative Model Inversion
+
+Generative model inversion usually refers to finding the
+initial noise representation of a given image, with which one
+can reconstruct that image using the generative model [71],
+[72]. This is often applied for editing real images, by manipu-
+lating the inverted noise representations [71]–[74]. For GANs,
+the inversion can be accomplished through optimization-based
+approaches that optimize the initial noise by minimizing the
+reconstruction loss [75]–[77]; encoder-based approaches that
+learn an encoder mapping images to latent noises [78]–[81];
+or combination of the two approaches [71], [82]. For diffusion
+
+PREPRINT
+
+3
+
+Fig. 2: Illustration of the training framework of layout-conditional image generation model (left) and prior layout model (right). Bounding
+boxes in image x are for visualization only.
+
+models, the inversion can be done through a generalized de-
+terministic forward diffusion process proposed in DDIM [83].
+Following improvement works include exacter and faster in-
+versions [84], [85] and extension to text-conditional mod-
+els [86], [87].
+
+Whereas these works invert an image to the noise space for
+the purpose of exact reconstruction, this work inverts diffusion
+models to the conditional input space to produce discriminative
+predictions. Recently, [88]–[90] invert diffusion models to
+the conditional input space, but their goals are to invert the
+concept [88] or the full content [89], [90] of the given image to
+texts, and use the inverted texts to generate new images, i.e.,
+still towards the reconstruction goal which is different from
+ours of performing discriminative task.
+
+III. METHOD
+In this section, we first review the background of conditional
+diffusion models and then introduce our method of repurpos-
+ing these models to perform discriminative tasks in the context
+of object detection.
+
+[3]–[5]
+
+A. Conditional Diffusion Model Preliminaries
+1) Diffusion Model: Diffusion models
+
+are
+likelihood-based generative models
+trained to reverse a
+diffusion process. The forward process, defined as a Markov
+chain structure, gradually adds noise to the clean image x0
+for a number of timesteps t = 1 · · · T [3]. During the reverse
+process, the model learns to predict the amount of noise ϵ
+added to the image [4], namely ϵθ(xt, t), or ϵθ(xt, t, vθ(y))
+for conditional diffusion models, where xt is the noisy image
+and y is the conditioning input such as class label, and
+vθ(·) maps y to embeddings. Specifically, the model can be
+trained by optimizing a variational bound of the conditional
+log-likelihood [4]:
+
+max
+θ
+
+log pθ(x|y) ≈ min
+
+θ
+
+Eϵ∼N (0,1),t
+
+(cid:2)||ϵ − ϵθ(xt, t, vθ(y))||2
+
+(cid:3) ,
+2
+(1)
+
+with x, y from training data (we use x to represent x0 for
+simplicity) and t sampled uniformly from {1 · · · T }.
+
+2) Conditional Branch: The conditional branch encodes the
+input y into the denoising network, facilitating controllable
+image synthesis, such as class-to-image, text-to-image, and
+layout-to-image generation. The encoding of class labels can
+be easily implemented using a learnable embedding layer that
+maps integer class indices to embedding vectors, as a branch
+of works do [6], [7], [14], [65], [91].
+
+The Latent Diffusion Model (LDM) [7] can deal with a
+variety of conditioning inputs, including image layouts such
+as detection labels. Building on this capability, we propose
+a model inversion approach in this paper. As illustrated in
+Figure 2 (left), similar to the encoding process of class
+labels, each bounding box (mmin, nmin, mmax, nmax) with
+the corresponding class c in an image is firstly mapped to
+embedding vectors through learnable vocabularies. These box
+and class embeddings form a sequence. Since different images
+usually contain varying numbers of objects, the sequences are
+padded with [none] embeddings to achieve a fixed length. The
+sequence is then processed by a transformer encoder [60] and
+later integrated into the main denoising network through cross-
+attention layers [60]. The vocabularies and the transformer
+encoder are trained as components of the overall diffusion
+model.
+
+B. Conditional Diffusion Model Inversion for Discriminative
+Task
+
+Given the pretrained conditional diffusion models pθ(x|y),
+following [1], [2], we use them to perform discriminative tasks
+using the Bayes’ rule:
+
+arg max
+y
+
+pθ(y|x) = arg max
+
+y
+
+pθ(x|y)p(y).
+
+(2)
+
+A theoretical issue arises: the conditional diffusion mod-
+els only capture the conditional likelihood pθ(x|y) without
+considering the prior p(y). In the case of a class-conditional
+
+Layout Encoder (2, 2, 97, 190, bicycle) (37, 166, 215, 228, dog)… (none, none, none, none, none)Denoising Network012…personbicycledog…nonenoneBoxClassVocabulariesEmbedding Mapping… … (2, 2, 97, 190, bicycle) (37, 166, 215, 228, dog)… (none, none, none, none, none)Embedding Mapping… … 012…personbicycledog…nonenoneBoxClassVocabulariesDenoising Network… … … … Layout Emb. SequenceLayout SequencePREPRINT
+
+4
+
+Fig. 3: Using trained layout-conditional image generation model and the prior layout model for object detection.
+
+diffusion model
+trained on balanced classification datasets
+like ImageNet-1k [92], it is reasonable to disregard p(y) in
+Eq. (2) when converting the model to a “Diffusion Classifier”
+by calculating each class’s posterior [1], because the prior
+is a uniform distribution (i.e., the same for each possible
+class). Unfortunately, for the object detection task, such a
+uniform prior distribution does not hold at all. For example,
+rare layouts, such as a bicycle on top of a person or things
+with unusual aspect ratios, should have a relatively lower
+prior probability. Thus, p(y) could not be ignored when using
+Eq. (2) to obtain diffusion detectors.
+
+1) Prior Modeling: To solve the above issue, we propose
+to model the underlying prior distribution of the labels in
+the training dataset. Ideally, the learned model could tell a
+reasonable p(y) value for any detection layout y. We construct
+a diffusion model pϕ(y) to model the prior label distribution.
+Unlike conditional image generation models, this prior model
+is a label generation model operating within the label space.
+Specifically for object detection, the input is a sequence of
+noised layout embeddings, and the model is trained to predict
+the added noise sequence:
+
+max
+ϕ
+
+log pϕ(y) ≈ min
+
+ϕ
+
+Eϵ∼N (0,1),t
+
+(cid:2)||ϵ − ϵϕ(vθ(y)t, t)||2
+
+2
+
+(cid:3), (3)
+
+as illustrated in Figure 2 (right). The embedding mapping pro-
+cess of the prior model uses the frozen pretrained vocabularies
+from the layout-conditional model, and the architecture of the
+denoising network here is a transformer [60], which is similar
+to the layout encoder in the layout-conditional model.
+
+With the learned prior and the pretrained conditional model,
+theoretically, we can accurately compute the maximum of
+Bayes’ posterior according to Eq. (2) to create an object
+detector. Another challenge is that there are countless potential
+detection labels for a given test image. For one thing, the
+number of objects is undetermined. Moreover, even for a single
+object, the number of possible bounding boxes on the image
+increases quadratically with respect to its size. Therefore, a
+non-enumeration-based approach is needed.
+
+2) Optimization-based Diffusion Model Inversion: Rather
+than trying the countless possible predictions and then choos-
+ing the one with the highest posterior value, we propose to
+directly optimize the prediction y by maximizing the posterior
+objective. By substituting Eq. (1) and (3) into Eq. (2), we
+obtain
+
+y∗ = arg min
+
+y
+
+(cid:8)Eϵ∼N (0,1),t
+
+(cid:2)||ϵ − ϵθ(xt, t, vθ(y))||2
+(cid:2)||ϵ − ϵϕ(vθ(y)t, t)||2
+
+2
+
+2
+
+(cid:3)
+
+(cid:3)(cid:9),
+
+(4)
+
++ Eϵ∼N (0,1),t
+
+where we simply add the losses of the two diffusion models.
+A practical issue is that the embedding mapping (vocabulary
+lookup) operation vθ(·) is not differentiable. Therefore, we
+turn to the embedding space to deploy our learnable param-
+eters v, and restrict them to lie in the discrete output space
+of vθ(·), by using the nearest embeddings in corresponding
+vocabularies NNvalue(v) to replace these learnable parameters
+v. Furthermore, during backward propagation, we copy the
+gradients from the replacement NNvalue(v) to the original learn-
+able parameters v. This discrete optimization trick enables the
+gradient to flow back to our learnable parameters, similar to
+the training of discrete autoencoders [9]–[12].
+
+Formally, Eq. (4) is implemented as:
+
+v∗ = arg min
+
+v
+
+(cid:8)Eϵ∼N (0,1),t
++ Eϵ∼N (0,1),t
+
+(cid:2)||ϵ − ϵθ(xt, t, v′)||2
+(cid:2)||ϵ − ϵϕ(v′
+
+t, t)||2
+2
+
+2
+
+(cid:3)
+
+(cid:3)(cid:9),
+
+v′ := sg [NNvalue(v) − v] + v,
+
+(5)
+
+(6)
+
+where sg is the stop-gradient operator, and NN represents the
+nearest neighbor, using cosine distance as the default metric.
+The whole framework is illustrated in Figure 3.
+
+After optimization, the final prediction y∗ can be obtained
+by finding the indices of the nearest embeddings of v∗ in the
+pretrained vocabularies:
+
+y∗ = NNindex(v∗).
+
+(7)
+
+Layout Encoder Denoising NetworkNearest Emb. Replacement… … 012…personbicycledog…nonenoneBoxClassVocabularies… … … … gradientDenoising Network… … Layout Emb. SequencePREPRINT
+
+5
+
+3) Implementation:
+
+a) Calculation of the Expectations: When learning v
+using Eq. (5) at each step, the noises and timesteps are always
+sampled from the corresponding distributions, similar to the
+training procedure of the diffusion models. We update v for a
+number of optimization steps. To obtain v∗, we cannot directly
+compare the loss values of each update because their noise and
+timestep values differ. Therefore, we pre-saved a set of fixed
+noises and timesteps and use them to periodically evaluate the
+loss value during the optimization process. These values serve
+as a monitor for selecting the v∗. All the results reported in
+Section IV are obtained in this way.
+
+b) Other Details: We empirically find in our preliminary
+experiments that initializing the learnable embeddings v with
+the [none] embeddings in the frozen vocabularies works well
+on both classification and detection tasks. Thus, we leave this
+design unchanged. For the object detection task, when getting
+detected objects from the optimized sequence, we drop none-
+value-contained objects and illegal objects (i.e., those where
+mmax ≤ mmin or nmax ≤ nmin). Algorithm 1 summarizes
+the pseudo-code of the optimization process for the object
+detection task.
+
+Algorithm 1: DIVE algorithm for object detection
+Input: pretrained layout-to-image model ϵθ(xt, t, v)
+
+with embedding vocabularies vθ : y → v,
+pretrained prior layout model ϵϕ(vt, t), a set of
+timesteps T used for inversion (same between
+the two models), test image x, maximum
+optimization steps K, monitoring frequency
+
+Output: prediction y of the given image x
+
+1 # Pre-save two sets of fixed noises for evaluation
+2 Eforθ = {ϵforθ ∼ N (0, 1)}range(T )
+3 Eforϕ = {ϵforϕ ∼ N (0, 1)}range(T )
+4 # Optimization loop
+5 y = [none, none, · · · , none]; v = vθ(y)
+6 monitor values = [], corresponding embs = []
+7 for k in range(K) do
+8
+
+# In-vocabulary discrete optimization
+v = stop gradient (NNvalue(v) − v) + v
+t ∼ T , ϵforθ ∼ N (0, 1), ϵforϕ ∼ N (0, 1)
+xt = addn(x, t, ϵforθ), vt = addn(v, t, ϵforϕ)
+L = ||ϵforθ − ϵθ(xt, t, v)||2
+Update v to minimize L
+# Periodically evaluate the optimized v
+if k % monitoring frequency == 0 then
+monitor values.append(eval(v))
+corresponding embs.append(v)
+
+2 + ||ϵforϕ − ϵϕ(vt, t)||2
+2
+
+17
+18 Function eval(v):
+19
+
+v = NNvalue(v), drop none and illegal boxes
+Calculate val losses over {T } like line10-12
+but uses saved fixed noises in Eforθ, Eforϕ
+return averaged val losses
+
+22 # Get final result
+23 v∗ = corresponding embs[argmin(monitor values)]
+24 return y = NNindex(v∗), drop none and illegal boxes
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+20
+
+21
+
+IV. EXPERIMENTS
+We conduct experiments in this section to assess the efficacy
+of the proposed Diffusion model InVErsion (DIVE) method
+from the following three aspects:
+• Performing object detection through using diffusion model
+
+only (Section IV-A).
+
+• Speeding up previous Diffusion Classifier method [1] on
+
+image classification task (Section IV-B).
+
+• Providing a self-contained evaluation metric for conditional
+
+diffusion models (Section IV-C).
+
+A. DIVE for Object Detection
+
+In this subsection, we aim to answer the following questions
+to evaluate our method for the standard object detection task:
+• How does our diffusion model inversion method compare to
+other diffusion-model-based methods and purely discrimina-
+tive methods?
+
+• How do the two proposed components, prior modeling and
+
+discrete optimization, affect the final result?
+1) Setup:
+
+a) Dataset and Evaluation Protocol: We conduct exper-
+iments using the object detection dataset COCO 2017 [31],
+containing 118k training and 5k validation images. Although
+our optimization-based method has already made performing
+detection implementable, due to the still high compute cost
+of generative methods, we evaluate DIVE on a subset of 500
+images. We report average precision (AP), a metric averaged
+over multiple Intersection over Union (IoU) thresholds, which
+is regarded as the single most important metric when evaluat-
+ing performance on COCO [31]. Other metrics (AP at single
+thresholds of 0.5 and 0.75, and on objects of small, medium,
+and large sizes) are also reported for thoroughly analyzing our
+method, following the definitions in [31].
+
+b) Pretrained Layout-to-Image Diffusion Model: Since
+there is no publicly available pretrained layout-to-image diffu-
+sion model on the COCO object detection dataset1, we retrain
+a model using the official code from LDM [7]. The denoising
+network adopts UNet [99] architecture, and the layout encoder
+is a transformer [60]. Following its implementation, we train
+the model in the latent space of VQGAN [11] with a down-
+sampling factor of 8 (named LDM-8). The model is trained
+at an image resolution of 256 × 256, and the input layout
+sequence has a fixed padding length of 100 objects. Object
+coordinates are kept in integer precision, meaning there are
+256 + 1 embeddings stored in the bounding box vocabulary.
+We add sequence-length learnable positional encodings to the
+embedded layout (box and class) sequence. During training,
+the objects in an image are randomly shuffled in different
+iterations since they should not have a fixed order, i.e., objects
+are in equivalent positions in the sequence. Such a model, with
+other designs unchanged, has a size of 363M parameters. We
+train the model over 200k iterations (∼220 epochs), taking
+about 5 days with 8 Nvidia A100 GPUs.
+
+1Some works [7], [21], [93]–[95] train layout-to-image models on COCO-
+Stuff dataset [96] (sometimes dubbed COCO), but that dataset is not suitable
+for the object detection task [96]. Some works [97], [98] extend pretrained
+text-to-image models to support positional inputs, but inverting such models
+is not suitable for the standard detection task because they involve captions.
+
+PREPRINT
+
+6
+
+TABLE I: Influence of optimization step of DIVE. The speed
+is evaluated on a Nvidia 3090 GPU. We observe a ∼1.8 speedup
+ratio if switching to a more advanced A100 GPU, as summarized in
+Section IV-B4.
+
+Optimization step
+Time per image
+AP
+
+400
+18min
+5.7
+
+1000
+45min
+6.4
+
+2000
+1.5h
+7.1
+
+4000
+3h
+7.2
+
+Fig. 4: Visualization of DIVE detection results with corresponding
+convergence optimization steps shown below, yielded from the
+monitor introduced in Section III-B3. The maximum optimization
+step for all images is set as a fixed number (2000) here for simplicity.
+The average convergence step of the test set is about 960. Images fed
+to the networks are in 256 × 256 resolution and shown here in their
+original aspect ratios for better visualization.
+
+c) Prior Layout Diffusion Model: The prior layout dif-
+fusion model shares a similar architecture with the layout
+encoder in the layout-to-image model. Both are transformers,
+and we simply inherit the implementation, resulting in a model
+size of 58M. The differences lie in their function - in the prior
+model, the transformer serves as the denoising network, while
+in the layout-to-image model, it functions as the conditional
+encoding branch. We train the prior model over 500k iterations
+(∼270 epochs), taking about 3 days with 4 Nvidia 3090 GPUs.
+
+d) DIVE Details: We inherit the original LDM’s hyper-
+parameter choices in their code when using the trained LDM to
+optimize our embeddings, unless stated otherwise. Following
+[1], we use evenly spaced timesteps for improving learning and
+monitoring efficiency. The even interval is 5, thus, we have 200
+different timesteps {2, 7, · · · , 997}. The monitor activates after
+a loop over these different timesteps. We conduct experiments
+with a batch size of 50, consisting of 5 steps of gradient
+accumulation due to the GPU memory limit. The learning rate
+is set to 0.01 with AdamW optimizer [100]. We use a single
+Nvidia 3090 GPU to invert each image. The computational
+cost with respect to the optimization step of DIVE is discussed
+in the next paragraph.
+
+e) DIVE Optimization Step and Computational Cost:
+
+We test a group of optimization steps to assess its influence.
+Table I shows the quantitative results, where all images use
+the same optimization step in each trial. We do not observe
+significant AP gains when the steps exceed 2000. We note
+that the computational cost is relatively higher than common
+discriminative detectors since DIVE requires several times of
+backward propagation through the whole network to optimize
+the result. Although the computational cost of the detection
+task is currently not the main focus of this work, which is to
+make the detection task doable using pretrained frozen image
+generation models and check their discriminative ability, the
+high cost of DIVE pushes us to explore whether there is
+potential for reduction without compromising the detection
+performance.
+
+To this end, we check the convergence step of some im-
+ages and show them in Figure 4 together with the detection
+visualization results. It can be seen that for some “easier”
+test images with larger and fewer objects, the optimization
+process converges more quickly. For “harder” ones, DIVE
+requires more steps to converge. Based on this observation, we
+can conclude that using an adaptive optimization-step strategy
+would be a feasible way to reduce the overall computational
+cost while preserving detection performance. For example, we
+can use an early stopping strategy to halt the optimization
+process if the monitor value (loss) does not decrease for a
+number of steps. We further check the average convergence
+step of the test set, which is about 960, indicating that the
+early stopping method could reach a maximum of ∼ 2×
+speedup ratio overall. Currently, for simplicity, the reported
+DIVE results of the following experiments are obtained using
+a fixed 2000 steps of optimization for all images.
+
+2) Comparison to Discriminative Detectors:
+
+a) Baselines: We first compare our purely generative
+method to generative-discriminative-mixed methods that also
+leverage a pretrained image-generation diffusion model. Syn-
+thetic Data trains a discriminative detection model using
+synthetic training data generated from the layout-to-image
+model. Diffusion Feature uses the pretrained diffusion model
+to extract features, serving as the backbone in discriminative
+object detectors. These baselines are essentially discriminative
+approaches, and we use Faster R-CNN [32] as their backend.
+For the Diffusion Feature method, in addition to LDM-8,
+we also use the text-to-image model Stable Diffusion [7]
+(SD v1.5), which is trained on a web-scale dataset much
+larger than COCO, serving as the feature-extraction module,
+following [27].
+
+We further compare with widely recognized purely
+discriminative object detectors Faster R-CNN [32] and
+DETR [101], and a more recent method, DiffusionDet [54]
+(DiffDet S @ Neval), that deploys the diffusion process in the
+proposal boxes space based on discriminative image features,
+where S and Neval are two hyper-parameters introduced in
+the paper [54]. We adopt various backbones (ResNet-50 and
+ResNet-101 [102]) and optimized architectures (feature pyra-
+mid network (FPN) [103] and dilated last stage (DC5) [104])
+for these detectors. We use detectron2 [105] to implement
+
+172 steps924 steps928 steps1208 steps260 steps1052 steps1592 stepsPREPRINT
+
+7
+
+TABLE II: Object detection on COCO validation set. We compare
+to generative-discriminative hybrid methods that also use image
+generation diffusion models. We also compare to advanced purely
+discriminative methods. T stands for time per image, which is
+evaluated on a Nvidia 3090 GPU.
+
+Method
+
+Backbone
+
+T
+
+AP AP50 AP75 APS APM APL
+
+Generative + discriminative methods:
+Synthetic Data
+Diffusion Feature LDM-8
+Diffusion Feature SD
+
+90ms 4.7
+47ms 6.9
+41ms 7.9
+
+R50
+
+8.7
+13.4
+15.7
+
+4.5
+5.9
+7.3
+
+0.0
+0.0
+0.0
+
+3.1
+3.5
+1.2
+
+9.8
+15.8
+18.9
+
+Generative methods:
+DIVE (ours)
+
+LDM-8
+
+1.5h
+
+7.1
+
+11.0
+
+7.1
+
+0.0
+
+1.2
+
+16.4
+
+Discriminative methods:
+5.7
+R50
+Faster R-CNN
+90ms 6.8
+9.5
+R101-FPN 29ms 9.6
+Faster R-CNN
+DETR
+8.7
+38ms 9.3
+R50
+R101-DC5 47ms 14.7 24.9 13.9
+DETR
+DiffDet (1@300) R101-FPN 37ms 14.6 24.4 14.6
+DiffDet (4@500) R101-FPN 41ms 15.2 25.7 14.8
+
+12.7
+17.3
+16.9
+
+0.3
+2.2
+1.3
+2.6
+2.9
+3.4
+
+13.2
+5.0
+17.2
+9.0
+6.4
+18.3
+11.6 27.6
+13.8 25.9
+14.4 26.9
+
+Faster R-CNN and DiffDet baselines and use the official code
+to implement DETR baselines. The Faster R-CNN and DiffDet
+models are trained using the 3× schedule (∼37 epochs), which
+is the typical setting in detectron2. DETR models are
+trained for over 200 epochs, as transformer-based architectures
+generally require longer training schedules. These discrim-
+inative detectors are trained at a resolution of 256 × 256,
+using random cropping and horizontal flip augmentations, and
+are trained from scratch, consistent with the layout-to-image
+diffusion model setup. Although it is difficult to make truly fair
+comparisons due to differences in architectures and training
+costs, our comparisons aim to thoroughly evaluate the inverted
+diffusion model regarding its strengths and weaknesses.
+
+b) Results: Table II shows the comparison results2. Com-
+pared to other generative-discriminative-mixed methods that
+use the same pretrained diffusion model, DIVE outperforms
+Synthetic Data and is competitive with Diffusion Feature
+(LDM-8). The corresponding visualization results of these
+methods are displayed in the left part of Figure 5. The
+Diffusion Feature baseline equipped with the SD backbone
+performs better than our DIVE and other LDM-8-based meth-
+ods. This is because the text-to-image SD was pretrained on a
+larger dataset than LDM-8’s COCO, incorporating richer prior
+knowledge into the network.
+
+Compared to purely discriminative detectors, DIVE
+achieves competitive results against the basic discriminative
+detector Faster R-CNN R50, but falls behind stronger detectors
+that use deeper backbones or modern architectures. Notably,
+to the best of our knowledge, we are the first
+to show
+that using a frozen pretrained image generation model can
+successfully tackle the challenging object detection task and
+achieve competitive performance compared to discriminative
+methods.
+
+Furthermore, we conduct a deeper analysis of DIVE by
+comparing it to Faster R-CNN R50, which achieves a compet-
+itive average performance. An interesting phenomenon is that,
+although falling behind Faster R-CNN R50 under AP50, DIVE
+
+2The relatively lower reproduced results of discriminative detectors is
+because we use a smaller image size of 256 × 256, which is common for
+generative models, for fair comparisons.
+
+TABLE III: Ablation studies of DIVE on the object detection task.
+
+Method
+
+DIVE
+w/o Prior Model
+w/o In-vocabulary Opt.
+w/o both
+Decoupling classes and boxes
+
+AP
+
+10.3
+6.7
+4.6
+3.2
+9.0
+
+AP50 AP75
+
+14.0
+10.6
+5.6
+5.4
+12.4
+
+11.5
+6.2
+4.8
+3.2
+9.2
+
+performs better under AP75 and slightly wins overall AP. This
+phenomenon indicates that DIVE has higher precision in true
+positive bounding box predictions while leaving some objects
+undetected. These undetected objects are usually small and
+medium objects, as indicated by poorer APS and APM values.
+Not coincidentally, the Synthetic Data and Diffusion Feature
+baselines also suffer from this issue. We conjecture that this
+is because LDM and SD are trained in the latent space, which
+has a downsampling factor of 8. In the compressed modeling
+space, smaller objects are resized to be even smaller.
+
+3) Ablation Study: In this subsection, we study the impact
+of the proposed components in our method. Besides ablating
+the prior model, we also study the impact if the discrete
+optimization trick were not used, i.e., using Eq. (5) as the
+objective without the in-vocabulary discrete optimization trick
+from Eq. (6) (v′ is v in this case). We conduct the ablation
+studies on a smaller subset of 100 images. It can be seen from
+Table III that quantitatively, both components are important to
+the overall performance. The qualitative results in Figure 5 tell
+more about the reason, and we analyze them below.
+
+a) Prior Model: From Figure 5, it can be seen that if
+we do not integrate the prior model into the inversion process,
+the inverted sequences (predictions) contain many redundant
+objects and illegal boxes. The synthetic images tell the reason.
+These redundant objects do not hurt the generation process
+of the conditional model (e.g., the first two lines), which
+is an interesting phenomenon similar to the findings in the
+literature of attacking text-to-image diffusion models [106]–
+[108]. However, these redundancies will negatively affect the
+detection performance, resulting in many false positives. Only
+if the prior model tells the optimization process about which
+types of layouts are more common could we achieve better
+detection results (DIVE default).
+
+b) In-vocabulary Discrete Optimization: In the case of
+continuous optimization in the embedding space (i.e., w/o
+using Eq. (6)), the optimization process only needs to re-
+construct (learn the content of) the given image. This case
+can be analogized to Textual Inversion [88], which learns to
+inject new words for the given images into a pretrained text-
+to-image model without considering new-word semantics. For
+our situation, if we attempt to decode to see what these “new
+words” are (by finding nearest neighbors in the vocabulary), as
+shown in Figure 5 right most, sometimes, we could get correct
+classes (e.g., the first line “person”), but in many other cases,
+classes are difficult to interpret (e.g., the last line “cow”), and
+boxes are hard to complete, even with the help from the prior
+model. This is because the reconstruction purpose dominates
+the optimization (best reconstruction performance in Figure 5),
+leaving words’ interpretability untouched.
+
+PREPRINT
+
+8
+
+Fig. 5: Visualization of the object detection results. Besides comparing DIVE with other generative baselines that use the same pretrained
+diffusion model as ours, we also show the influences of the prior model and in-vocabulary discrete optimization method. For these ablations,
+we show at the bottom some additional dropped objects (none-value-contained and illegal boxes) in the inverted sequence for clearer
+visualization of different methods’ behavior. And on the right, we show generated images by feeding the full inverted sequence to the
+pretrained layout-to-image model. Zoom in for better visualization.
+
+c) Decoupling classes and bounding boxes: Considering
+that the trained prior model may overfit the training data distri-
+bution, this ablation decouples the classes and bounding boxes
+in the sequence. Specifically, we train two prior distribution
+models separately, one for classes and the other for boxes,
+and use them together during inversion. However, note that
+this strategy may not be a natural and proper way to model
+the prior layout distribution, as it separates the relationships
+between classes and boxes. For example, it cannot distinguish
+“a bicycle on a person” and “a person on a bicycle” with the
+same box layouts. Nevertheless, it can still learn what boxes
+are legal compared to not using any prior models. The last line
+of Table III presents the result. It falls between the results of
+the default (un-decoupling) method and the “w/o Prior Model”
+method, which aligns with the above hypothesis.
+
+B. DIVE for Image Classification
+
+In this subsection, we compare our optimization-based
+method with the previous enumeration-based method Diffu-
+sion Classifier [1] on the image classification task regarding
+accuracy and speed.
+
+1) Setup: Following the setup in [1], we use pretrained
+Diffusion Transformer (DiT) [65] as the conditional diffusion
+model
+to be inverted, which is a class-conditional model
+trained on ImageNet-1k [92]. Same as the setup in [1] for a
+fair comparison, we use DiT-XL/2 at the resolution 256 × 256
+and evaluate on a subset of 2000 images (2 images per class).
+Given that ImageNet-1k’s label distribution is uniform, the
+prior modeling model is unnecessary in this case. The number
+of different timesteps for DIVE here is set to 250 to align with
+
+TABLE IV: Image classification on ImageNet-1k. The speeds are
+tested on an A100 GPU. The accuracy of Diffusion Classifier is from
+[1], and its speed is tested using the official code.
+
+Method
+
+Time per image Accuracy
+
+Generative + discriminative methods:
+Synthetic Data
+Diffusion Feature
+
+9 ms
+31 ms
+
+Generative methods:
+Diffusion Classifier
+DIVE (ours)
+
+∼1100 s
+80 s
+
+Discriminative methods:
+AlexNet
+ResNet-18
+ResNet-50
+ResNeXt101
+ViT-L/32
+ViT-B/16
+Swin-B
+
+8 ms
+8 ms
+9 ms
+15 ms
+12 ms
+9 ms
+21 ms
+
+67.1
+69.2
+
+77.3
+77.2
+
+57.5
+70.6
+77.6
+79.7
+78.0
+81.5
+83.7
+
+the Diffusion Classier. We optimize our embeddings over 200
+steps with a batch size of 25, taking about 80 seconds to invert
+an image on a single A100 GPU.
+
+2) Results: Table IV shows the comparison results. We
+compare to Diffusion Classifier [1], discriminative classi-
+fiers [102], [109] [110]–[112], and generative-discriminative
+hybrid methods Synthetic Data and Diffusion Feature. Syn-
+thetic Data trains a standard ResNet-50 using a training dataset
+generated by DiT-XL/2. Diffusion Feature, following the base-
+line design in [1], uses the pretrained DiT-XL/2 network as the
+feature extractor and trains a modified ResNet-18 on top of the
+features using the ImageNet real dataset. It can be seen from
+
+w/o In-voc. Opt.None boxes: (none, 57, 175, 197, person), (none, 36, 208, 175, laptop), ...w/o Prior ModelDIVEGround TruthSynthetic DataIllegal boxes: (254, 165, 209, 75, person), (256, 165, 2, 254, cup), ...None boxes: (0, 142, none, 256, person), ...Diffusion Feat.Predictionw/o In-voc. Opt.w/o Prior ModelDIVEGenerated Image Using The Full Inverted SequenceNone boxes: (181, none, none, 252, train), (none, 168, none, none, microwave), ...Illegal boxes: (242, 68, 3, 2, bicycle), (215, 170, 178, 152, none), ...None boxes: (none, none, 205, none, none), ...None boxes: (162, 111, none, 197, cow), (none, none, none, none, airplane), ...Illegal boxes: (171, 102, 43, 207, kite), (116, 155, 69, 74, person), ...None boxes: (none, 109, none, none, none), ...PREPRINT
+
+9
+
+Table IV that DIVE achieves nearly the same accuracy as the
+Diffusion Classifier. This result verifies the effectiveness of the
+proposed optimization-based method for purely generation-
+based image classification, representing an ideal alternative to
+the enumeration-based method.
+
+Notably, our optimization-based method achieves a ∼ 14×
+speedup compared to the enumeration method while maintain-
+ing accuracy. This is because the enumeration method needs
+to try all possible predictions of the test dataset, which causes
+a significant computational cost. Compared to discriminative
+models that directly map the test image to a prediction label,
+generative methods still fall behind in efficiency due to the cost
+of exploring possible labels. Potential directions for further
+accelerating these generative methods include reducing the
+exploration steps or parameters of the pretrained model.
+
+To determine the maximum speedup ratio achievable by
+using an early stopping strategy to halt DIVE’s optimization
+process, we check the convergence steps of test images here,
+as done in the previous detection section IV-A1e. We find that
+the average convergence step of the test set here is about 106
+(max is 200), indicating that reducing the exploration steps
+could further achieve a maximum of ∼ 2× speedup overall.
+3) Ablation of In-vocabulary Discrete Optimization: We
+ablate the in-vocabulary optimization method here again to
+verify its effectiveness. Without this optimization component,
+we achieve a lower accuracy of 60.3, indicating its importance
+for the optimization-based approach.
+
+4) Influence of GPU: Readers may note that we used
+different GPUs for the previous detection and classification
+experiments. There are no other reasons for this but only to
+schedule our limited resources more efficiently. Specifically,
+we tested the speeds of using different GPUs for different tasks
+before conducting our formal experiments. As summarized
+in Table V, we observed that switching from 3090 to A100
+achieves a larger speedup ratio on the classification task than
+on the detection task, leading to the previous choices. Here,
+we conduct repeated experiments to assess task performances
+influenced by switching GPUs. Table V shows the results,
+where the detection experiments are conducted at the ablation
+study’s experimental scale (c.f. Table III). It can be seen that
+the detection AP and classification accuracy fluctuate slightly.
+
+C. DIVE for Conditional Diffusion Model Evaluation
+
+Following [69], [70], we use our proposed DIVE to evaluate
+different conditional diffusion models from the perspective
+of discriminative ability. While using DIVE as a general
+evaluation metric for generative models may be controversial
+- not applicable to non-likelihood-based models like GANs -
+it has the advantage of not relying on external models such
+as the commonly used ImageNet-pretrained InceptionV3 [113]
+for computing FID [114]. Nevertheless, the main aim of this
+subsection is to see whether the discriminative ability of DIVE
+aligns with other widely used metrics for evaluating generative
+models.
+
+1) Setup: We evaluate both types of conditional diffusion
+models mentioned earlier. For class-conditional models, we
+compare DiT-XL/2 [65] with LDM-4 [7], where the former,
+
+TABLE V: Influence of GPU on different tasks.
+
+Task
+
+GPU
+
+Time per image AP / Acc
+
+Detection
+
+Classification
+
+3090
+A100
+
+3090
+A100
+
+90 min
+50 min
+
+240 s
+80 s
+
+10.3
+10.6
+
+76.6
+77.2
+
+TABLE VI: Comparing conditional diffusion models with differ-
+ent evaluation metrics. Accuracy and AP are used for DIVE metrics,
+respectively. Other numbers in table (a) are from [65]. Prec. stands
+for Precision.
+
+(a) Comparing class-conditional models
+
+Model
+
+#Params FID↓
+
+IS↑
+
+Prec.↑ Recall↑ DIVE↑
+
+LDM-4
+DiT-XL/2
+
+400M 3.60
+675M 2.27
+
+247.67
+278.24
+
+0.87
+0.83
+
+0.48
+0.57
+
+62.7
+77.2
+
+(b) Comparing layout-conditional models
+
+Model
+
+#Params FID↓ Prec.↑ Recall↑ DIVE↑
+
+LDM-8-S
+LDM-8
+
+65M 24.90
+363M 18.36
+
+0.45
+0.53
+
+0.62
+0.63
+
+4.5
+7.1
+
+used in the previous subsection, is based on the transformer
+architecture [60], while the latter is based on the convolu-
+tional UNet architecture [99]. For layout-conditional models,
+we compare the one used in Section IV-A (LDM-8) with
+another smaller LDM (LDM-8-S) trained ourselves. For other
+evaluation metrics compared, we use Fr´echet Inception Dis-
+tance (FID) [114], Inception Score (IS) [115], and Preci-
+sion/Recall [116].
+
+2) Results: The results are presented in Table VI. It can
+be observed that the results from our discriminative metric
+align with most other metrics, such as FID, which assesses
+distribution similarity between real and generated images. An
+exception occurs at DIVE vs. Precision in Table VI(a). This
+suggests that a model exhibiting greater generative diversity
+(high Recall) rather than better image realism (high Precision)
+may have a stronger discriminative ability (high DIVE).
+
+V. CONCLUSION
+In this paper, we proposed an optimization-based approach
+to invert conditional diffusion models to produce discrimina-
+tive labels under the framework of Bayes’ rule. We empirically
+show that the proposed optimization-based approach is much
+faster than the previous enumeration-based method in the
+image classification task, and makes it feasible to use purely
+pretrained generative models for accomplishing the more com-
+plex object detection task. We hope that the conclusion of this
+paper could help recognize the internal discriminative ability
+of pretrained image generation models. Future research could
+further accelerate the proposed optimization-based approach or
+extend it to more complex dense tasks, such as semantic seg-
+mentation. However, note that simply extending the proposed
+approach to dense tasks would create a large optimization
+space, and the contribution of a single conditional pixel to the
+final objective is relatively small, which may be problematic
+and needs to be addressed. Adding some regularization terms
+might offer a feasible solution.
+
+PREPRINT
+
+10
+
+ACKNOWLEDGMENTS
+
+This work is partially supported by National Natural Sci-
+ence Foundation of China (NSFC): 62376259, 62306301, and
+National Postdoctoral Program for Innovative Talents under
+Grant BX20220310.
+
+REFERENCES
+
+[1] Alexander C Li, Mihir Prabhudesai, Shivam Duggal, Ellis Brown, and
+Deepak Pathak. Your diffusion model is secretly a zero-shot classifier.
+In IEEE ICCV, pages 2206–2217, 2023.
+
+[2] Kevin Clark and Priyank Jaini. Text-to-image diffusion models are
+
+zero-shot classifiers. NeurIPS, 36, 2023.
+
+[3] Jascha Sohl-Dickstein, Eric Weiss, Niru Maheswaranathan, and Surya
+Ganguli. Deep unsupervised learning using nonequilibrium thermody-
+namics. In ICML, pages 2256–2265, 2015.
+
+[4] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion
+
+probabilistic models. NeurIPS, 33:6840–6851, 2020.
+
+[5] Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Ku-
+mar, Stefano Ermon, and Ben Poole. Score-based generative modeling
+through stochastic differential equations. In ICLR, 2021.
+
+[6] Prafulla Dhariwal and Alexander Nichol. Diffusion models beat GANs
+
+on image synthesis. NeurIPS, 34:8780–8794, 2021.
+
+[7] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser,
+and Bj¨orn Ommer. High-resolution image synthesis with latent diffu-
+sion models. In IEEE CVPR, pages 10684–10695, 2022.
+
+[8] Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang,
+Emily L Denton, Kamyar Ghasemipour, Raphael Gontijo Lopes, Burcu
+Karagol Ayan, Tim Salimans, Jonathan Ho, David J Fleet, and Moham-
+mad Norouzi. Photorealistic text-to-image diffusion models with deep
+language understanding. NeurIPS, 35:36479–36494, 2022.
+
+[9] Aaron van den Oord, Oriol Vinyals, and Koray Kavukcuoglu. Neural
+
+discrete representation learning. NeurIPS, 30, 2017.
+
+[10] Ali Razavi, Aaron van den Oord, and Oriol Vinyals. Generating diverse
+
+high-fidelity images with VQ-VAE-2. NeurIPS, 32, 2019.
+
+[11] Patrick Esser, Robin Rombach, and Bjorn Ommer. Taming transformers
+In IEEE CVPR, pages 12873–
+
+for high-resolution image synthesis.
+12883, 2021.
+
+[12] Aditya Ramesh, Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea
+Voss, Alec Radford, Mark Chen, and Ilya Sutskever. Zero-shot text-
+to-image generation. In ICML, pages 8821–8831, 2021.
+
+[13] Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David
+Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio.
+Generative adversarial nets. NeurIPS, 27, 2014.
+
+[14] Andrew Brock, Jeff Donahue, and Karen Simonyan. Large scale GAN
+training for high fidelity natural image synthesis. In ICLR, 2019.
+[15] Tero Karras, Samuli Laine, and Timo Aila. A style-based generator
+architecture for generative adversarial networks. In IEEE CVPR, pages
+4401–4410, 2019.
+
+[16] Ruifei He, Shuyang Sun, Xin Yu, Chuhui Xue, Wenqing Zhang, Philip
+Is synthetic data from generative
+
+Torr, Song Bai, and Xiaojuan Qi.
+models ready for image recognition? In ICLR, 2023.
+
+[17] Mert B¨ulent Sarıyıldız, Karteek Alahari, Diane Larlus, and Yannis
+Kalantidis. Fake it till you make it: Learning transferable represen-
+tations from synthetic imagenet clones. In IEEE CVPR, pages 8011–
+8021, 2023.
+
+[18] Shekoofeh Azizi, Simon Kornblith, Chitwan Saharia, Mohammad
+Norouzi, and David J. Fleet. Synthetic data from diffusion models
+improves imagenet classification. TMLR, 2023.
+
+[19] Weijia Wu, Yuzhong Zhao, Mike Zheng Shou, Hong Zhou, and Chun-
+hua Shen. DiffuMask: Synthesizing images with pixel-level annotations
+In IEEE ICCV,
+for semantic segmentation using diffusion models.
+pages 1206–1217, 2023.
+
+[20] Quang Nguyen, Truong Vu, Anh Tran, and Khoi Nguyen. Dataset
+diffusion: Diffusion-based synthetic data generation for pixel-level
+semantic segmentation. NeurIPS, 36, 2023.
+
+[21] Kai Chen, Enze Xie, Zhe Chen, Yibo Wang, Lanqing Hong, Zhenguo
+Li, and Dit-Yan Yeung. GeoDiffusion: Text-prompted geometric
+control for object detection data generation. In ICLR, 2024.
+
+[22] Haoyang Fang, Boran Han, Shuai Zhang, Su Zhou, Cuixiong Hu, and
+Wen-Ming Ye. Data augmentation for object detection via controllable
+diffusion models. In IEEE WACV, pages 1257–1266, 2024.
+
+[23] Dmitry Baranchuk, Andrey Voynov, Ivan Rubachev, Valentin Khrulkov,
+Label-efficient semantic segmentation with
+
+and Artem Babenko.
+diffusion models. In ICLR, 2022.
+
+[24] Jiarui Xu, Sifei Liu, Arash Vahdat, Wonmin Byeon, Xiaolong Wang,
+and Shalini De Mello. Open-vocabulary panoptic segmentation with
+In IEEE CVPR, pages 2955–2966,
+text-to-image diffusion models.
+2023.
+
+[25] Xingyi Yang and Xinchao Wang. Diffusion model as representation
+
+learner. In IEEE ICCV, pages 18938–18949, 2023.
+
+[26] Daiqing Li, Huan Ling, Amlan Kar, David Acuna, Seung Wook Kim,
+Karsten Kreis, Antonio Torralba, and Sanja Fidler. DreamTeacher:
+In IEEE
+Pretraining image backbones with deep generative models.
+ICCV, pages 16698–16708, 2023.
+
+[27] Wenliang Zhao, Yongming Rao, Zuyan Liu, Benlin Liu, Jie Zhou,
+and Jiwen Lu. Unleashing text-to-image diffusion models for visual
+perception. In IEEE ICCV, pages 5729–5739, 2023.
+
+[28] Neehar Kondapaneni, Markus Marks, Manuel Knott, Rogerio
+Guimaraes, and Pietro Perona. Text-image alignment for diffusion-
+based perception. In IEEE CVPR, pages 13883–13893, 2024.
+
+[29] Guangkai Xu, Yongtao Ge, Mingyu Liu, Chengxiang Fan, Kangyang
+Xie, Zhiyue Zhao, Hao Chen, and Chunhua Shen. Diffusion models
+trained with large data are transferable visual models. arXiv preprint
+arXiv: 2403.06090, 2024.
+
+[30] Andrew Ng and Michael Jordan. On discriminative vs. generative clas-
+sifiers: A comparison of logistic regression and naive bayes. NeurIPS,
+14, 2001.
+
+[31] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Per-
+ona, Deva Ramanan, Piotr Doll´ar, and C Lawrence Zitnick. Microsoft
+COCO: Common objects in context. In ECCV, pages 740–755, 2014.
+[32] Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun. Faster
+R-CNN: Towards real-time object detection with region proposal
+networks. NeurIPS, 28, 2015.
+
+[33] Yuqi Jiang, Qiankun Liu, Dongdong Chen, Lu Yuan, and Ying Fu.
+AnimeDiff: Customized image generation of anime characters using
+diffusion model. IEEE TMM, pages 1–13, 2024.
+
+[34] Yifei Xu, Xiaolong Xu, Honghao Gao, and Fu Xiao. SGDM: An
+adaptive style-guided diffusion model for personalized text to image
+generation. IEEE TMM, 26:9804–9813, 2024.
+
+[35] Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun Wu, Jun-
+Yan Zhu, and Stefano Ermon. SDEdit: Guided image synthesis and
+editing with stochastic differential equations. In ICLR, 2022.
+
+[36] Shidong Cao, Wenhao Chai, Shengyu Hao, Yanting Zhang, Hangyue
+Chen, and Gaoang Wang. DiffFashion: Reference-based fashion
+design with structure-aware transfer by diffusion models. IEEE TMM,
+26:3962–3975, 2024.
+
+[37] Cong Zhang, Wenxia Yang, Xin Li, and Huan Han. MMGInpainting:
+Multi-modality guided image inpainting based on diffusion models.
+IEEE TMM, 26:8811–8823, 2024.
+
+[38] Jonathan Ho, Tim Salimans, Alexey Gritsenko, William Chan, Moham-
+mad Norouzi, and David J Fleet. Video diffusion models. NeurIPS,
+35:8633–8646, 2022.
+
+[39] Daizong Liu, Jiahao Zhu, Xiang Fang, Zeyu Xiong, Huan Wang, Renfu
+Li, and Pan Zhou. Conditional video diffusion network for fine-grained
+temporal sentence grounding. IEEE TMM, 26:5461–5476, 2024.
+[40] Minglu Zhao, Wenmin Wang, Tongbao Chen, Rui Zhang, and Ruochen
+Li. TA2V: Text-audio guided video generation. IEEE TMM, 26:7250–
+7264, 2024.
+
+[41] Minheng Ni, Zitong Huang, Kailai Feng, and Wangmeng Zuo. Imagi-
+naryNet: Learning object detectors without real images and annotations.
+In ICLR, 2023.
+
+[42] Zebin You, Yong Zhong, Fan Bao, Jiacheng Sun, Chongxuan Li,
+and Jun Zhu. Diffusion models and semi-supervised learners benefit
+mutually with few labels. NeurIPS, 36, 2023.
+
+[43] Lisa Dunlap, Alyssa Umino, Han Zhang, Jiezhi Yang, Joseph E
+Gonzalez, and Trevor Darrell. Diversify your vision datasets with
+automatic diffusion-based augmentation. NeurIPS, 36, 2023.
+
+[44] Lihe Yang, Xiaogang Xu, Bingyi Kang, Yinghuan Shi, and Hengshuang
+FreeMask: Synthetic images with dense annotations make
+
+Zhao.
+stronger segmentation models. NeurIPS, 36, 2023.
+
+[45] Laurynas Karazija, Iro Laina, Andrea Vedaldi, and Christian Rupprecht.
+Diffusion models for open-vocabulary segmentation. In ECCV, 2024.
+[46] Jiahao Xie, Wei Li, Xiangtai Li, Ziwei Liu, Yew Soon Ong, and
+Chen Change Loy. Mosaicfusion: Diffusion models as data aug-
+menters for large vocabulary instance segmentation. arXiv preprint
+arXiv:2309.13042, 2023.
+
+[47] Saksham Suri, Fanyi Xiao, Animesh Sinha, Sean Culatana, Raghu-
+raman Krishnamoorthi, Chenchen Zhu, and Abhinav Shrivastava.
+Gen2Det: Generate to detect. In IEEE CVPRW, 2024.
+
+PREPRINT
+
+11
+
+[48] Ziyi Li, Qinye Zhou, Xiaoyun Zhang, Ya Zhang, Yanfeng Wang,
+and Weidi Xie. Open-vocabulary object segmentation with diffusion
+models. In IEEE ICCV, pages 7667–7676, 2023.
+
+[49] Soumik Mukhopadhyay, Matthew Gwilliam, Yosuke Yamaguchi, Vat-
+sal Agarwal, Namitha Padmanabhan, Archana Swaminathan, Tianyi
+Zhou, and Abhinav Shrivastava. Do text-free diffusion models learn
+discriminative visual representations? In ECCV, 2024.
+
+[50] Shiyin Dong, Mingrui Zhu, Kun Cheng, Nannan Wang, and Xinbo
+Gao. Bridging generative and discriminative models for unified visual
+perception with diffusion priors. In IJCAI, pages 740–748, 2024.
+[51] Suraj Patni, Aradhye Agarwal, and Chetan Arora. ECoDepth: Effective
+conditioning of diffusion models for monocular depth estimation. In
+IEEE CVPR, pages 28285–28295, 2024.
+
+[52] Tomer Amit, Tal Shaharbany, Eliya Nachmani, and Lior Wolf. SegDiff:
+Image segmentation with diffusion probabilistic models. arXiv preprint
+arXiv:2112.00390, 2021.
+
+[53] Ting Chen, Lala Li, Saurabh Saxena, Geoffrey Hinton, and David J
+Fleet. A generalist framework for panoptic segmentation of images
+and videos. In IEEE ICCV, pages 909–919, 2023.
+
+[54] Shoufa Chen, Peize Sun, Yibing Song, and Ping Luo. DiffusionDet:
+In IEEE ICCV, pages 19830–
+
+Diffusion model for object detection.
+19843, 2023.
+
+[55] Yiqun Duan, Xianda Guo, and Zheng Zhu. DiffusionDepth: Diffusion
+denoising approach for monocular depth estimation. arXiv preprint
+arXiv:2303.05021, 2023.
+
+[56] Yuanfeng Ji, Zhe Chen, Enze Xie, Lanqing Hong, Xihui Liu, Zhaoqiang
+Liu, Tong Lu, Zhenguo Li, and Ping Luo. DDP: Diffusion model for
+dense visual prediction. In IEEE ICCV, pages 21741–21752, 2023.
+
+[57] Hsin-Ying Lee, Hung-Yu Tseng, Hsin-Ying Lee, and Ming-Hsuan
+Yang. Exploiting diffusion prior for generalizable dense prediction.
+In IEEE CVPR, pages 7861–7871, 2024.
+
+[58] Bingxin Ke, Anton Obukhov, Shengyu Huang, Nando Metzger, Ro-
+drigo Caye Daudt, and Konrad Schindler. Repurposing diffusion-based
+In IEEE CVPR,
+image generators for monocular depth estimation.
+pages 9492–9502, 2024.
+
+[59] Xianyun Wang, Linhong Wang, Zhenchen Yang, Jiacong Zhou, Yuchen
+Zheng, Feng Chen, Richang Hong, Jun Yu, and Fan Yang. DSIS-
+DPR: Structured instance segmentation and diffusion prior refinement
+for dental anatomy learning. IEEE TMM, 2024.
+
+[60] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion
+Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention
+is all you need. NeurIPS, 30, 2017.
+
+[61] Junjiao Tian, Lavisha Aggarwal, Andrea Colaco, Zsolt Kira, and Mar
+Gonzalez-Franco. Diffuse attend and segment: Unsupervised zero-shot
+segmentation using stable diffusion. In IEEE CVPR, pages 3554–3563,
+2024.
+
+[62] Koutilya Pnvr, Bharat Singh, Pallabi Ghosh, Behjat Siddiquie, and
+David Jacobs. LD-ZNet: A latent diffusion approach for text-based
+image segmentation. In IEEE ICCV, pages 4157–4168, 2023.
+
+[63] Jinglong Wang, Xiawei Li, Jing Zhang, Qingyuan Xu, Qin Zhou, Qian
+Yu, Lu Sheng, and Dong Xu. Diffusion model is secretly a training-free
+open vocabulary semantic segmenter. arXiv preprint arXiv:2309.02773,
+2023.
+
+[64] Changming Xiao, Qi Yang, Feng Zhou, and Changshui Zhang. From
+text to mask: Localizing entities using the attention of text-to-image
+diffusion models. Neurocomputing, 610:128437, 2024.
+
+[65] William Peebles and Saining Xie. Scalable diffusion models with
+
+transformers. In IEEE ICCV, pages 4195–4205, 2023.
+
+[66] Roland S Zimmermann, Lukas Schott, Yang Song, Benjamin Adric
+Dunn, and David A Klindt. Score-based generative classifiers.
+In
+NeurIPS Workshop on Deep Generative Models and Downstream
+Applications, 2021.
+
+[67] Huanran Chen, Yinpeng Dong, Zhengyi Wang, Xiao Yang, Chengqi
+Duan, Hang Su, and Jun Zhu. Robust classification via a single
+diffusion model. In ICML, 2024.
+
+[68] Huanran Chen, Yinpeng Dong, Shitong Shao, Zhongkai Hao, Xiao
+Yang, Hang Su, and Jun Zhu. Your diffusion model is secretly a
+certifiably robust classifier. arXiv preprint arXiv: 2402.02316, 2024.
+
+[69] Benno Krojer, Elinor Poole-Dayan, Vikram Voleti, Christopher Pal,
+and Siva Reddy. Are diffusion models vision-and-language reasoners?
+NeurIPS, 36, 2023.
+
+[70] Sai Saketh Rambhatla and Ishan Misra. SelfEval: Leveraging the
+arXiv
+
+discriminative nature of generative models for evaluation.
+preprint arXiv: 2311.10708, 2023.
+
+[71] Jun-Yan Zhu, Philipp Kr¨ahenb¨uhl, Eli Shechtman, and Alexei A Efros.
+In
+Generative visual manipulation on the natural image manifold.
+ECCV, pages 597–613, 2016.
+
+[72] Weihao Xia, Yulun Zhang, Yujiu Yang, Jing-Hao Xue, Bolei Zhou,
+IEEE TPAMI,
+
+and Ming-Hsuan Yang. GAN inversion: A survey.
+45(3):3121–3138, 2022.
+
+[73] Narek Tumanyan, Michal Geyer, Shai Bagon, and Tali Dekel. Plug-
+and-play diffusion features for text-driven image-to-image translation.
+In IEEE CVPR, pages 1921–1930, 2023.
+
+[74] Mingdeng Cao, Xintao Wang, Zhongang Qi, Ying Shan, Xiaohu Qie,
+and Yinqiang Zheng. MasaCtrl: Tuning-free mutual self-attention
+In IEEE ICCV,
+control for consistent image synthesis and editing.
+pages 22560–22570, 2023.
+
+[75] Antonia Creswell and Anil Anthony Bharath. Inverting the generator
+of a generative adversarial network. IEEE TNNLS, 30(7):1967–1974,
+2018.
+
+[76] Rameen Abdal, Yipeng Qin, and Peter Wonka. Image2StyleGAN: How
+to embed images into the StyleGAN latent space? In IEEE ICCV, pages
+4432–4441, 2019.
+
+[77] Peihao Zhu, Rameen Abdal, Yipeng Qin, John Femiani, and Peter
+Wonka. Improved StyleGAN embedding: Where are the good latents?
+arXiv preprint arXiv:2012.09036, 2020.
+
+[78] Elad Richardson, Yuval Alaluf, Or Patashnik, Yotam Nitzan, Yaniv
+Azar, Stav Shapiro, and Daniel Cohen-Or. Encoding in style: A
+In IEEE CVPR,
+StyleGAN encoder for image-to-image translation.
+pages 2287–2296, 2021.
+
+[79] Omer Tov, Yuval Alaluf, Yotam Nitzan, Or Patashnik, and Daniel
+Cohen-Or. Designing an encoder for StyleGAN image manipulation.
+ACM TOG, 40(4):1–14, 2021.
+
+[80] Yuval Alaluf, Omer Tov, Ron Mokady, Rinon Gal, and Amit Bermano.
+HyperStyle: StyleGAN inversion with hypernetworks for real image
+editing. In IEEE CVPR, pages 18511–18521, 2022.
+
+[81] Jialu Huang, Jing Liao, and Sam Kwong. Unsupervised image-to-
+IEEE TMM,
+
+image translation via pre-trained StyleGAN2 network.
+24:1435–1448, 2022.
+
+[82] Jiapeng Zhu, Yujun Shen, Deli Zhao, and Bolei Zhou. In-domain GAN
+inversion for real image editing. In ECCV, pages 592–608, 2020.
+[83] Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion
+
+implicit models. In ICLR, 2021.
+
+[84] Bram Wallace, Akash Gokul, and Nikhil Naik. EDICT: Exact diffusion
+inversion via coupled transformations. In IEEE CVPR, pages 22532–
+22541, 2023.
+
+[85] Guoqiang Zhang and W Bastiaan Kleijn.
+
+integration approximation.
+
+Exact diffusion inver-
+arXiv preprint
+
+sion via bi-directional
+arXiv:2307.10829, 2023.
+
+[86] Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel
+Cohen-Or. Null-text inversion for editing real images using guided
+diffusion models. In IEEE CVPR, pages 6038–6047, 2023.
+
+[87] Daiki Miyake, Akihiro Iohara, Yu Saito, and Toshiyuki Tanaka.
+Negative-prompt inversion: Fast image inversion for editing with text-
+guided diffusion models. arXiv preprint arXiv:2305.16807, 2023.
+[88] Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or Patashnik, Amit Haim
+Bermano, Gal Chechik, and Daniel Cohen-or. An image is worth one
+word: Personalizing text-to-image generation using textual inversion.
+In ICLR, 2023.
+
+[89] Chen Wei, Chenxi Liu, Siyuan Qiao, Zhishuai Zhang, Alan Yuille, and
+Jiahui Yu. De-diffusion makes text a strong cross-modal interface. In
+IEEE CVPR, pages 13492–13503, 2024.
+
+[90] Shweta Mahajan, Tanzila Rahman, Kwang Moo Yi, and Leonid Sigal.
+Prompting hard or hardly prompting: Prompt inversion for text-to-
+image diffusion models. In IEEE CVPR, pages 6808–6817, 2024.
+[91] Mehdi Mirza and Simon Osindero. Conditional generative adversarial
+
+nets. arXiv preprint arXiv:1411.1784, 2014.
+
+[92] Olga Russakovsky, Jia Deng, Hao Su, Jonathan Krause, Sanjeev
+Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla,
+Michael S. Bernstein, Alexander C. Berg, and Li Fei-Fei.
+Imagenet
+large scale visual recognition challenge. IJCV, 115:211–252, 2015.
+
+[93] Wan-Cyuan Fan, Yen-Chun Chen, DongDong Chen, Yu Cheng,
+Lu Yuan, and Yu-Chiang Frank Wang. Frido: Feature pyramid diffusion
+for complex scene image synthesis. In AAAI, volume 37, pages 579–
+587, 2023.
+
+[94] Jiaxin Cheng, Xiao Liang, Xingjian Shi, Tong He, Tianjun Xiao, and
+Mu Li. LayoutDiffuse: Adapting foundational diffusion models for
+layout-to-image generation. arXiv preprint arXiv: 2302.08908, 2023.
+[95] Guangcong Zheng, Xianpan Zhou, Xuewei Li, Zhongang Qi, Ying
+Shan, and Xi Li. LayoutDiffusion: Controllable diffusion model for
+layout-to-image generation. In IEEE CVPR, pages 22490–22499, 2023.
+[96] Holger Caesar, Jasper Uijlings, and Vittorio Ferrari. COCO-Stuff:
+Thing and stuff classes in context. In IEEE CVPR, pages 1209–1218,
+2018.
+
+PREPRINT
+
+12
+
+[97] Zhengyuan Yang, Jianfeng Wang, Zhe Gan, Linjie Li, Kevin Lin,
+Chenfei Wu, Nan Duan, Zicheng Liu, Ce Liu, Michael Zeng, and
+In
+Lijuan Wang. ReCo: Region-controlled text-to-image generation.
+IEEE CVPR, pages 14246–14255, 2023.
+
+[98] Yuheng Li, Haotian Liu, Qingyang Wu, Fangzhou Mu, Jianwei Yang,
+Jianfeng Gao, Chunyuan Li, and Yong Jae Lee. GLIGEN: Open-set
+In IEEE CVPR, pages 22511–
+grounded text-to-image generation.
+22521, 2023.
+
+[99] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-Net: Con-
+volutional networks for biomedical image segmentation. In MICCAI,
+pages 234–241, 2015.
+
+[100] Ilya Loshchilov and Frank Hutter. Decoupled weight decay regulariza-
+
+tion. In ICLR, 2019.
+
+[101] Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier,
+Alexander Kirillov, and Sergey Zagoruyko. End-to-end object detection
+with transformers. In ECCV, pages 213–229, 2020.
+
+[102] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep
+residual learning for image recognition. In IEEE CVPR, pages 770–
+778, 2016.
+
+[103] Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath
+Hariharan, and Serge Belongie. Feature pyramid networks for object
+detection. In IEEE CVPR, pages 2117–2125, 2017.
+
+[104] Yi Li, Haozhi Qi, Jifeng Dai, Xiangyang Ji, and Yichen Wei. Fully
+convolutional instance-aware semantic segmentation. In IEEE CVPR,
+pages 2359–2367, 2017.
+
+[105] Yuxin Wu, Alexander Kirillov, Francisco Massa, Wan-Yen Lo, and
+https://github.com/facebookresearch/
+
+Detectron2.
+
+Ross Girshick.
+detectron2, 2019.
+
+[106] Rapha¨el Milli`ere. Adversarial attacks on image generation with made-
+
+up words. arXiv preprint arXiv:2208.04135, 2022.
+
+[107] Haomin Zhuang, Yihua Zhang, and Sijia Liu. A pilot study of query-
+free adversarial attack against stable diffusion. In IEEE CVPRW, pages
+2385–2392, 2023.
+
+[108] Hongcheng Gao, Hao Zhang, Yinpeng Dong, and Zhijie Deng. Evaluat-
+ing the robustness of text-to-image diffusion models against real-world
+attacks. arXiv preprint arXiv:2306.13103, 2023.
+
+[109] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weis-
+senborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani,
+Matthias Minderer, Georg Heigold, Sylvain Gelly, Jakob Uszkoreit,
+and Neil Houlsby. An image is worth 16x16 words: Transformers for
+image recognition at scale. In ICLR, 2021.
+
+[110] Alex Krizhevsky, Ilya Sutskever, and Geoffrey E Hinton.
+
+ImageNet
+classification with deep convolutional neural networks. NeurIPS, 25,
+2012.
+
+[111] Saining Xie, Ross B. Girshick, Piotr Doll´ar, Z. Tu, and Kaiming He.
+Aggregated residual transformations for deep neural networks. In IEEE
+CVPR, 2016.
+
+[112] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang,
+Swin transformer: Hierarchical vision
+
+Stephen Lin, and B. Guo.
+transformer using shifted windows. In IEEE ICCV, 2021.
+
+[113] Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jon Shlens, and
+Zbigniew Wojna. Rethinking the inception architecture for computer
+vision. In IEEE CVPR, pages 2818–2826, 2016.
+
+[114] Martin Heusel, Hubert Ramsauer, Thomas Unterthiner, Bernhard
+Nessler, and Sepp Hochreiter. GANs trained by a two time-scale update
+rule converge to a local nash equilibrium. NeurIPS, 30, 2017.
+[115] Tim Salimans, Ian Goodfellow, Wojciech Zaremba, Vicki Cheung,
+Alec Radford, and Xi Chen. Improved techniques for training GANs.
+NeurIPS, 29, 2016.
+
+[116] Tuomas Kynk¨a¨anniemi, Tero Karras, Samuli Laine, Jaakko Lehtinen,
+Improved precision and recall metric for assessing
+
+and Timo Aila.
+generative models. NeurIPS, 32, 2019.
+
+

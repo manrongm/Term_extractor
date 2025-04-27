@@ -1,0 +1,1275 @@
+Continuous and discrete compartmental models
+for infectious disease
+
+Gustavo A. Sousa1†, Diogo L. M. Souza2†, Enrique C. Gabrick3*†,
+Patr´ıcio D. C. dos Reis2†, Lucas E. Bentivoglio2†,
+Antonio M. Batista2,4†, Jos´e D. Szezech Jr.2,3,4†
+
+1 Department of Physics, State University of Ponta Grossa, 84030-900,
+Ponta Grossa, PR, Brazil..
+2Graduate Program in Science, State University of Ponta Grossa,
+84030-900, Ponta Grossa, PR, Brazil.
+3Institute of Physics, University of S˜ao Paulo, 05315-970, S˜ao Paulo, SP,
+Brazil.
+4Department of Mathematics and Statistics, State University of Ponta
+Grossa, 84030-900, Ponta Grossa, PR, Brazil.
+
+*Corresponding author(s). E-mail(s): ecgabrick@gmail.com;
+†These authors contributed equally to this work.
+
+Abstract
+
+The study of infectious disease propagation is essential for understanding and
+controlling epidemics. One of the most useful tools for gaining insights into the
+spread of infectious diseases is mathematical modelling. In terms of mathematical
+epidemiology, the main models are based on compartments, such as Susceptible–
+Infected (SI), Susceptible–Infected–Recovered (SIR), and Susceptible–Exposed–
+Infected–Recovered (SEIR). These models oﬀer mathematical frameworks for
+representing the proliferation dynamics of various diseases, for instance ﬂu and
+smallpox. In this work, we explore these models using two distinct mathemat-
+ical approaches, Cellular Automata (CA) and Ordinary Diﬀerential Equations
+(ODEs). They are able to reproduce the spread dynamics of diseases with their
+own individuality. CA models incorporate the local interaction among individu-
+als with discrete time and space, while ODEs provide a continuous and simpliﬁed
+view of a disease propagation in large and homogeneous populations. By com-
+paring these two approaches, we ﬁnd that the shape of the curves of all models is
+similar for both representations. Although, the growth rates diﬀer between CA
+and ODE. One of our results is to show that the CA yields a power-law growth,
+
+1
+
+5
+2
+0
+2
+
+r
+p
+A
+6
+1
+
+]
+E
+P
+.
+o
+i
+b
+-
+q
+[
+
+1
+v
+3
+5
+9
+3
+1
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+ 
+ 
+ 
+ 
+ 
+ 
+while the ODE growth rate is well-represented by an exponential function. Fur-
+thermore, a substantial contribution of our work is using a hyperbolic tangent
+to ﬁt the initial growth of infected individuals for all the considered models. Our
+results display a strong correlation between simulated data and adjusted function.
+We mainly address this successful result by the fact that the hyperbolic function
+captures both growing: the power-law (when considered the ﬁrst terms of inﬁnite
+sums) and combinations of exponential (when the hyperbolic function is written
+via exponential). Therefore, our work shows that when modelling a disease the
+choice of mathematical representation is crucial, in particular to model the onset
+of an epidemic.
+
+Keywords: Cellular automata, Epidemiology, Diﬀerential Equations.
+
+1 Introduction
+
+Infectious disease spread is a worldwide problem that has aﬀected the humanity
+throughout the history [1]. Understanding the spread of illness is an important topic
+for the modern science, improving the forecast and control methods [2]. One powerful
+tool to investigate the disease spread is the mathematical models [3]. The investigation
+can be done via statistical modelling [4], Ordinary Diﬀerential Equations (ODEs) [5],
+Partial Diﬀerential Equations [6], Cellular Automaton (CAs) [7], Machine Learning
+[8], among others [9–12]. In some cases, speciﬁcally in ODE and CA, the modelling is
+mostly made based on compartmental models [1].
+
+Compartmental epidemiological models have their origins in attempts to quantify
+and predict the spread of infectious diseases. One of the most inﬂuential models was
+proposed by William Hamer in 1906, using the concept of “mass action” transmis-
+sion [13]. In this model, the rate of new cases is proportional to the product of the
+health and the sick individuals. However, it was the model proposed by Kermack and
+McKendrick [14], in 1927, that laid the foundation for modern compartmental models.
+These models compartmentalise the host population according to the status of
+infection. The main compartments are Susceptible (S), Exposed (E), Infected (I) and
+Recovered (R) states [15]. S compartment is responsible for holding healthy individuals
+who can contract the infection, E compartment contains the individuals who are
+infected but not infectious, namely latent period [16]. The infectious agents are in the I
+compartment. After the individuals pass through the infectious stage, they evolve to R.
+Combinations of these compartments and inclusion of new ones lead to several models.
+In this work, we focus on Susceptible–Infected (SI), Susceptible–Infected–Recovered
+(SIR) and Susceptible–Exposed–Infected–Recovered (SEIR) models. The ﬁrst model
+is adequate for diseases that confer a lifelong infection, such as AIDS [17]. The second
+model is adequate for diseases in which the healthy individual becomes infected and,
+after a time interval, acquires a permanent immunity, for instance measles [18]. The
+SEIR is employed to describe illness with latent period, and one recent example is
+COVID-19 [19]. These models can be described in diﬀerent mathematical frameworks.
+In this work, we analyze the CA and ODE and compare their results.
+
+2
+
+CAs are mathematical models capable of simulating complex biological, chemical,
+and physical processes [20]. They were proposed by Stanislaw Ulam and John von
+Neumann during the 1940s. The CA model is deﬁned as a grid of cells that evolve
+according to local rules based on the states of their nearest neighbors [21]. Later, the
+concept was expanded, most notably with John Conway’s “Game of Life”, which used
+CA to demonstrate complex behaviors emerging from simple rules [22].
+
+In mathematical epidemiology, CAs have been used to model the spread of infec-
+tious diseases in discrete and spatially distributed populations [23]. Their relevance
+grew during the 1980s and 1990s with research focusing on the inﬂuence of spatial
+structure and human mobility on disease dissemination [24, 25]. CA has been applied
+to study the spread of HIV [26], dengue [27], and inﬂuenza outbreaks [28], allowing the
+simulation of hypothetical scenarios and the integration of real data for more accurate
+predictions and strategic control [29].
+
+In the study of epidemiology, ODEs are employed to model the dynamics of infec-
+tious disease transmission in homogeneous populations, enabling the analysis of factors
+such as transmission rate, recovery rate, and the impact of interventions, providing
+eﬀective approaches for infectious disease control [32, 33].
+
+In this work, we study the compartmental models SI, SIR, and SEIR using CA and
+ODE. By comparing the results, we aim to identify and analyse the similarities and dif-
+ferences between these two approaches. Our results show that the CA and ODE exhibit
+distinct growth rate for the infected populations in the models studied. The growth
+of the infected population in the CA model follows a power-law function, while in the
+ODE model is better represented by an exponential function. Our study highlights
+the unique characteristics of each mathematical approach, enabling future studies to
+choose the most appropriate method for accurately representing experimental data.
+Moreover, a key ﬁnding is that the hyperbolic tangent is a strong candidate to ﬁt the
+initial growth of infected individuals for all the considered models in both represen-
+tations. This occurs mainly due to the fact that the hyperbolic tangent encompasses
+power-law growth (in the ﬁrst terms of inﬁnite sums) and exponential representations.
+This work is organized as following: In Section 2, we present the mathematical
+framework of CA and ODE. Thereafter, the SI model is discussed in Section 3. Results
+concerning to SIR and SEIR model are present in Sections 4 and 5, respectively.
+Finally, we draw our conclusions in Section 6.
+
+2 Methodology
+
+Cellular automata are considered discrete representations of partial diﬀerential
+equations [21]. They are mathematical models characterized by discrete space, time,
+and state variables [34]. A model based on CA framework can have n space dimen-
+sions. In this work, we consider n = 2, where n is the space dimension, and a square
+grid compose of M × M identical cells (Ci,j). The time evolution depends on pre-
+deﬁned rules and the neighborhood. The rules are deﬁned according to the problem
+to be modelled and the neighborhood is deﬁned by taking the closest neighbors of
+Ci,j. In this work, we consider a two space dimension where the neighbors belongs
+to the von Neumann neighborhood, i.e., the set of neighbors in the four closest cells
+
+3
+
+[29]. The time step is deﬁned when the transition rules are applied to the whole grid,
+simultaneously.
+
+In this work, for each epidemiological model, we assume that each cell in the CA
+represents one individual. Our grid consist of M × M cells, where M = 100, implying
+in a population equal to N = 10000, and we employ the von Neumann neighbourhood
+with periodic boundary conditions. The transition rules speciﬁc to each compartmental
+model are detailed in their respective sections. The position of the infected cells in the
+grid are randomly selected. Therefore, the CA model considered is probabilistic, the
+epidemic curves are an average of 100 independent simulations.
+
+Since their development, ODEs have been applied across various ﬁelds of knowl-
+edge. In physics, they are used to describe the behaviour of dynamic systems, such as
+neuronal modelling [36], pendulum oscillations [37], ﬂuid dynamics [38], and others. In
+epidemiological studies, ODEs have been used to model the dynamics of infectious dis-
+ease transmission in homogeneous populations [39]. They allow the analysis of factors
+such as transmission rates, recovery rates, and the impact of interventions, providing
+an eﬀective approach for developing disease control strategies [40, 41].
+
+In this work, to numerically integrate the diﬀerential equations, we use the 4th-
+
+order Runge-Kutta method with a ﬁxed step equal to h = 0.01.
+
+3 SI model
+
+One of the simplest compartmental models extensively used is the SI. This model
+describes the spread of diseases where the I individuals have lifelong infection, such
+as AIDS [42] or mosquitoes infected by dengue [43]. Figure 1 shows the interaction
+between the S and I compartments, where the arrow indicates the ﬂow of individuals.
+Above the arrow, we include the notation βI/N , which represents the force of infection,
+that deﬁne the infection contraction of each S individual [1], and β is the product
+between transmission probability and contact rates. In this way, the rate in which new
+infected individuals are produced is βSI/N .
+
+S
+
+Fig. 1: Compartmental diagram of the SI model.
+
+Firstly, we simulate the SI model using CA approach. During each iteration, if one
+or more neighbors are I, each S can evolve to I with a rate β. Once a cell becomes I,
+it remains in that compartment for the rest of the simulation. This approach allows
+an analysis of the spatial and temporal dynamics of the infection, which is useful for
+understanding the spread patterns. We consider states set U = {S, I} = {1, 2}. Then,
+the update rules of the each cell Ci,j (t) (Susceptible or Infected) are summarized as
+follow:
+
+4
+
+1. The susceptible cells verify the presence of neighbour infected cells, than each
+
+adjacent infected cell infects the susceptible cell with a probability β.
+
+2. Once the susceptible cell is infected, it evolves to the infected state and stays there
+
+trying to contaminate S adjacent cells.
+
+By implementing the rules with parameters listed in Table 1, we show the spa-
+tial evolution of SI model in Fig. 2, in CA framework.
+It is worth mentioning that
+the parameter values are arbitrary, since we are not modeling any real disease, but
+rather exploring fundamental relationships of both formulations (ODE and CA). How-
+ever, once selected the parameters values, they need to be equal for both approaches,
+including the fraction of initial individuals. Figures 2(a), 2(b), and 2(c) are snapshots
+at t = 15, 30, and 45, respectively. In these results, and in the rest of the paper, we
+represent S cells by black colour and I by red. For t = 15 (Fig. 2(a)), we observe the
+emergence of many infection focus, which are centred in the infected initial condition.
+As t advances, each aggregation grows in the grid. In Fig. 2(c), we select the snapshot
+when t = 45, for in this a signiﬁcant part of the grid is red.
+
+Nonetheless, the equilibrium is reached when all the cells become I; for our para-
+metric conﬁguration, this occurs at t ≈ 100. It is important to mention that these
+snapshots are for one random initial condition, if the initial infected cells are disposed
+in other position, the snapshots assume diﬀerent shape. A major advantage of CA is
+the ability to capture spatial variations, thereby representing the rapid infection of
+densely populated areas.
+
+Table 1: Parameters for the SI model
+considering CA and ODEs. The initial
+condition for S is S(0) = N − I(0).
+
+Parameter Values (CA) Values (ODE)
+
+N
+β
+I(0)
+
+10000
+0.1
+100 (0.01N )
+
+1
+0.1
+0.01
+
+(a)
+
+t=15
+
+(b)
+
+t=30
+
+(c)
+
+t=45
+
+100
+
+75
+
+j
+
+50
+
+25
+
+0
+
+100
+
+75
+
+j
+
+50
+
+25
+
+0
+
+100
+
+75
+
+j
+
+50
+
+25
+
+S
+
+I
+
+0
+
+0
+
+25
+
+75
+
+50
+i
+
+50
+i
+Fig. 2: Time and spatial evolution of the SI model via CA. The black color displays
+the susceptible and red the infected individuals.
+
+50
+i
+
+100
+
+100
+
+75
+
+25
+
+75
+
+25
+
+0
+
+0
+
+100
+
+5
+
+Next, we implement the SI through ODEs. The equations represent the change
+
+rate of S(t) and I(t) compartments:
+
+dS
+dt
+dI
+dt
+
+= −β
+
+SI
+N
+
+,
+
+= β
+
+SI
+N
+
+,
+
+(1)
+
+(2)
+
+where N = S + I is the total population [15]. Using this constraint the model can be
+uncoupled and solved analytically. Considering S = N − I in Eq. (2), we get
+
+dI
+dt
+
+=
+
+β
+N
+
+I(N − I),
+
+where the solution for I is given by
+
+I(t) =
+
+I0N eβt
+N + I0(eβt − 1)
+
+,
+
+(3)
+
+(4)
+
+and for S(t) = N −I(t). The I number grows as an exponential function which depends
+on β. If S(0) ≈ N and I(t) ≪ N , a rapid spread of the disease occurs according to an
+exponential function dependent on β. Although we keep the capital notation in the
+equations for ODEs approaches, the epidemic curves are normalised, i.e., s = S/N ,
+i = I/N , and so on.
+
+As the disease spreads, the number of susceptible individuals decreases, going to
+zero, while the number of infected individuals reaches a plateau close to the total num-
+ber of individuals in the population. Eventually, the number of new cases stabilizes,
+and all susceptible individuals become infected.
+
+With both mathematical formulation (CA and ODE) for SI model, we implement
+numerical solutions for both cases, the parameters for CA and ODE are described in
+Table 1. From the CA model, the population in S compartment starts to move to
+I until this compartment to be ﬁlled (Fig. 3(a)). The same dynamics is observed in
+ODE framework. Taking the limit t → ∞ in Eq. (4) we get (S, I) = (0, N ), showing
+that all the population moves from S to I. This is not necessarily true for the next
+analyzed models. A numerical simulation corroborates this analysis, as shown in Fig.
+3(b), where we observe the changes between the compartments.
+
+The solutions displayed in Fig. 3(a) and Fig. 3(b) have a similar behaviour. How-
+ever, when we analyse the increase of infected individuals for short times, we can infer
+the diﬀerences, as exhibited in Figs. 3(c) and 3(d). In CA, the decrease in susceptible
+and the increase in infected individuals is slower compared to the ODE formula-
+tion (Fig. 3(b)). To compare the initial growth in both formulations, we propose a
+power-law for CA,
+
+for ODE framework:
+
+ICA(t) = KtB,
+
+IODE(t) = K exp (Bt),
+
+6
+
+(5)
+
+(6)
+
+and to compare both growing, we consider a hyperbolic tangent:
+
+b
+I(t) = α (1 + tanh(ξt + φ)) ,
+
+(7)
+
+b
+where α ∈ [0, 1] is the amplitude, ξ is the growing rate, and φ is a phase.
+I(t)
+corresponds to the individuals, tanh and φ are dimensionless, and ξ has 1/time unity.
+In this way, α is the number of individuals who become sick in a time interval, i.e., an
+incidence factor.
+
+The initial time evolution of i curve (until I = 0.15N ) for both approaches is
+displayed in Fig. 3(c) and 3(d). In the panel (c), the red line is for i, while the green
+dotted line is the adjustment using Eq. (5) for K = 0.007 ± 0.001 and B = 1.09 ± 0.05,
+with R2 = 0.9966; and the black triangle is the ﬁtting using Eq. (7), for α = 0.115 ±
+0.005, ξ = 0.108 ± 0.003, φ = −1.27 ± 0.01, and R2 = 0.9998. Both curves describe
+the initial grow of i individuals.
+
+We conduct a similar analysis for the ODE formulation (Fig. 3(d)). For Eq. (6), we
+obtain K = 0.01076 ± 0.00001 and B = 0.09262 ± 0.00004, and R2 = 0.99987, shown
+by the blue dotted line; and for Eq. (7), α = 0.500 ± 0.003, ξ = 0.05000 ± 0.00003,
+φ = −2.298 ± 0.003, and R2 = 0.99998, exhibited by the black triangle.
+
+In the analysed cases, we obtain a signiﬁcant R2, for all the ﬁts, but we note
+that the infection modelled by CA grows as a power-law, while via ODEs follows
+an exponential. A hyperbolic tangent is able to ﬁt both grows. For SI this approach
+works for the whole time of i(t), however, for other models which present a bell shape
+of infection, this function is adequate just for short and medium times, i.e., times
+before the peak. For these parametric conﬁgurations and analysing the adjustments,
+we observe that the infected curve grows faster for CA than ODE. This diﬀerence
+in infection speed also arises due to the ODE model is treating the population as a
+continuous medium, ignoring spatial interactions between individuals.
+
+4 SIR model
+
+The SIR model describes the transition from an infected state to a recovered one. It is
+able to mimic spread of diseases where individuals obtain permanent immunity after
+the infectious period, for instance measles [3] and smallpox [44]. Figure 4 shows the
+interactions between the compartments in SIR. We consider a new parameter γ, which
+is the recovery rate and 1/γ gives the average infectious time.
+
+We set up a CA formulation for the SIR model, where the transition between
+diﬀerent compartments is governed by infection probability β and recovery probability
+γ. The set of states is U = {S, I, R} = {1, 2, 3}. The S cell can become I with
+probability β if it has at least one infected neighbor. After a cell becomes infected, it
+recovers with a probability γ. We do not consider mortality due to the disease, then
+after a long simulation time, the entire population will be in R compartment. The
+transition rules of SIR are similar to those of SI, the only diﬀerence is the addition of
+the transition to R state. A summary of the state transition rules for the SIR model is
+
+7
+
+5
+7
+
+6
+7
+
+Fig. 3: Time evolution of s(t) (green line) and i(t) (red line) in the panels (a) and (b),
+for CA and ODE, respectively. The panels (c) and (d) display the respective infected
+curve for both approaches, where the red line is for i, the green dotted line is the
+adjustment using Eq. (5), the black triangle is the ﬁtting using Eq. (7), and the blue
+dotted line is the adjustment given by Eq. (6).
+
+S
+
+R
+
+Fig. 4: Diagram of the compartments for the SIR model. β describes the eﬀective rate
+of infection and γ represents the recovery rate.
+
+1. An infected cell can contaminate an adjacent S cell with probability β. If there are
+multiple infected cells around a susceptible cell, each I cell contaminates the S cell
+with probability β.
+
+2. When a S cell is infected by one of its neighbours, it evolves to the infected state.
+3. An infected cell can recover from the pathology with probability γ. Upon recovery,
+
+the infected cell goes to the R state and remains there.
+
+Figure 5 shows the spatial and temporal evolution of the SIR based on CA formu-
+lation with parameters described in Table 2. At the beginning of the simulation (Fig.
+5(a)), there are only a few infected and recovered cells. Over time, there is a wave of I
+transmitting the disease to S, where the growing is like a circle centred in the initial
+position of i(0), and the centre of the circle contain R individuals, as observed in Fig.
+5(b). For long times of simulation, the number of R individuals increases until nearly
+the entire population (Fig. 5(c)). Due to permanent immunity, the number of infected
+individuals decreases exponentially.
+
+8
+
+t=10
+
+(a)
+
+100
+
+75
+
+j
+
+50
+
+25
+
+(b)
+
+100
+
+75
+
+j
+
+50
+
+25
+
+t=20
+
+(c)
+
+t=35
+
+100
+
+75
+
+j
+
+50
+
+25
+
+S
+
+I
+
+R
+
+0
+
+0
+
+0
+
+0
+
+75
+
+25
+
+100
+
+50
+i
+
+50
+i
+Fig. 5: Time evolution of CA for SIR for (a) t = 10, (b) t = 20, and (c) t = 35. Black
+colour represents the susceptible, red colour the infected and yellow the recovered
+individuals.
+
+50
+i
+
+100
+
+100
+
+75
+
+25
+
+25
+
+75
+
+0
+
+0
+
+Table 2: Parameters of SIR for CA
+and ODEs. The initial condition for S is
+S(0) = N − I(0).
+
+Parameters Values (CA) Values (ODEs)
+
+N
+β
+γ
+I(0)
+R(0)
+
+10000
+0.2
+0.1
+100 (0.01N )
+0
+
+1
+0.2
+0.1
+0.01
+0
+
+We study the SIR model described by ODEs, that is given by three coupled
+
+diﬀerential equations:
+
+= −β
+
+SI
+N
+
+,
+
+− γI,
+
+= β
+
+SI
+N
+
+= γI,
+
+dS
+dt
+dI
+dt
+dR
+dt
+
+(8)
+
+(9)
+
+(10)
+
+where β is the infection rate and γ is the recovery rate. This model also obeys the
+constraint S + I + R = N . This way, it is possible to rewrite one of the Eqs. (8)-
+(10) into an algebraic expression. For example, the system can be reduced to two
+diﬀerential equations by taking R = N − S − I. Due to the non-linearity in Eqs. (8)-
+(10), it is not possible to reduce the number of equations as we made for the SI model.
+Another diﬀerence from SI model is that the transmission stops when there are no I
+individuals, not when all S becomes I.
+
+A comparison between the S, I and R curves in the both frameworks is displayed
+in Fig. 6, where Fig. 6(a) is for CA and Fig. 6(b) for ODE. The behavior observed
+in these curves arises from the inherent nature of the models: CA captures spatial
+interactions, while ODE concentrates on temporal dynamics. CA allows the study of
+infection spread in spatially heterogeneous populations, revealing new patterns such
+as damped oscillations [45]. In contrast, the SIR model ODE focus on the temporal
+development of epidemics through non-linear diﬀerential equations.
+
+9
+
+Another diﬀerence is in the growth of I individuals, as noted previously. Following
+the same strategy, we ﬁt the I curve until the time where I reaches 0.15N . For CA, we
+consider Eq. (5) and obtain parameters equal to K = 0.017±0.001, B = 0.87±0.03 and
+R2 = 0.9987. This curve is displayed in Fig. 6(c) by the green dotted line. Meanwhile,
+for the ODE, we use Eq. (6) getting K = 0.0175 ± 0.0001, B = 0.0597 ± 0.0001, and
+R2 = 0.9926 (blue dotted line in Fig. 6(d)). For the analysed case, we observe that the
+I number in CA formalism grows like a power-law, while in ODE as an exponential
+function. We verify the adjustment given by Eq. (7), for CA: α = 0.090 ± 0.003,
+ξ = 0.150 ± 0.006, φ = −1.030 ± 0.019, and R2 = 0.9996; and for the ODE: α =
+0.10027 ± 0.00007, ξ = 0.05447 ± 0.00003, φ = −1.5027 ± 0.0003, and R2 = 0.99996.
+Both adjustments are shown in Figs. 6(c) and 6(d), respectively, by the black triangles.
+
+5
+7
+
+6
+7
+
+Fig. 6: Temporal evolution of s (green line), i (red line), and r (blue line) of the SIR
+model for (a) CA and (b) ODE. In the panels (c) and (d), we show the i curve for CA
+and ODE, respectively, followed by the adjustments given by Eq. (5) in green dotted
+line, Eq. (6) in blue dotted, and Eq. (7) by the black triangles.
+
+5 SEIR model
+
+The SEIR model is represented by the diagram in Fig. 7, it is an extension of SIR
+by including a new compartment. This model is appropriate to describe the disease
+in which one individual comes into contact with one infected agent and becomes
+contaminated. After that, the exposed individuals go through the latent period, during
+which they are not able to spread the disease. The time interval of latent period is
+equal to 1/ω. Once infected, the individual spreads the illness and after 1/γ becomes
+R.
+
+We analyze SEIR via CA, where U = {S, E, I, R} = {1, 2, 3, 4}. In this model,
+S cells become exposed if they are adjacent to infected cells and the transition is
+
+10
+
+S
+
+E
+
+R
+
+Fig. 7: Compartment diagram for the SEIR model. β describes the eﬀective rate of
+infection, ω represents the rate of transfer from exposed to infectious, and γ represents
+the recovery rate.
+
+determined by the probability β. Exposed cells progress to the I state with probability
+ω, that is related to the incubation period. During the incubation period the exposed
+cell does not transmit the disease to its neighbours. Infected cells recover with a
+probability γ, transitioning to the R state. The CA rule for the SEIR model can be
+summarised as follows
+
+1. The evolution of the S cell to E state occurs with a probability β (infection rate),
+
+if there is at least one adjacent infected cell.
+
+2. Exposed cells do not transmit the diseases to other cells. These cells can transi-
+tion to infected state (Ci,j (t) = 3) with probability ω (incubation rate). Once the
+exposed cell evolves to an infected cell, it begins to expose adjacent cells to the
+pathology.
+
+3. An infected cell can recover from the diseases with probability γ (recovery rate).
+Once recovered, the infected cell updates to a recovered cell, state which the cell
+remains for the entire simulation.
+
+Implementing the previous rules, we obtain the spatial-temporal evolution for the
+SEIR model, as exhibited in Fig. 8(a)-(c), for t = 10, 15, and 25, respectively. The
+parameters are displayed in Table 3. As I advances infecting individuals, the agents
+in the centre of the circle evolve to R. The ﬁnal state is a grid full of R.
+
+Table 3: Parameters considered in the
+CA for SEIR. The initial condition for S
+is S(0) = N − I(0) − E(0).
+
+Parameters Values (CA) Values (ODE)
+
+N
+β
+γ
+ω
+E(0)
+I(0)
+R(0)
+
+10000
+0.25
+0.1
+0.2
+100 (0.01N )
+100 (0.01N )
+0
+
+1
+0.25
+0.1
+0.2
+0.01
+0.01
+0
+
+Considering an ODE approach, the SEIR model is described by
+
+dS
+dt
+dE
+dt
+
+=
+
+=
+
+,
+
+−βSI
+N
+βSI
+N
+
+− ωE,
+
+11
+
+(11)
+
+(12)
+
+(a)
+
+t=10
+
+100
+
+75
+
+j
+
+50
+
+25
+
+0
+
+(b)
+
+100
+
+75
+
+j
+
+50
+
+25
+
+0
+
+t=15
+
+(c)
+
+t=25
+
+100
+
+75
+
+j
+
+50
+
+25
+
+S
+
+E
+
+I
+
+R
+
+0
+
+0
+
+25
+
+75
+
+100
+
+50
+i
+
+0
+
+25
+
+50
+i
+Fig. 8: Spatial-temporal evolution of the CA for SEIR for (a) t = 10, (b) t = 15,
+and (c) t = 25. The colour of each individual represents the compartment of the cell:
+susceptible individuals are represented by black, exposed by purple, infected by red
+and recovered by yellow.
+
+100
+
+100
+
+75
+
+25
+
+50
+
+75
+
+0
+
+i
+
+dI
+dt
+dR
+dt
+
+= ωE − γI,
+
+= γI,
+
+(13)
+
+(14)
+
+where the restriction N = S + E + I + R is valid. Using the constraint, the Eqs. (11)-
+(14) are reduced to three ODEs systems by computing R via R = N − (S + E + I).
+The dynamics are more complex than those of the SIR model due to the inclusion of
+the exposed compartment, which represents a delay between infection and the onset
+of infectiousness. The delay can inﬂuence both the speed and intensity of epidemic
+outbreaks. The disease can spread more slowly initially due to the incubation period,
+however, once the exposed individuals become infectious, there can be a rapid increase
+in the cases.
+
+The temporal evolution of S, E, I, and R individuals are shown in Fig. 9. The
+panels (a) and (b) shows the temporal evolution for CA and ODEs formalism, respec-
+tively. The curve shape of CA and ODE approach are similar. The diﬀerence occurs
+basically in the beginning of the outbreak. Note that the E individuals increase faster
+in CA, while in ODE, they grow slowly for t < 20 and after that assume an exponential
+increase.
+
+To verify which function better describes the start of the outbreak. We adjust the
+CA curve via Eq. (5), getting K = 0.0069 ± 0.0005, B = 1.21 ± 0.03, and R2 = 0.9987
+(green dotted line in Fig. 9(c)). For the ODE approach, via Eq. (6), we obtain K =
+0.00077 ± 0.00008, B = 0.116 ± 0.002, and R2 = 0.7509 (blue dotted line in Fig.
+9(d)). Then, we employ Eq. (7) for CA and ODE. For the ﬁrst one, the parameter
+is α = 0.106 ± 0.003, ξ = 0.142 ± 0.004, φ = −1.35 ± 0.01, and R2 = 0.9997; and
+for the second α = 0.10360 ± 0.00007, ξ = 0.04334 ± 0.00002, φ = −1.4970 ± 0.0003,
+and R2 = 0.99996. The black triangles display both ﬁttings in Fig. 9(c) and (d).
+Comparing the previous descriptions for SI and SIR, the power-law and exponential
+do not describe very well the i curve for SEIR, otherwise, the hyperbolic tangent keeps
+being a good adjustment.
+
+12
+
+6
+7
+
+5
+7
+
+Fig. 9: Temporal evolution of s (green line), e (purple line), i (red line), and r (blue
+line) of SEIR for (a) CA and (b) ODE. In panels (c) and (d), we show the i curve
+for CA and ODE, respectively, followed by the adjustments given by Eq. (5) in green
+dotted line, Eq. (6) blue dotted, and Eq. (7) by the black triangles.
+
+6 Conclusions
+
+In this work, we investigate three epidemiological models: SI, SIR and SEIR. To
+simulate these models, we use two diﬀerent techniques: cellular automata (CA) and
+ordinary diﬀerential equations (ODE). We made a direct comparison between both
+approaches. Our results shows that the mathematical representation aﬀects profoundly
+the modelling output. Our main observation is that the infected initial growth in CA
+approach is better described by a power-law, while in ODE the infected number grows
+as an exponential function. In addition, we propose an adjustment based on hyperbolic
+tangent, which represents very well both growth. It is important to know how I grows
+in the beginning of outbreak. Knowing this, we are able to select the mathematical
+description discussed in this paper.
+
+An important contribution of our work is the use of a hyperbolic tangent to ﬁt
+the initial growth of all models in both approaches. The use of hyperbolic tangent
+is presented in [1] where the authors obtain an approximate solution for R(t) in the
+limit when R0R is small for the SIR model. This condition, sometimes, coincides with
+the initial growth of outbreaks. Based on this, we show via numerical tests that a
+hyperbolic tangent can ﬁt not only the SIR model, but also SI and SEIR. We address
+these successful results by analyzing the representation of the hyperbolic tangent in
+terms of inﬁnite series. We observe a sum of alternating signs of odd powers describes it.
+This suggests that the hyperbolic tangent better captures the growth when compared
+to a power-law representation that uses a single exponent. Additionally, the hyperbolic
+tangent is deﬁned by exponential functions that preserves a relationship with the
+EDOs solutions. This combination of characteristics makes the hyperbolic tangent
+more suitable for simultaneously representing both CA and EDO.
+
+13
+
+The comparison between CA and ODE reveals that both methods oﬀer distinct
+perspectives for modelling and analysing epidemics, each with its own advantages and
+limitations. CA, with their discrete approach and ability to simulate local interactions
+between individuals, provides a detailed view of disease spread within a spatially
+organized structure. Meanwhile, ODE with their continuous and analytical approach,
+oﬀers a simpliﬁed and eﬀective overview of the trends and rates of disease spread
+in large and homogeneous populations. The ability of ODEs to generate analytical
+or numerical solutions for dynamic systems permits quantitative analysis and the
+prediction of long-term epidemiological behaviors. To summarise the comparison, we
+say that CA model described a microscopic level, i.e., individual by individual, while
+ODE gives the macroscopic description.
+
+The use of CA and ODE in epidemiology expands the scope of possible analyses
+and oﬀers complementary tools that help build a more detailed picture of disease prop-
+agation dynamics. Our study shed light into the diﬀerences between ODE and CA
+compartmental epidemiological models. Diﬀerent mathematical approaches can better
+describe the experimental data of speciﬁc diseases. Therefore, combining these method-
+ologies can enhance intervention and control strategies, promoting more eﬀective
+outbreak and pandemic management. In this way, continuous research and develop-
+ment of these techniques are essential to tackle emerging epidemiological challenges
+and improve public health policies based on solid evidence.
+
+Acknowledgements
+
+CAPES
+
+acknowledge
+
+88887.991936/2024–00,
+(Financial
+We
+88887.650484/2021–00, 88887.856951/2023–00, 88887.965333/2024-00), CNPq (Fin-
+cancial Code: 309670/2023-3), Funda¸c˜ao Arauc´aria, and FAPESP (Financial code:
+2024/14478-4, 2024/14825-6, 2025/02318-5). We also would like to acknowledge the
+Science Group 105 (www.105groupscience.com)
+
+Codes:
+
+Funding
+
+The authors would like to thank the Brazilian funding agencies: CAPES
+(Financial Codes: 88887.991936/2024–00, 88887.650484/2021–00, 88887.856951/2023–
+00, 88887.965333/2024-00), CNPq (Fincancial Code: 309670/2023-3), Funda¸c˜ao
+Arauc´aria, and FAPESP (Financial code: 2024/14478-4, 2024/14825-6, 2025/02318-5)
+by the ﬁnancial support.
+
+Data Availability
+
+The numerical data that support the ﬁndings of this study are available from the
+corresponding author upon reasonable request.
+
+14
+
+Declarations
+
+Conﬂict of Interest:
+The author declares that there exists no competing ﬁnancial interest or personal
+relationships that could have appeared to inﬂuence the work reported in this paper.
+
+References
+
+[1] Keeling, M.J., Rohani, P.: Modeling Infectious Diseases in Humans and Animals,
+
+1st edn. Princeton University Press, Princeton (2008).
+
+[2] Anderson, R.M., May, R.M.: Infectious Diseases of Humans: Dynamics and
+
+Control. Oxford University Press, Oxford (1991).
+
+[3] Bjornstad, O.N.: Epidemics: Models and Data Using R, 1ª ed., Springer Nature
+
+Switzerland AG, Cham, Switzerland (2018).
+
+[4] Cummings, D.A.T., Iamsirithaworn, S., Lessler, J.T., McDermott, A., Prasan-
+thong, R., Nisalak, A., Jarman, R.G., Burke, D.S., Gibbons, R.V.: The impact
+of the demographic transition on dengue in thailand: Insights from a statistical
+analysis and mathematical modeling. Plos Medicine 6, 1000139 (2009).
+
+[5] Manchein, C., Brugnago, E.L., Silva, R.M., Mendes, C.F.O., Beims, M.W.: Strong
+correlations between power-law growth of covid-19 in four continents and the
+ineﬃciency of soft quarantine strategies. Chaos 30, 041102 (2020).
+
+[6] Yamazaki, K.: Threshold dynamics of reaction–diﬀusion partial diﬀerential
+equations model of ebola virus disease. International Journal of Biomathematics
+11, 1850108 (2018).
+
+[7] White, S.H., Rey, A.M., S´anchez, G.R.: Threshold dynamics of reaction–diﬀusion
+partial diﬀerential equations model of ebola virus disease. Applied Mathematics
+and Computation 186, 193–202 (2007).
+
+[8] Wang, P., Zheng, X., Li, J., Zhu, B.: Prediction of epidemic trends in covid-19
+with logistic model and machine learning technics. Chaos, Solitons and Fractals
+139, 110058 (2020).
+
+[9] Hoertel, N., Blachier, M., Blanco, C., Olfson, M., Massetti, M., Rico, M.S.,
+Limosin, F., Leleu, H.: A stochastic agent-based model of the sars-cov-2 epidemic
+in france. Nature Medicine 26, 1417–1421 (2020).
+
+[10] Pastor-Satorras, R., Castellano, C., Mieghem, P., Vespignani, A.: Epidemic
+processes in complex networks. Reviews of Modern Physics 87, 925 (2015).
+
+[11] Allen, L.J.S.: Some discrete-time si, sir, and sis epidemic models. Mathematical
+
+Biosciences 124, 83–105 (1994).
+
+15
+
+[12] Allen, L.J.S., Burgin, A.M.: Comparison of deterministic and stochastic sis and
+
+sir models in discrete time. Mathematical Biosciences 163, 1–33 (2000).
+
+[13] Hamer, W.: The treatment of typhoid fever. The Lancet 167, 227–230 (1906).
+
+[14] Kermack, W.O., McEndrick, A.G.: A contribution to the mathematical theory
+of epidemics. Proceedings of the royal society of London. Series A 115, 700–721
+(1927).
+
+[15] Batista, A.M., Souza, S.L.T., Iarosz, K.C., Almeida, A.C.L., Jr., J.D.S., Gabrick,
+E.C., Mugnaine, M., Santos, G.L., Caldas, I.L.: Simulation of deterministic com-
+partmental models for infectious diseases dynamics. Revista Brasileira de Ensino
+de F´ısica 43, 20210171 (2021).
+
+[16] Li, M.Y., Muldowney, J.S.: Global stability for the seir model in epidemiology.
+
+Mathematical Biosciences 125, 155–164 (1995).
+
+[17] Cai, L., Li, X., Ghosh, M., Guo, B.: Stability analysis of an hiv/aids epidemic
+model with treatment. Journal of Computational and Applied Mathematics 229,
+313–323 (2009).
+
+[18] Bjornstad, O.N., Finkenst¨adt, B.F., Grenfell, B.T.: Dynamics of measles epi-
+demics: estimating scaling of transmission rates using a time series sir model.
+Ecological Monographs 72, 169–184 (2002).
+
+[19] Mohajan, D., Mohajan, H.K.: Mathematical analysis of seir model to prevent
+covid-19 pandemic. Journal of Economic Development, Environment and People
+11, 5-30 (2022).
+
+[20] Neumann, J. Theory of Self-reproducing Automata, Edited by Arthur W. Burks
+
+edn., University of Illinois Press, Illinois (1966).
+
+[21] Wolfram, S. A New Kind of Science. 1st edn., Wolfram Media, Champaign, Illinois
+
+(2002).
+
+[22] Gardner, M.: Wheels, Life and Other Mathematical Amusements, 10 edn.
+
+American Mathematical Society (2020).
+
+[23] Sirakoulis, G.C., Karafyllidis, I., Thanailakis, A.: A cellular automaton model for
+the eﬀects of population movement and vaccination on epidemic propagationa.
+Ecological Modelling 133, 209–223 (2000).
+
+[24] Yakowitz, S., Gani, J., Hayes, R.: Cellular automaton modeling of epidemics.
+
+Applied Mathematics and Computation 40, 41–54 (1990).
+
+[25] Fuentes, M.A., Kuperman, M.N.: Cellular automata and epidemiological models
+
+with spatial dependence. Physica A 267, 471–486 (1999).
+
+16
+
+[26] Santos, R.M.Z., Coutinho, S.: Dynamics of hiv infection: A cellular automata
+
+approach. Physical Review Letters 87, 168102 (2001).
+
+[27] Pereira, F.M.M., Schimit, P.H.T.: Dengue fever spreading based on probabilistic
+
+cellular automata with two lattices. Physica A 499, 75–87 (2018).
+
+[28] Beauchemin, C., Samuel, J., Tuszynski, J.: A simple cellular automaton model for
+inﬂuenza a viral infections. Journal of Theoretical Biology 232, 223–234 (2005).
+
+[29] Mugnaine, M., Gabrick, E.C., Protachevicz, P.R., Iarosz, K.C., Souza, S.L.T.,
+Almeida, A.C.L., Batista, A.M., Caldas, I.L., Jr, J.D.S., Viana, R.L.: Control
+attenuation and temporary immunity in a cellular automata seir epidemic model.
+Chaos, Solitons and Fractals 155, 111784 (2022).
+
+[30] Boyce, W.E., DiPrima, R.C.: Elementary Diﬀerential Equations and Boundary
+
+Value Problems, 8ª ed., John Wiley and Sons, New York (2004).
+
+[31] Butcher, J.C. Numerical Methods for Ordinary Diﬀerential Equations. 1st edn.,
+
+John Wiley and Sons, Chichester, England (2008).
+
+[32] Brauer, F., Castillo-Chavez, C., Feng, Z. Mathematical Models in Epidemiology.
+
+1st edn., Springer, New York (2019).
+
+[33] Beira, M.J., ao, P.J.S.: A diﬀerential equations model-ﬁtting analysis of covid-
+19 epidemiological data to explain multi-wave dynamics. Scientiﬁc Reports 11,
+16312 (2021).
+
+[34] Ilachinski, A. Cellular Automata: A Discrete Universe. 1st edn., World Scientiﬁc
+
+Publishing Company, Singapore (2001).
+
+[35] Gabrick, E.C., Protachevicz, P.R., Batista, A.M., Iarosz, K.C., Souza, S.L.T.,
+Almeida, A.C.L., Jr, J.D.S., Mugnaine, M., Caldas, I.L.: Eﬀect of two vaccine
+doses in the seir epidemic model using a stochastic cellular automaton. Physica
+A 597, 127258 (2022).
+
+[36] Souza, D.L.M., Borges, F.S., Gabrick, E.C., Bentivoglio, L.E., Protachevicz, P.R.,
+Santos, V., Viana, R.L., Caldas, I.L., Iarosz, K.C., Batista, A.M., Kurths, J.: Spi-
+ral wave dynamics in a neuronal network model. Journal of Physics: Complexity
+5, 025010 (2024).
+
+[37] Rosenblum, M., Pikovsky, A.: Synchronization: From pendulum clocks to chaotic
+lasers and chemical oscillators. Contemporary Physics 44, 401–416 (2003).
+
+[38] Kikuchi, N., Pooley, C.M., Ryder, J.F., Yeomans, J.M.: Transport coeﬃcients
+of a mesoscopic ﬂuid dynamics model. The Journal of Chemical Physics 119,
+6388–6395 (2003).
+
+17
+
+[39] Hethcote, H.W.: The mathematics of infectious diseases. SIAM Review 42,
+
+599–653 (2000).
+
+[40] Diekmann, O., Heesterbeek, H., Britton, T.: Mathematical Tools for Understand-
+ing Infectious Disease Dynamics, 1st edn., p. 520. Princeton University Press
+(2013).
+
+[41] Tian, J.P., Wang, J.: Global stability for cholera epidemic models. Mathematical
+
+Biosciences 232, 31–41 (2011).
+
+[42] Dalal, D., Greenhalgh, D., Mao, X.: A stochastic model of aids and condom use.
+
+Journal of Mathematical Analysis and Applications 325, 36–53 (2007).
+
+[43] Ospina-Aguirre, C., D.S.-P., Olivar-Tost, G., Galindo-Gonz´ales, C., J.G.-G., Oso-
+rio, C.: A stochastic model of aids and condom use. Plos Neglected Tropical
+Diseases 17, 0011087 (2023).
+
+[44] Kuddus, A., Rahman, A., Talukder, M.R., Hoque, A.: A modiﬁed sir model to
+study on physical behaviour among smallpox infective population in bangladesh.
+American Journal of Mathematics and Statistics 4, 231–239 (2014).
+
+[45] Misici, L., Santarelli, F.: Epidemic propagation: An automaton model as the
+
+continuous sir model. Applied Mathematics 4, 84 (2013).
+
+18
+
+

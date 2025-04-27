@@ -1,0 +1,727 @@
+([α] = gy−1
+([β] = gy−2
+(beam absent
+(dashed lines
+-  ±
+-quadratic (lq
+10 to 30 minutes
+10 µm
+104 330 present force distribution
+2 gy
+2-15 gy
+30 minutes
+40% dead cells
+7 fig
+7a the same system
+= ae−
+a beam
+a beam delivery
+a behavior
+a broad range
+a cancerous cell
+a cell
+a cell simulation platform
+a common pathology
+a compact granular tissue
+a comparison
+a continuum
+a control
+a description
+a duration
+a final dead
+a final percentage
+a force contribution
+a free growth environment
+a gaus- sian
+a gaussian
+a gaussian behavior
+a gaussian function g(a
+a gaussian, eq
+a generic therapeutic radiation beam
+a harsh approximation
+a higher young’s modulus
+a human cancerous cell
+a length scale
+a linear equation
+a linear repulsion ⃗f r
+a long ex- ponential tail
+a long exponential tail
+a mecha- nistic model
+a mechanobiological cell model
+a method
+a monte carlo procedure
+a monte carlo process simulation
+a more abundant population
+a more uniform force distribution
+a new pathway
+a number
+a packed configuration
+a photon beam
+a plateau
+a promising avenue
+a protein
+a pure pc-3 cul- ture
+a radiation beam
+a radiotherapy model
+a random number ξn
+a random process
+a regular desktop computer
+a rigid box
+a second validation
+a signature
+a similar result
+a simple monte carlo step
+a single dose de- livery
+a single radiation event
+a single simulation
+a single-track process
+a situation
+a solvent
+a spe- cific protein
+a specific concentration
+a specific gene
+a specific protein
+a steeper decay
+a strong influence
+a survival probability
+a sys- tem
+a time step
+a treatment
+a two-track process
+a very detailed description
+a very low statistics
+a very marked slope difference
+a weaker pressure force
+a wide range
+a x0 table iii
+a. contact force probability
+about 1 hour
+about 24-72 hours
+action recognition
+agent-based ones
+alive and dead cells
+alive cells
+all cases
+all parameters
+all the available volume
+an easily expand- able tool
+an endoge- nous level
+an exponential
+an exponential function
+an exponential shape
+an exponential tail
+an external radiation beam
+an important characteristic
+an infinite box
+an initial core
+an initial peak
+an open source software
+an over- expression
+anomalously high values
+any cell
+any cellular scale effects
+any dose delivery
+any quantitative comparison
+as many as 70%
+at least one neighbor
+b. cell survival
+bernier et al
+bidimensional cells
+ble ii
+both cancerous and healthy cells
+both spatial con- figurations
+both tails
+box side beam dose
+breast and prostate cancers
+bryant et al
+ca- nine kidney cells
+canada n6a
+cancer cell dna
+cancer cells
+cancer patients
+cancer treatment
+cell counting
+cell death
+cell di- vision
+cell division
+cell mi- gration
+cell migration
+cell mobility
+cell shrinking
+cell-cell adhe- sion
+cell-cell adhesion
+cell-cell and cell-medium friction
+cells populations
+cellular dynamics
+cellular growth
+cellular reproduction
+cellular systems
+certain conditions
+close packing
+contact forces
+d2 ≈ 40%
+d3 ≈
+dam- aging
+dead and alive cells
+dead cells
+depth estimation
+differ- ent sizes
+different aims
+different approaches
+different doses
+different final ratios
+different levels
+different loads
+different mathematical and computational approaches
+direct com- gorithm
+discrete cells
+discrete sizes
+disease control
+dose d
+dying cells
+each beam delivery
+each block
+each case
+each cell
+each simulation
+easily changeable elastic prop- erties
+effective phagocytosis
+effective removal
+eight different simulations
+elastic shells
+elastic spheres
+ent conditions
+epithelial cells
+epithelial tissues
+et al
+et al. measured traction distributions
+excellent agree- ment
+excellent agreement
+experimental data
+exten- sions
+external fac- tors
+f (x
+f ≈
+final states
+finland 4department
+fitting parameters
+fixed volume
+fixed volume (packed) spatial configuration
+force distributions
+four different dead-alive final ratios
+free growth
+fric- tion
+fundamental physics
+future work
+gaussian peaks and exponential tails
+gianluca lattanzi,2
+gianluca.lattanzi@unitn.it ‡ jan.astrom@csc.fi
+good agreement
+hard grains
+hard spheres
+healthy and cancer cells
+healthy cells
+healthy ones
+heavier ions
+hela cells
+hence the shrinking rate
+hence the total contact force
+heterogeneous prop- erties
+high friction
+high values
+high- energy protons
+high-energy pro- tons
+higher forces
+human organs
+i. introduction
+i.e., mimicking phagocytosis
+ii. methods a. cellsim3d
+immediate side effects
+important differences
+improve- ments
+in vitro measurements
+independent cell movement
+influence growth
+inho- mogeneous tissue
+instance segmentation
+integrated features
+interesting features
+internal pres-
+israel 2department
+its borders
+its core
+its disposal
+its lo- cal environment
+its value
+kipri- anou
+large forces
+large scale models
+lea-catcheside factors
+leith et al
+less space
+less than 1,500 integration steps
+little free space
+long times
+low and high dosages
+low force
+low forces
+low fractions
+lower peak forces
+lower pressure
+madin-darby canine kidney cells
+mechanical frustration
+mechanobiological simulations
+mechanobiological studies
+micron-sized elastic shells
+model verification
+modeling radiotherapy
+more com- plex approximations
+more complex radiation types
+more than 80%
+more than one cell type
+most models
+most simulation models
+multiple soft grains
+namely the impact
+namely the output frame frequency
+neighbor cells
+neighbor tables
+new features
+no dead cells
+no deformation
+no fractionation
+no free volume
+no load
+no volume
+null friction
+object detection
+one dose
+one frame
+one further issue
+one single frame
+only few cells
+only one or two points
+only very few force measurements
+open boundaries
+open boundary
+open graphs
+open space exhibit
+other articles
+other properties
+other simulations
+other studies
+our case
+our distributions
+our model predictions
+our open boundary simulations
+our peak value
+our results
+our simulation
+our simulations
+our system
+our work
+particle thera- pies
+pc-3 cell line) data
+peak height
+physical and model parameters
+preliminary studies
+previous experimental and simulation studies
+prior studies
+proliferating systems
+prostate cancer
+prostate cancer data
+prostate cancer survivors
+prostate tumor
+published experimental results
+quadratic (lq) model
+quali- tative features
+radiation (photon) treatment
+radiation beam
+radiation damage
+radiation delivery
+radiation dose
+radiation therapy
+radiation transport
+radiation treatment
+radiother- apy
+radiotherapy modeling
+random packing
+randomly packed hard spheres
+real time scales
+real treatments
+refer- ence measurements
+richmond street
+russell et al
+sam- ple preparation
+section iii
+self-repair mechanisms
+semantic segmentation
+several prior pub- lications
+side effects
+significant advancements
+sim- ply
+simulating cancer therapy mirko bagnarol,1
+simulation total #
+single and double events
+six sides
+slower division
+slower growth re- sults
+soft grains
+soft rapidly proliferating cancer cells
+softer cells
+softer contact
+solid lines
+some areas
+some bins
+some curves
+some free space
+spatial accuracy
+specific preparations
+standard clinical photon therapies
+standard nvidia graphics cards
+stiff slowly proliferating healthy cells
+strong forces
+stronger forces
+supplemental material
+survival pa- rameters
+survival parameters
+table i
+table i.
+table ii
+table iii
+table iv
+tables ii
+targeted high-energy beam
+that direction
+that range
+that same special issue
+that target- ing mechanical properties
+the above lq model
+the above reasons
+the absence
+the abundance
+the action
+the addition
+the aim
+the area
+the authors
+the basis
+the beam
+the binning
+the biological effects
+the border
+the box
+the box side
+the case
+the cell
+the cell culture samples
+the cell cycle
+the cells
+the cellsim3d model
+the cellular dna
+the center
+the code
+the comparison
+the compu- tational complexity
+the conformation
+the contact area
+the contact forces
+the contin- uum lq model
+the core
+the cubic box
+the current approach
+the current implementation
+the current modeling approaches
+the current models
+the current simulations
+the curves
+the data
+the dead cells
+the dead-to-alive ratios
+the death probability
+the deflation
+the deformation
+the density
+the detailed derivation
+the difference
+the distribution
+the distribution crosses
+the distributions
+the division
+the division volume
+the dna
+the domain
+the dose
+the dose d
+the editorial
+the effect
+the end
+the events
+the experimental data
+the experimental data ex-
+the expo- nential tail
+the exponential fits
+the exponential tail
+the exponential tails
+the expression
+the fact
+the factor
+the final frame
+the final step
+the first cell type
+the first row
+the first setup
+the fit
+the force
+the force distribution
+the force probability distri- butions
+the forces
+the fraction
+the fractions
+the free distribution
+the frequency
+the full removal
+the gaussian
+the gaussian fit
+the gaussian peak
+the gaussians
+the geant4 framework
+the gradient
+the grain
+the grains
+the growth rate
+the hebrew university
+the histogram
+the influence
+the initial value
+the initial, gaussian peak
+the instantaneous action
+the inter-particle forces
+the internal pressure
+the investigation
+the irradiated sample
+the jamming point
+the jamming threshold
+the jamming transition
+the lack
+the larger these parameters
+the last 1%
+the latter ones
+the level
+the life cycle
+the limit
+the limit density
+the linear-
+the linear-quadratic (lq) model
+the live cells
+the load
+the local mechanical stress landscape
+the longer tail
+the lower threshold
+the lq approach
+the lq model
+the main parameters
+the main simulation parameters
+the main treatment
+the majority
+the mapping
+the maximum
+the maximum volume
+the mechanobiological cellsim3d simulation model
+the mitotic index
+the mode
+the mode ¯f
+the model
+the model details
+the models
+the more sensitive the cells
+the most common cancer treatments
+the most common mathematical approach
+the most fre-
+the most impressive similarities
+the natural length scale
+the nature
+the neighbors
+the newborn state
+the next sections
+the next two sections
+the normalization
+the normalized probability density
+the nth cells
+the ones
+the open boundary conditions
+the open space configuration
+the open space simulations
+the open systems
+the order
+the original model
+the other hand
+the output file
+the over-expression
+the packed configura- tion
+the packed configuration
+the packed ones
+the packed system
+the packing
+the packing density
+the packing properties
+the parameter
+the parameter values
+the parameters
+the pc-3 cell line
+the peak
+the peaks
+the per- centages
+the percentage
+the perspectives
+the point
+the points
+the previous paragraph
+the probability
+the probability densities
+the probability density
+the program
+the protein
+the radiation beam
+the radiation dose
+the radiation resistance
+the radiosensitivity
+the radiosensitivity enhancement
+the range
+the ratio
+the rationale
+the re- spective amplitudes
+the reference control
+the relative errors
+the relative importance
+the repulsion force
+the results
+the reviews show
+the right order
+the same spatial configuration
+the same sprit
+the same steepness pattern
+the same time step
+the sample
+the samples
+the second difference
+the second most common cause
+the second setup
+the set
+the setup
+the shapes
+the shrinking
+the simula- tion
+the simulation
+the simulation box
+the simulations
+the six simulations
+the size
+the small force domain
+the software
+the spatial configurations
+the spread
+the starting point
+the state
+the statistical error
+the statistics
+the status
+the steepness
+the stress transfer
+the structure
+the study
+the survival parameters
+the survival percentages
+the survival probability
+the system
+the tail
+the tails
+the target tissue
+the threshold
+the time
+the time interval
+the time unit
+the tissue
+the topology
+the total number
+the traction data
+the two types
+the type
+the unit
+the us centers
+the user
+the values
+the varying experimental setups
+the very core
+the volume
+the well-known fact
+the width
+the widths
+the work
+the α/β ratios
+their abundance
+their case
+their curves
+their distributions
+their dna
+their experiment
+their fig
+their neigh- bors
+their neighbors
+their re- sults
+their status
+their α and β parameters
+therefore the fraction
+these experimental data
+these experimental val- ues
+these facts
+these unbiased data
+these unbiased reference data
+these validations
+this approach
+this case
+this direction
+this end
+this fact
+this feature
+this framework
+this number
+this paper
+this process
+this task
+this work
+three data sets
+time scales
+time steps
+tissue growth
+total cells ratio
+treatment frequency
+treatment planning algorithms
+trento institute
+tumor growth
+two different cell types
+two different types
+two interpretations
+two notable differences
+two separate radiation hits
+two simulation setups
+two successive frames
+two to three orders
+two types
+unity corresponds
+up to 60,000 cells
+varying experimental conditions
+varying mechanical properties
+vector substance
+very good agreement
+via sommarive
+vivo outcomes
+western university
+whose internal pressure
+write frequency
+y h
+§ 1the racah institute
+αβ-3 7 deweese
+† jan ˚astr¨om,3
+⃗f p
+∗ mirko.bagnarol@mail.huji.ac.il †

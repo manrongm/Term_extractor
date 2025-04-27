@@ -1,0 +1,974 @@
+(a) example
+(a) schematic
+(a) time evolution
+(a) training error
+(b) environmental mechanical signal
+(b) phase diagram
+(b) schematic representation
+(b) target
+(b) trained network
+(b) training
+(c) schematic
+(c) target
+(c) training error
+(d) learning
+(d) learning dynamics
+(d) target
+(d) training error
+(e.g., memory
+(gray dashed line
+(i.e. input
+(i.e. output
+(i.e., a time duration
+(i.e., e−β
+(i.e., linear elasticity
+(i.e., slower relaxation
+(i.e., target edge strain
+(i.e., the strain
+(i.e., τsev
+(iii) altered geometry learning
+(ljk −l0 jk
+(supplementary fig
+(| ϵ(−) progresses
+, a = a0l
+, conserved geometry learning
+, s10
+1 0 5training time
+10 source edges
+2 kϵ2
+2 margaret l. gardel,1
+2 thierry mora,5
+2 ˙ϵ2
+2. additionally ϵcrit
+3rd order
+4 fig
+5 2 0 2 r
+6 1james franck institute
+6 t distinct types
+6 ˙ϵ3 3 k2ϵ3
+7. self-organized learning
+= gc
+= nsr
+= β1
+a = a0
+a broader context
+a case
+a cell
+a cell- autonomous process
+a classification problem
+a clear connection
+a coarse-grained description
+a coarse-grained version
+a common learning framework
+a constant coefficient
+a constant factor
+a constraint
+a contrastive learning framework
+a contrastive learning mechanism
+a contrastive learning protocol
+a critical value
+a cytoskeletal network
+a desired amount
+a desired mechanical response
+a desired state
+a desired strain response
+a desired value
+a different type
+a disordered network
+a disordered spring network
+a distinctly different strain value
+a drosophila wing disc tissue
+a faraway part
+a fast and slow timescale
+a fictional “supervisor
+a finite target strain value
+a fixed ϵcrit value
+a framework
+a function
+a general strategy
+a given magnitude
+a higher strain rate
+a history
+a hyperparameter
+a jk
+a jk = ξmjk
+a large number
+a learning
+a learning mechanism
+a learning rule
+a linear approximation
+a living cell
+a longer timescale τs
+a lower unbinding rate
+a m - d
+a map
+a measure
+a mechanism
+a mechanosensitive protein
+a model
+a model cytoskeletal network
+a negative feedback
+a network
+a node
+a noisy mechanical environment
+a non-learning state
+a nonlinear function
+a part
+a particular target strain value
+a pathway
+a persistent change
+a phase diagram
+a physical learning process
+a positive strain gradient
+a priori
+a probability
+a process
+a proof
+a quantity
+a red dashed line
+a relationship
+a result
+a self-organized physical learning mechanism
+a self-organized physical learning process
+a set
+a shorter target edge
+a signal
+a significant number
+a simple case
+a simple form
+a simplified mechanical network caricature
+a simplistic form
+a single pulse train
+a slowdown
+a smaller force
+a spatial pattern
+a specific target strain value
+a specific value
+a steady state
+a strain gradient
+a system
+a task
+a threshold active force
+a timescale
+a timescale τcon
+a timescale τsev
+a tolerance value
+a trained network
+a uniform random number
+a variety
+a version
+a way
+a) schematic showing
+abcdcontrastive learningactive forces
+abcoutput(+ve slope)(-ve
+acexternal perturbationlow strain region
+actin filaments
+action recognition
+active force generation
+active force-dependent remodeling
+active forces
+active stress
+activity dependent recovery
+activity hinder learning
+activity parameter
+activity parameter ξ
+actomyosin contractility
+actomyosin cytoskeleton
+actomyosin pulsation
+adap- tation
+adaptive response
+airway smooth muscle cells
+aleksandra m. walczak,5
+all target edges
+all |x| ≥ gc
+altered interaction
+an active stress-producing motor
+an adaptation problem
+an adaptive mechanical response
+an amplitude-dependent manner
+an environment
+an example
+an extension
+an external drive
+an external force
+an external stimulus
+an external supervised force
+an external supervisor
+an update
+another classic learning task
+any arbitrary edge
+any edge
+any external drive
+any significant effect
+any source strain
+appendix a
+appendix b
+appendix c
+asymmetric driving forces
+biochemical signaling pathways
+biological systems
+biologically plausible contrastive learning
+biomimetic systems
+biophysical effects
+biophysical ingredients
+both the protein dynamics
+bound proteins
+broken circles
+c) phase diagram
+c) training error
+catch-bond-like dynamics
+cell biology
+cell death
+cell mechanics
+cell migration
+cell motility
+cell-autonomous mechanochemical interactions
+cellular adaptation
+cellular behavior
+cellular decision-making
+cellular deformations
+cellular features
+cellular functionalities
+cellular functions
+cellular morphologies
+cellular morphology
+cellular or tissue-level home- ostasis
+changing environments
+chemical or mechanical processes
+chemical signals
+classification accuracy
+complex tasks
+conserved geometry learning
+constant amplitude
+continuous turnover
+contractility parameter ξ
+contrastive learning
+contrastive update
+cytoskeletal network configurations
+cytoskeletal networks
+dependent driving
+depth estimation
+desired behavior
+developing tissues
+different activity values
+different critical strain values ϵcrit
+different mechanical signals
+different mechanosensitive proteins
+different regimes
+different responses
+different types
+different values
+dna damage
+dynamic turnover
+dynamical equations
+each cycle
+each edge
+each switching cycle
+each update
+edge rest length values
+edge severing
+edge stiffness
+edge strain(ϵ
+edge turnover
+either the “+
+either u1
+environmental mechanical signals
+environmental perturbations
+environmental signals
+environmental stimuli
+error evolution
+errortraining time
+essential physiological functions
+essential regula- tory actors
+etry learning
+every switching
+experimentally testable predictions
+external forcing
+external mechanical perturbations
+external signals
+f a
+f a jk
+f a jk = ξmjk
+f a jk ˆrjk
+f e
+f e = −λ(t)∇
+falk et al
+fast contractions
+fast turnover lead
+faster classification
+faster turnover dynamics
+fig 8a
+fig. 5c
+force generation
+force generator
+force-dependent catch-bond-
+force-sensitive kinetics
+france 6department
+generationmechanosensationstrain rateremodellingdynamics
+generic biomolecular ingredients
+geometry learning
+geometry learning states
+geometry learningno learningaltered geometry learning40
+here τf
+high τsev/τcon values
+high ϵcrit values
+higher activity
+higher activity values
+higher tension
+higher-order terms
+hookean springs
+how biomolecularly plausible force- sensitivities
+how force-sensitive proteins
+how learning
+how mechanosensitivity
+how the target edge contracts
+i. introduction single cells
+i.e., |ϵ(+) t −
+il 60637 2department
+il 60637 3department
+impaired adaptation
+implicit memory
+imposed source
+increased activity
+increased unlearning (reversal
+increasing activity
+increasing strength
+increasing values
+input and output signals
+input signals
+input- output force relations
+instance segmentation
+irreversible changes
+ith edge
+its ability
+its components
+its coupling
+its deformability
+its edges
+its geometry
+its implications
+its internal interactions
+its native environment
+its response
+iv. dynamics
+jk − β3
+jth node
+k0 b
+k0 un
+k1 b
+k1 recent work
+k−1 b βn0
+l0 jk
+large deformations
+large values
+large ξ
+larger changes
+larger τsev
+learning ability
+learning capability
+learning dynamics
+line width
+linear approximation
+linear elasticity
+linked bundles
+living cells
+ljk = |rj − rk|
+local cell environment
+local motor density
+local quantities
+local strain
+local turnover timescales
+long-term memory
+low activity
+low severing timescales
+low-strain region
+lower motor turnover rate ku
+lower training error
+lower training error values
+lower values
+machine learning
+magenta arrows
+many cycles
+many such cycles
+many types
+meaningful learning
+mechanical networks
+mechanical perturbation
+mechanical perturbations
+mechanical response
+mechanical responses
+mechanical stability
+mechanical stimuli
+mechanosensi- tivity
+mechanosensitive lim- domain proteins
+mechanosensitive protein
+mechanosensitive proteins
+mechanosensitivity β1
+memory kernel
+moderate strength
+moderate values
+molecular engineering
+molecular genetics
+molecular motors
+more detail
+motor binding
+motor contractility
+motor density
+motor dynamics
+motor turnover rate ku
+multicellular organisms
+myosin motors
+myosin pulsation
+n o
+negative feedback
+negative t −
+network components
+network components cellular cytoskeletal networks
+network edges
+network elasticity
+network geometry
+network geometry changes
+network remodeling
+network turnover
+no change
+no coupling
+no learning
+no means
+no significant qualitative
+node j
+nodes j
+noisy environmental signals
+non- zero edge strain
+non-linear effects
+non-linear elasticity
+non-linear protein dynamics
+nonlinear elastic properties
+nonlinear elasticity
+nuclear rupture
+nuclear stability
+object detection
+one cycle
+one edge
+one part
+one slope value
+one source edge
+one target edge
+other edges
+other parameters
+our analysis
+our approach
+our cytoskeleton
+our learning mechanisms
+our learning paradigm
+our main finding
+our main results
+our mechanical network caricature
+our model
+our network
+our results
+our system
+our work
+overdamped dynamics
+panel b
+panel c
+paris sciences et lettres university
+particular kinds
+particular, different strain gradients
+physical learning
+potentially multiple) input-output relations
+prescribed external force application
+previous work
+pulse trains
+quantitative changes
+randomly chosen target
+recent experimental studies
+recent studies
+recent work
+recent works
+reconnection events
+reconnection processes
+reconnection timescales
+reduced levels
+remodel rest
+rescaled units
+rest length
+rest lengths
+rule results
+self-organized actomyosin forces
+self-organized learning
+self-organized pulsation
+self-organized pulse
+semantic segmentation
+severing timescale
+single cells
+slow relaxation
+slower severing rates
+small noise
+small values
+smaller networks
+sorbonne universit´e
+source and target edges
+source edges
+specific target
+stem cell differentiation decisions
+stiffness change |∆k|
+strain gradient(-
+strain gradientclassiﬁcation
+strain gradients
+strain patterns
+strain response
+strain values
+strain ϵ∗ t
+strain-rate dependent unbinding
+straintesting time
+structural remodeling
+subsequent stimuli
+subsequently the strain
+successful classifications
+successful learning
+such a learning process
+such actomyosin pulsation
+such adverse outcomes
+such an input-output relationship
+such environmental mechanical signals
+such functionalities
+such information
+such mechanisms
+such phenomenology
+such pulses
+such self-organized learning
+such tasks
+supervisorself-organized pulsetarget
+supplementary fig
+svaikunt@uchicago.edu paradigm
+synthetic chemical reaction networks
+t ϵ∗(+
+t → t
+t − ϵ∗(+
+t −∞ k(t − t′)δϵ(t′)dt′
+target edge
+target edge length
+target edge “−
+target edges
+target strainabca=a0a=a0 ltraining
+that case
+that is, the rest length
+that strain signal
+the a priori knowledge
+the ability
+the above cases
+the above equations
+the above learning mechanism
+the above results
+the active force
+the active force-dependent remodeling
+the activity
+the activity increases
+the actomyosin cortex
+the actomyosin cytoskeleton
+the actomyosin forces
+the actomyosin pulsation
+the adaptation
+the altered geometry learning case
+the application
+the arrow
+the average number
+the average training error
+the balance
+the basis
+the beginning
+the behavior
+the bonds
+the bottom part
+the bound motor density
+the bound motors
+the boundaries
+the case
+the cell
+the cell nucleus
+the cellular cytoskeleton
+the cellular scale
+the change
+the choice
+the clamped and free states
+the clamped state
+the clamped states
+the classification
+the classification accuracy
+the classification output
+the classification task
+the coefficient
+the coefficient β1
+the colors
+the concept
+the connectivity
+the connectivity parameter ξ
+the consideration
+the consistency
+the constant β1 = k1
+the constituent elements
+the contractility
+the contractility parameter
+the contractility parameter ξ
+the contrastive learning mechanism
+the correct implicit memory
+the correct solution
+the corresponding target strain values
+the coupled dynamics
+the coupling
+the critical strain value
+the crucial role
+the current case
+the current context
+the cytoskeletal network
+the cytoskeletal network adapts
+the cytoskeletal networks
+the cytoskeletal structure
+the cytoskeleton
+the dashed gray lines
+the dashed line
+the density
+the derivative
+the described learning mechanism
+the desired mechanical response
+the desired responses
+the desired shape
+the desired strain
+the desired strain value
+the desired strain ϵ∗ t
+the desired target
+the desired target strain
+the desired target strain value
+the desired value
+the desired value ϵ∗ t
+the difference
+the direction
+the dna
+the driving
+the driving force
+the duration
+the dynamic coupling
+the dynamic network
+the dynamical procedure
+the dynamics
+the edge
+the edge length
+the edge stiffness values
+the edge thickness
+the edge turnover dynamics
+the edges
+the effect
+the effectiveness
+the elastic constants
+the elastic energy
+the energy
+the environment
+the equation
+the extent
+the external drive
+the external environment
+the external forces
+the eyes
+the fast timescale
+the faster turnover
+the fig
+the following
+the following sections
+the force balance equation
+the forces
+the form
+the free and clamped states
+the free state
+the free state ϵt
+the friction coefficient
+the functional role
+the future
+the future course
+the genetic material
+the get
+the gradients
+the homeostasis
+the implicit memory
+the imposed source strain pattern
+the influx
+the information
+the initial unstrained state
+the input
+the input nodes
+the instantaneous distance
+the integral form
+the interactions
+the ith edge
+the jth node
+the kernel timescale
+the largest increase
+the ldof
+the learning
+the learning capability
+the learning capacity
+the learning degree
+the learning degrees
+the learning dynamics
+the learning dynamics converges
+the learning dynamics t
+the learning mechanism
+the learning outcomes
+the learning paradigm
+the learning problem
+the learning process
+the learning rate parameter
+the learning rule
+the legend
+the length
+the length- 8 fig
+the lim- domain proteins
+the linear approximation
+the linear case
+the linear limit
+the linearized form
+the local active force
+the local motor dynamics
+the local regulation
+the local strain
+the loss
+the machine learning context
+the magnitude
+the mechanical behavior
+the mechanical state
+the mechanosensitive protein dynamics
+the mechanosensitive protein kinetics
+the mechanosensitive proteins
+the memory
+the memory kernel k
+the molecular mechanism
+the molecular motor
+the most generic implementation
+the motor binding-unbinding kinetics
+the motor density
+the motor dynamics
+the nature
+the negative feedback
+the negative slope
+the neighbors
+the network
+the network activity
+the network connectivity
+the network edges
+the network elasticity
+the network size
+the neuronal context
+the new rest length
+the new † corresponding author
+the nodes
+the nonlinear elastic response
+the nonlinear terms
+the nonlinearities
+the nonlinearity
+the nth source edge
+the nucleus
+the number
+the number density
+the numbers
+the original rest length values
+the output nodes
+the parameter
+the parameter values
+the particular choice
+the performance
+the periphery
+the phase diagram
+the phases
+the points
+the position
+the positive and negative gradient
+the positive and negative gradients
+the positive slope
+the possibility
+the presence
+the previous case
+the previous section
+the previous sections
+the probability
+the progression
+the protein dynamics
+the pulsation
+the pulsation amplitude
+the pulse amplitude
+the pulses
+the quantity
+the ratio
+the reconnected edge
+the reconnection timescale τsev/τcon ≲
+the recovery
+the rescaled parameter values
+the rest length
+the rest length changes
+the rest length values
+the rest lengths
+the result
+the resulting learning dynamics
+the results
+the role
+the same learning problem
+the same sawtooth-like temporal dynamics
+the same values
+the severed edges
+the severing and reconnecting dynamics
+the severing captures
+the severing dynamics
+the severing time scale
+the severing timescale
+the sign
+the slope
+the slopes
+the slow timescale
+the source
+the source and target edges
+the source edge
+the source edge extension
+the source edge indices
+the source strain
+the sources
+the spatial distribution
+the state
+the stiffness
+the stiffness and rest length
+the strain
+the strain pattern input
+the strain rate
+the strain rate dependence
+the strain value
+the strain ϵ∗ s
+the strain-rate dependent unbinding term
+the strain-rate-dependent mechanosensitive protein dynamics
+the strength
+the structural remodeling
+the successful classification
+the sum
+the supervisor
+the supplementary section a.
+the system
+the system’s response
+the target
+the target edge
+the target edge length
+the target edge ϵ∗ t
+the target nodes
+the temporal contrastive learning
+the temporal driving
+the temporal dynamics
+the tension-dependent recruitment
+the threshold active force value
+the time duration
+the timescale
+the trained network
+the trained network topology
+the training
+the training error
+the training process
+the training progresses
+the training time
+the turnover
+the two classes
+the un-trained network
+the unit vector ˆrjk
+the unitless nonlinear coefficients
+the university
+the untrained response
+the value
+the variation
+the various mechanosensitive proteins
+the viability
+the y- axis
+the “+
+the “−” target edge
+their action
+their biological functionality
+their components
+their environment
+their rest length
+their spatial position
+their stiffness atarget
+these arguments
+these few key elements
+these parameter values
+these predictions
+these proteins
+these pulses
+these scenarios
+these sets
+these two node positions
+these two parameters
+this asymmetry
+this capability
+this cytoskeletal network
+this disordered network
+this driving
+this effect
+this imperfection
+this information
+this learned mechanical response
+this learning
+this learning mechanism
+this loss
+this paradigm
+this process
+this section
+this setup
+this strain dependence
+this strain gradient
+this study
+this work
+three different cases
+three groups
+three target edges
+threshold active force
+tissue morphogenesis
+trained networks
+training changes
+training error
+training errors
+training time
+trivial errors
+two edges
+two generic molecular components
+two molecular components
+two target edges
+two training errortraining time
+two uniform distributions u1 ∈
+u2 ∈
+unalterable edge
+underlying learning
+unitless parameters
+universit´e paris-cit´e
+up to 20%
+usa 4pritzker school
+various complex tasks
+various developmental processes
+various edges
+various hyper-parameter values
+various scenarios
+various severing timescales
+varying conditions
+vertex-like models
+visual- ization
+wherein properties
+which rest length changes
+|(ϵt − ϵ∗ t
+|) input strain-gradients
+γ ˙rj = nn (cid:88
+δ ˙m ∼
+δm =
+λ = λmax
+ξmjk ˆrjk
+τcon = 10τcyc
+τcon > τcyc
+τf < τs
+ϵjk =
+ϵ∗ s
+ϵ∗ s(n
+ϵ∗ t
+“ −
+” (purple
+− 1)sr
+− e−

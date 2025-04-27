@@ -1,0 +1,761 @@
+(cid:13)j c
+(cid:13)j c dp
+(ours)median scannet++ eth3d
+(w. sift
+, ql, fij
+, θij cj
+- i t t
+// // initialization
+1 7 pixel
+1 hθ(r
+1 |ω| (cid:88) p∈ω
+10 correspondences
+12 corre- spondences
+15 correspondences
+2 (cid:13)d(r
+2 cameras
+2 distor- tion models
+2 min dp
+200+ images
+2d points
+2d-2d correspon- dences
+2d-2d correspondences
+2munich center
+3 approach
+3 degrees
+3 variants
+3 × 3 real matrix
+3. normalize singular values
+360-degree panoramic images
+3d geometry
+3d points
+3d reconstruction
+3d reconstructions
+4 images
+5 2 0 2 r
+5 2d-to-3d cor- respondences
+5. experiments
+7 degrees
+7. conclusion
+8 correspondences
+9 correspondences
+: f ≈ dx
+= argmin
+= argmin θ n (cid:88
+] v c
+a 180◦ lens
+a 3d map
+a 3×3 fundamental matrix f
+a bar
+a big basin
+a c s
+a cauchy loss function
+a challenging dataset
+a challenging problem
+a crucial role
+a dataset
+a decoupled calibration stage
+a dense subset
+a distorted image
+a fair comparison
+a final step
+a first step
+a fisheye camera dataset
+a fully accurate distortion estimate
+a fully projec- tive framework
+a fully projective method
+a function
+a fundamental matrix
+a general principle
+a given focal length f
+a global opti- mization
+a global refinement
+a good initialization
+a higher-order degree-k polynomial model
+a homography
+a k-th degree polynomial
+a known 3d map
+a map- ping uθ(p
+a new image
+a new method
+a nonlinear optimizer
+a novel distortion
+a particularly simple form
+a perfect 3d map
+a pinhole
+a pinhole camera
+a pixel-wise per- spective field
+a point p
+a projective setting
+a promising direction
+a radial distortion-invariant way
+a rational model
+a reliable camera model
+a robust sampson error loss
+a robust solver
+a scaling factor
+a separate estimation
+a set
+a sfm framework
+a sfm pipeline
+a significantly higher concentration
+a simple yet effective approach
+a single consistent camera model
+a single consistent estimation θi
+a single consistent model
+a single image
+a single pair
+a single, unified distortion polynomial
+a single-parameter division model
+a single-parameter polynomial model
+a slam-based method
+a small pixel displacement dx
+a subpixel reprojection error
+a subset
+a vehicle
+a weighted aver- age
+a weighted least- squares problem
+ac- curacy
+action recognition
+active research
+additional regularization
+all 5 sequences
+all available frames
+all available images
+all base- line methods
+all camera parameters
+all cameras
+all datasets
+all epipolar lines
+all estimated models
+all frames
+all image pairs
+all images
+all matched image pairs
+all models
+all non-distortion pa- rameters
+all pairs
+all pixels
+all sequences
+all steps
+all the observed parameters
+almost all datasets
+an absolute pose error
+an accurate 3d map
+an accurate camera model
+an angle
+an available 3d map
+an efficient numerical approximation
+an esti- mate
+an exact 180◦ field
+an extension
+an image
+an image ii
+an image pair
+an interpretable measure
+an optimal solution
+an optimization problem
+an overview
+an undistorted image
+an undistortion function
+angular errors
+any 2d point correspondence
+any 3d reconstruction method
+any feature-matching approaches
+any non- zero scalar
+any non-zero scalar
+any single fundamental matrix
+any stage
+artificial fisheye distortion
+automatic calibration
+averaging daniil
+barath et al
+benchmark dataset
+both colmap
+both images
+bottom row
+bundle-adjustment methods
+cal length
+calibration accuracy
+calibration parameters
+calibration-free sfm
+camera cal- ibration
+camera calibration
+camera distortion
+camera distortion calibration
+camera distortions
+camera intrinsic and distortion parameters
+camera models
+camera parameters
+camera poses
+camera rigs
+camera views
+careful handling
+challenging conditions
+challenging datasets
+challenging sequences
+ci the parameters
+cid:69)2 ωi
+circular arcs
+cj argmin
+cj fij
+clever minimal solvers
+cluding structure
+colmap format
+commonly used methods
+completely incorrect estimation
+continuous sequences
+conver- gence
+daniel cremers1,2 1technical university
+deep learning
+deep- calib
+deepfocal predicts
+depth estimation
+dif- ferent assumptions
+different cameras
+dis- torted images
+dis- tortion
+discussion similar
+distinct physical camera
+distorted lines
+distorted regions
+distortion averaging
+distortion estimation
+distortion optimization
+distortion parameters
+ditional implementation details
+diverse fisheye distortions
+division camera model
+droid- slam
+droidcalib extents
+droidcalib geocalib deepcalib
+dx f ≈ tan(θ
+e t r o t
+each camera
+each camera c
+each camera ci
+each correspondence
+each dataset
+each estimated distortion model
+each higher-order model
+each image
+each image pair
+each image’s camera model
+each model
+each pair
+each physical camera model
+each point correspondence pi
+each possible image pair
+each scene
+each sequence
+each stage
+each such pair
+early works model distortion
+either a projective
+either colmap
+epipolar lines
+estimated camera models
+estimated camera parameters
+et al
+eucledian vs projective sfm
+euclidean space
+every other image
+ex- act modeling
+existing ap- proaches
+explicit 3d point reconstruction
+extreme baselines
+extreme wide-angle fisheye cameras
+extremely distorted images
+feature- based methods
+ferent camera models
+fewer parameters
+fisheye-lens dslr images
+focal length
+focal length estima- tion
+focal length estimation
+focal lengths
+focal-adjusted re
+fol- lows
+four 180◦ fish- eye cameras
+full bundle adjustment
+full sfm
+functional space
+fundamen- tal matrices
+future research
+geometric principles
+geometric relations
+global optimization
+global refinement
+global sfm methods
+gravity direction
+ground-truth calibrations
+ground-truth models
+highly distorted regions
+hold-geoffroy et al
+hole cameras
+i d
+i=0 θiri
+i=1 ωi
+i=1 ωi r
+im- ages
+image matching tech- niques
+image points
+image relationships
+image step
+inconsistent pairwise estimates
+ing intrinsics
+ing, averages multiple distortion estimates
+initial one-parameter distortion models
+inlier estimation
+instance segmentation
+internet images
+involv- ing camera poses
+its application
+its center
+its errors
+joint estimation
+keypoint tracks
+kukelova et al
+learning geometric principles
+learning-based meth- ods
+learning-based methods
+least squares
+less expressive mod- els
+local updates
+low overlap
+lower minimum reprojection errors
+m correspondences
+machine learning daniil.sinitsyn@tum.de
+many cases
+many images
+many real-world distortion patterns
+matched points
+meaningful results
+mei’s camera model
+metric accuracy
+min/mean/max angular errors
+minimal methods
+minimal samples
+minimal solvers
+model averaging
+modern techniques
+more accurate distortion correction
+more correspondences
+more registered images
+multi- ple datasets
+multi- ple image pairs
+multiple camera models
+multiple distor- tion models
+multiple images
+multiple imprecise
+multiple initial estimates
+multiple models
+multiple pairs
+n u
+n-point solvers
+n-point- solvers
+nearly any degree
+neural networks
+no es- tablished go-to method
+no significant effect
+non-ideal settings
+nonlinear optimization
+nonlinear refinement
+normalize u
+novel-view synthe- sis (nvs
+object detection
+one camera model
+one category
+one image
+one-parameter distortion model
+optical axes
+other image regions
+other methods
+our approach
+our averaging approach
+our contributions
+our method
+our methods
+our proposed method
+our proposed solution
+our results
+our so- lution
+our solution
+our work
+over 10,000 images
+p ∈ ω
+pa- rameters
+pairwise projective relations
+pan et al
+panoramic images
+par- ticular importance
+parameters θ
+perfor- mance
+performance analysis
+performance comparison
+pi hθ(∥pi∥
+pi, qi)mn
+pinhole cameras
+pinhole geometry
+pinhole settings
+pixel coordinates
+pixel correspondences
+pixel errors
+pl, ql corre- sponding points
+point cor- respondences
+point correspondences
+point correspondences pi
+point tracks
+polar coordinates
+polynomial distortion regularization
+poor reconstruction performance
+pre-filtering stages
+predefined thresholds
+predicts focal length
+principal points
+prior accurate intrin- sics
+projective framework
+projective radial distortion
+projective reconstruction
+projective sfm
+projective space
+q. geometrically
+qu radial distortion calibration
+qualitative results
+r2 sampson pl
+r3 dr
+radial dis- tortion
+radial distor- tion averaging
+radial distor- tion calibration
+radial distortion
+radially distorted cameras
+reduced accuracy
+related work accurate distortion estimation
+relative poses
+reprojection errors
+rv points
+satisfy eq
+scara- muzza
+se- quence
+selected baseline methods
+semantic segmentation
+separate parameters
+several fig
+several images
+several methods
+sfm methods
+sfm- based methods
+sfm-based methods
+significant distor- tion
+significant distortion
+significant improvements
+simultaneous lo- calization
+small angles
+so × s1
+solving eq
+some fundamental fundamental matrix f
+sparse images
+sparse scannet
+sparse timestamps
+standard image matching algorithms
+straight lines
+strong ex- amples
+strong robustness
+such cases
+such data
+such that the undistorted points
+sufficient accuracy
+sufficient cover- age
+sufficient informa- tion
+sufficient overlap
+supplementary appendix a. quantitative results
+supplementary mate- rial
+synthetically distorted images
+t e
+tain initial estimates
+tent distortion model estimates
+termining distortion parameters
+that distortion calibration
+that outlier cor- respondences
+that well-established learning-based matchers
+the 1-dimensional sphere
+the 10-point method
+the 3d scene
+the 600 first frames
+the ability
+the absence
+the accuracy
+the adjustments
+the angle
+the angular resolution
+the application
+the approach
+the approximation
+the associated com- plexities
+the authors
+the auto-calibration process
+the averaging scheme
+the back projection
+the basis
+the benefits
+the best result
+the bundle adjustment step
+the cam- era parameters
+the camera model
+the camera models
+the camera parameters
+the case
+the center
+the coefficients
+the com- parison
+the complexity
+the con- straints
+the continuous case
+the corresponding cameras
+the corresponding model
+the cost
+the dataset
+the degenerative case
+the degree
+the denominator
+the dependence
+the deviation
+the displacement dx
+the distance
+the distortion
+the distortion estimate
+the distortion estimation
+the distortion model
+the distortion model initialization
+the distortion models
+the distortion parameters
+the distortion polynomials
+the down- stream task
+the entire algorithm
+the entire image
+the epipo- lar constraint
+the epipolar con- straint
+the epipolar constraint
+the epipolar geometry
+the error
+the error distribution
+the estimated camera models
+the estimated model
+the explicit estimation
+the extension
+the f10 solver
+the first 60 frames
+the first stage
+the focal length
+the following scheme
+the form
+the full image
+the full pipeline
+the full structure
+the fundamen- tal matrix
+the fundamental matrices
+the fundamental matrix
+the geometry
+the goal
+the ground truth camera model
+the ground truth model
+the group
+the histogram
+the homogeneous points
+the homogeneous representa- tion
+the hori- zon line
+the im- age center
+the im- ages
+the image
+the image pixel coordinates
+the image plane
+the images
+the impact
+the in- dividual models
+the increasing number
+the individual estimates
+the initial pairwise estimation
+the internet
+the intersection
+the kitti
+the last homogeneous coordinate
+the left and right images
+the left-side camera
+the length
+the levenberg-marquardt algorithm
+the literature
+the local linearity assumption
+the loss function
+the lowest error
+the matcher
+the maximum degree
+the mean error
+the method
+the minimal parameterization
+the minimum adjustment
+the model
+the model behaves
+the models
+the model’s ability
+the mul- tiplicative distortion model
+the need
+the number
+the numerical stability
+the observation
+the one-parameter division camera model
+the one-parameter division model
+the optical ray
+the optimiza- tion problem
+the optimization
+the original distorted fisheye image
+the original image
+the other image
+the pa- rameters
+the performance
+the point cloud
+the points
+the polynomial
+the polynomial division model
+the presence
+the principal point
+the pro- jection function
+the problem
+the projection
+the projection function
+the projective reconstruction
+the proposed algorithm
+the proposed method
+the proposed solution
+the quality
+the radial distortion
+the radial distortion model
+the radially symmetric distortion assumption
+the radius
+the rate
+the ray
+the regions
+the relative geometry
+the reported errors
+the reprojection error
+the reprojection errors
+the residual error
+the resulting cam- era models
+the resulting reconstruction
+the results
+the right-side camera
+the robustness
+the same camera
+the same camera model
+the same fov
+the same sift matches
+the sampson error
+the scene structure
+the second camera
+the set
+the so- lution
+the solution
+the solver
+the space
+the sparse test images
+the standard setup
+the superscript
+the test set sequences
+the test split
+the thresholds
+the top row
+the training data
+the true error
+the two images
+the two-view distortion estimates
+the two-view step
+the uncovered regions
+the undis- torted image
+the undis- torted points
+the undistorted pinhole-like image
+the undistortion function
+the unified spherical model
+the unit circle
+the unknown calibration
+the unknown funda- mental matrix
+the values
+the visual undistortion
+the woodscape dataset
+the σ or σ++ consensus
+the “low-res many-view” category
+their corresponding epipolar lines
+their solution
+these correspondences
+these distortion estimates
+these improvements
+these individual estimates
+these methods
+these pairs
+these principles
+these properties
+these results
+these steps
+this approach
+this careful design
+this challenge
+this condition
+this critical accuracy range
+this dataset
+this demon- strates
+this fact
+this formulation
+this function
+this image pair
+this integral
+this loss formulation
+this minimal solver
+this paper
+this parameteriza- tion
+this parameterization
+this regularization
+this reliance
+this simplifies
+this stage
+this step
+this work
+thoughtful design
+three categories
+three im- ages
+to distortion changes
+top row
+tracking points
+traditional methods
+traditional sfm pipelines
+trans- lation
+two 180◦ fisheye cameras
+two pinhole camera images
+two subcategories
+two views
+two-view initialization
+two-view nonlinear refinement
+u n (cid:88
+u ← u
+undistorted points
+unified camera model
+unknown distortion
+unordered image collections
+unrealistic results
+v ← v
+vali- date
+various approaches
+various indoor scenes
+varying parameters
+video input
+video sequences
+visual overlap
+well- established methods
+well- established minimal solvers
+where c(dp
+woodscape dataset
+worse results
+× so
+θij ci
+ωi p∈i
+ωi r
+− p(cid:13
+− ˆui(p
+≃ denotes

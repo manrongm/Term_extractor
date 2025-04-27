@@ -1,0 +1,877 @@
+5
+2
+0
+2
+
+r
+p
+A
+8
+
+]
+h
+p
+-
+o
+i
+b
+.
+s
+c
+i
+s
+y
+h
+p
+[
+
+1
+v
+3
+4
+1
+7
+0
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Functionally graded keratin facilitates
+tactile sensing in elephant whiskers
+
+Andrew K. Schulz1,∗, Lena V. Kaufmann2,+, Lawrence T. Smith3,+,
+Deepti S. Philip1,4, Hilda David4, Jelena Lazovic5,
+Michael Brecht2, Gunther Richter4, Katherine J. Kuchenbecker1,∗
+1Haptic Intelligence Department, Max Planck Institute for Intelligent Systems (MPI-IS), Stuttgart, Germany
+2Bernstein Center for Computational Neuroscience Berlin, Humboldt University of Berlin, Berlin, Germany
+3Robotic Materials Department, MPI-IS, Stuttgart, Germany
+4Materials Central Scientific Facility, MPI-IS, Stuttgart, Germany
+5Medical Systems Central Scientific Facility, MPI-IS, Stuttgart, Germany
+
++ denotes equal contribution
+* Co-corresponding authors:
+Andrew K. Schulz and Katherine J. Kuchenbecker
+Heisenbergstraße 3, 70569 Stuttgart, Germany
+aschulz@is.mpg.de & kjk@is.mpg.de
+
+Abstract
+
+Keratin composites enable animals to hike with hooves, fly with feathers, and sense with skin. These distinct
+
+functions arise from variations in the underlying properties and microscale arrangement of this natural
+
+polymer. One well-studied example is mammalian whiskers, elongated keratin rods attached to tactile skin
+
+structures that extend the animal’s sensory volume. Here, we investigate the non-actuated whiskers that
+
+cover Asian elephant (Elephas maximus) trunks and find they are geometrically and mechanically tailored
+
+to facilitate tactile perception by encoding contact location in vibrotactile signal amplitude and frequency.
+
+Elephant whiskers emerge from armored trunk skin and shift from a thick, circular, porous, stiff root to a thin,
+
+ovular, dense, soft point. This smooth transition enables interaction with widely varying substrates, reduces
+
+wear, and increases the vibrotactile signal information generated during contact. The functionally graded
+
+geometry, porosity, and stiffness of elephant whiskers tune the neuromechanics of trunk touch, facilitating
+
+highly dexterous manipulation.
+
+Introduction
+
+Whiskers, tree bark, seashells, and other biological composites consist of proteins, sugars, and minerals [1],
+
+giving living organisms diverse mechanical and functional properties through morphology and composi-
+
+tion [2]. One of these biological building blocks, the protein keratin, is arranged in alpha helices in mam-
+
+malian epidermis, horns, nails, and hair, such as the dense, hollow fur that helps polar bears thermoregulate
+
+in arctic temperatures [3]. Alpha-keratin helices occur at the 7-nm length scale [4], and the structures
+
+they create have diverse mechanical forms that support the keratinized structure’s functional use: for ex-
+
+ample, bighorn sheep horns contain hollow tubules that increase shock absorption [5], and the tapering of
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+rat whiskers facilitates texture discrimination by allowing the whisker points to mechanically interact with
+
+tiny surface asperities [6]. The thicker root of each rat whisker is actuated by a collagen protein wrapper,
+
+increasing the animal’s sensory volume [7]. Keratin itself cannot sense touch, but this keratin-collagen inter-
+
+face is ringed by sensory neurons, creating the three components of familiar whiskers: hair, collagen wrapper
+
+(follicle), and sensory ring (Fig. 1A) [8].
+
+This intriguing somatosensory structure has both incentivized biologists and neuroscientists to understand
+
+whisker neuromechanics [9, 10, 11, 12, 13] and inspired several robotic whisker designs [14, 15, 16, 17].
+
+Past research on whisker morphology and function has primarily focused on the follicle and sensory ring
+
+structures [18, 19, 20], as well as the scaly wall known as the cuticle (Fig. 1B). Mouse whiskers increase in
+
+elastic modulus from the root to the point by a factor of two [21], and seal whiskers decrease in modulus by
+
+the same ratio [22]. Researchers typically average these moduli [14, 23, 13] and assume the whisker is solid
+
+and uniform throughout. Instead of exploring the effects of nonuniform material properties, the focus has
+
+been on morphology, determining how whisker length [9], tapering [6], aspect ratio [22], and actuation [24]
+
+impact the mechanical frequencies or torques communicated to the whisker root (Fig. 1B). Elephant trunk
+
+whiskers are unique among studied mammalian taxa as they lack muscles in the root follicle (Fig. 1C) [19].
+
+These non-whisking whiskers adorn a hydrostat with approximately 90 000 muscle fascicles [25] capable of
+
+near-infinite-degree-of-freedom motions [26] that generate ample whisker-object contact.
+
+Whiskers extend the sensory function of the elephant trunk, assisting with precision manipulation of
+
+widely varying items including hundreds of kilograms of food daily [19, 27]. We hypothesize that the
+
+elephant’s lack of individual whisker actuation is accompanied by striking geometrical and material differences
+
+compared to actuatable whiskers, such as those of domesticated cats (Felis catus) or rats (Rattus norvegicus).
+
+This hypothesis is tested in baby and adult Asian elephants (Elephas maximus) by studying the three
+
+parameters governing their mechanical behavior: geometry, porosity, and elastic modulus [28] (Fig. 1E).
+
+Microscopy and material characterization allow us to describe how elephant whisker parameters shift from
+
+root to point. Finite element analysis (FEA) of whiskers with nonuniform cross section, porosity, and
+
+modulus demonstrates how whisker morphology and composition affect what is felt by the sensory neurons
+
+at the whisker root.
+
+Tapered ellipsoidal whiskers highlight contact directionality
+
+We used microscopy and microCT to characterize elephant whisker geometry, including longitudinal tapering
+
+and cross-sectional shape. First, whiskers from the distal and proximal sections of an Asian elephant’s trunk
+
+were compared. We imaged each whisker from its root (embedded in the skin) to its point (extending beyond
+
+2
+
+the skin and interacting with the environment). Whiskers from the distal trunk are thin, highly tapered, and
+
+blade-like (Fig. 1C–F, fig. S1A–B, movie S1). The whisker cross section’s long axis aligns with the trunk’s
+
+circumferential wrinkles (fig. S1D), and its ellipsoidal aspect ratio increases by 40% as the elephant develops
+
+(Fig. 1G). The whiskers of pinniped species also have an ovular cross-sectional shape (Fig. 1G, table S1),
+
+which confers sensory benefits in preferred directions in water [22]. The distal trunk is used for gripping and
+
+manipulation [29], so its blade-like whiskers could facilitate directional contact perception; indeed, researchers
+
+have long hypothesized that elephants use their distal whiskers for precise tactile sensory discrimination [30].
+
+This blade-like whisker structure also appears more rectangular than ovular near the root, which could alter
+
+the bending rigidity in preferred directions similar to the round-to-square cross-sectional transition in bird
+
+feather rachis [31].
+
+Whiskers from the proximal trunk are thicker, only gently tapered, and nearly circular (Fig. 1F, fig.
+
+S1C, movie S1). Their aspect ratios match those of other terrestrial animals’ whiskers (table S1) and are
+
+significantly more circular than the whiskers of the distal trunk and aquatic mammals (n = 5, Fig. 1G,
+
+p < 0.001). Elephant proximal whiskers are also wavy, with undulating radius changes along the whisker
+
+length (Fig. 1F, fig. S1C, movie S1), similar to pinnipeds [22], which could reduce vibrations when moving
+
+through air or water, as has been shown in seals [22]. Interestingly, proximal elephant trunk whiskers are
+
+much less tapered than distal whiskers, and their points round to a diameter of 0.59 ± 0.07 mm (n = 5,
+
+Fig. 1F). Similar to mechanical curb feelers on early cars, the elephant’s proximal whiskers may perform
+
+omnidirectional proximity sensing to identify obstacles near the face, compensating for the animal’s poor
+
+eyesight [32].
+
+Considering each whisker as a long, slender rod, we modeled its flexural rigidity, K, as a function of the
+
+material stiffness, E, and the cross section’s second moment of area, I [33]. Therefore, whisker tapering, or
+
+reduction of the diameter D along the whisker length z, represents an influential method of controlling local
+
+whisker flexibility, as K ∝ D4. (Graded material stiffness, E(z), is explored later.) A tiny diameter at the
+
+point (as seen in distal but not proximal elephant trunk whiskers) helps with texture discrimination [34] and
+
+allows penetration into the depth of rough materials to detect surface features [35] and even discriminate
+
+shapes [34]. These geometrical parameters of aspect ratio and tapering are the current focus of many whisker
+
+researchers, while few studies have explored micron-scale factors that affect whisker mechanics.
+
+Elephant whiskers exhibit a horn-like microstructure
+
+Scanning electron microscopy (SEM) images showed that most Asian elephant whiskers analyzed from the
+
+adult (both distal and proximal sections) are encased by an axially scarred cuticle (Fig. 2A) that appears
+
+3
+
+to be unique among studied whiskers. In contrast, portions of the roots of baby elephant whiskers and all
+
+examined elephant body hairs have a scaly cuticle (fig. S2A) like that found along the lengths of whiskers and
+
+body hairs of other terrestrial mammals (Fig. 2B–D, fig. S2A,C). The primary function of a scaly cuticle is
+
+thought to be to preserve the mechanical integrity of the hair during deformations [36]. The baby elephant
+
+distal trunk whiskers that we imaged had scales only at the widest points of the root; thus, these scales might
+
+contribute to development of the whisker as a blade-like structure, as the scales grow over time (fig. S1B).
+
+However, there is no indication of scales at the baby elephant whisker point (fig. S2B), indicating they do
+
+not wear off later from abrasion, which is commonly assumed when whiskers lack a scaly cuticle [37]. Given
+
+this lack of scales and the scarred outer wall of elephant trunk whiskers, the most similar keratin structures
+
+are mammalian horns, antlers, and porcupine quills [38]. Such structures contain porous cavities, known as
+
+tubules, along their length.
+
+We observed porous macro- and micro-scale axial channels in the microCT images of elephant trunk
+
+whisker roots (Fig. 1F, movie S1). These channels were visualized by SEM imaging cryotome-sliced whisker
+
+sections showing the transverse cross section (fig. S3A–B). The inner matrix of elephant whiskers has lon-
+
+gitudinal keratin strands packed and wrapped tightly around large and small tubules (Fig. 2F–H). For
+
+comparison, the tail hair of Asian elephants has been shown to contain a few medulla channels [39], and
+
+elephant body hair has a single medulla channel [36]. The macro channels seen in elephant whiskers are
+
+30–40 µm in diameter (Fig. 2F-G) and are arranged at the root, similar to the tubules in antlers, bighorn
+
+sheep horn (fig. S4A-B), and horse hooves [40]. Tubules provide added benefits for energy dissipation in horn
+
+structures [38] and change the material porosity only slightly [40]. Therefore, the more numerous tubule
+
+channels present in elephant whiskers may provide benefits beyond the energy dissipation of previously
+
+studied keratinous horns.
+
+Functionally porous whiskers amplify tactile signal transmission through mass
+
+reduction
+
+We determine the porosity along the length of each studied elephant whisker using microCT and see a strong
+
+porosity gradient: elephant whisker roots are highly porous (∼70%) and transition from ∼15% porosity at
+
+20% of normalized whisker length to fully dense (∼0% porosity) by the middle of the whisker. Distal trunk
+
+whiskers have a root porosity of 82 ± 9% (n = 5) with the numerous medullary channels appearing as a
+
+hollow shell (Fig. 1G, Fig. 2I). Proximal whiskers have a somewhat less-porous root (63 ± 7%, n = 5) that
+
+also promptly transitions to a dense structure (Fig. 2I); the density difference between the roots of proximal
+
+and distal trunk whiskers is significant (p < 0.05). Since the medullas of cat and rat whiskers occupy only
+
+4
+
+2–5% of the whisker cross section (Fig. 2I) [9], previous investigations have assumed that all whiskers are
+
+fully dense, but elephant whiskers clearly break this assumption.
+
+A whisker transmits tactile information from contacts along its length to the sensing structures at its
+
+root through vibrations, enabling the animal to distinguish obstacles, food, or prey [41]. Experiments on
+
+whisker models with axially graded porosity (table S2, fig. S5) indicate that functional grading of porosity
+
+plays a role in transmitting this information. Finite element analysis of graded-porosity whiskers shows that
+
+elevated root porosity modestly increases the natural frequency of the first five vibration modes (<10%)
+
+compared to whiskers with no porosity (Fig. 2J). The increase in frequencies follows intuitively from basic
+
+beam theory [33], as porous whiskers have reduced volumetric mass, m, which is inversely related to the
+square of the natural frequency, ω, of the beam: ω ∝ (cid:112)K/m. We hypothesize that the primary function of
+
+very high root porosity in elephant whiskers is to increase resistance to the dynamic impacts that commonly
+
+occur during fast head and trunk movements. Importantly, our analysis shows that this large decrease in
+
+whisker mass does not negatively impact the neuromechanics of touch in the elephant.
+
+More broadly, porosity is known to confer dynamic benefits to both manufactured and biological com-
+
+posites. Porosity allows materials to efficiently absorb energy during impact loading while simultaneously
+
+reducing mass [42], which facilitates control and reduces the energy cost of movement. Porous roots may
+
+reduce the damage these whiskers sustain across a lifetime of mechanical use, which is essential as adult
+
+elephants spend around 16 hours per day foraging [27] and often live at least 60 years in the wild. Ad-
+
+ditionally, damage reduction is biologically crucial since elephants appear unable to regrow whiskers [19],
+
+unlike rodents [43]. We conclude that porosity of the whisker root gives the elephant trunk an array of thin
+
+sensory horns that resist damage from impact while communicating clear higher-frequency signals to the
+
+mechanoreceptors in their follicles.
+
+Elastomer-pointed elephant whiskers tolerate loads and encode contact location
+
+In addition to geometry and porosity, elastic modulus can also change along the length of a functionally
+
+graded beam [44]. To determine whether the material changes along the length of elephant whiskers, we
+
+used pico-indentation into the wall at the root and at the point of whiskers from the distal section of the
+
+studied elephant trunks (Fig. 3A–F, fig. S6A-B). When an Asian elephant is two weeks old, its distal whiskers
+
+already have a significant functional material grade of almost one order of magnitude: the root modulus of
+
+0.57 ± 0.02 GPa (n = 4) shifts to a softer point modulus of 0.1013 ± 0.004 GPa (n = 4) p < 10−5, Fig. 3E).
+
+As the elephant develops, this functional gradient greatly increases, and the root modulus increases by an
+
+order of magnitude to 2.99 ± 0.28 GPa (n = 5). The point of the whisker changes by a comparatively small
+
+5
+
+amount to 0.706 ± 0.008 GPa (n = 5), meaning adult elephant’s whiskers have a significant stiffness gradient
+
+spanning two orders of magnitude (p < 10−5, Fig. 3F), matched to that of squid’s composite beak [45]. We
+
+see a similarly significant large modulus shift (p < 10−5) in the studied cat whiskers (Fig. 3I) with a root
+
+modulus of 2.24 ± 0.05 GPa (n = 5) and a point modulus of 0.01 ± 0.0005 (n = 5); this shifting from a stiff
+
+root to a soft point is opposite the gradient found in rats, though their modulus shifts by only a factor of 1.5
+
+from root to point [21]. All previously studied whiskers (table S3) show only a small modulus range around
+
+a factor of 3 from root to point.
+
+Our indentation data demonstrates that the elephant’s whisker exhibits nonuniform elastic and plastic
+
+mechanical behavior at different locations along its length. Following indentation near the root, the whisker
+
+wall remains deformed (Fig. 3E-F), a plasticity behavior commonly observed in polymers (0.09 GPa ≤
+
+natural polymers ≤ 100 GPa). Following indentation at the point, the elephant whisker responds elastically
+
+(Fig. 3C-D), with no permanent deformation, a behavior commonly observed in elastomers (≤ 0.09 GPa) [46].
+
+Therefore, baby and adult elephant whiskers are natural polymer-elastomer composites (Fig. 3G-H), which
+
+have never before been observed in a mammalian keratin structure; the closest finding showed that hydration
+
+can reduce the moduli of alpha-keratin structures by one order of magnitude [47].
+
+Static finite element analysis of whisker deformation indicates that functional grading of elastic modulus
+
+from a stiff root to a soft point distributes stresses more evenly, enables larger tip displacements, and
+
+modifies the frequency response of the whisker compared to homogeneous whiskers (fig. S7A). We compared
+
+the mechanical response of whiskers with the modulus gradient measured in adult elephant whiskers against
+
+uniform whiskers of constant modulus 3.3 GPa (fig. S8) [21] and predicted the displacement and stress fields
+
+when the root is fixed in space, and displacements or loads are prescribed at the point. Graded whiskers
+
+exhibit nearly double the displacement magnitude at equivalent point loading compared to homogeneous
+
+whiskers (Fig. 4A-B). Mechanoreceptors near the distal portion of the dermis in the skin would detect
+
+this increased displacement from the whisker’s follicle, communicating a large deformation to the strain
+
+mechanoreceptors located at the root surrounding the whisker follicle.
+
+A soft point confers added benefits for interacting with rigid stationary objects such as stone, as the
+
+whisker point can lightly brush past rigid external stimuli, an advantage of soft materials [15]. In simulations
+
+that reflect this scenario, where large transverse displacements at the point are prescribed (fig. S7B), the
+
+functionally graded elephant whisker exhibits 33% lower peak stresses at the root relative to homogeneous
+
+whiskers (Fig. 4C-D, movie S2). Reduction in stress concentrations at the whisker root leads to a reduced
+
+chance of failure or breakage compared to an isotropic structure with constant properties. This reduction
+
+of stress has previously been shown in the slender structures on gecko feet, known as setae, which are
+
+functionally graded in modulus [48].
+
+6
+
+Whiskers with a modulus ratio Epoint/Eroot ≈ 10−2 from point to root, including those of the adult
+
+elephant and domesticated cat, have a first natural frequency that is double that of whiskers with the inverse
+
+ratio (Fig. 4E, movie S3). Whiskers with a soft root and stiff point also likely do not exist in nature as the
+
+vibration communicated to the root is so reduced in amplitude and frequency that it falls in the smallest
+
+range of sensing capable for mammalian mechanoreceptors (Fig. 4E). Whiskers like the elephant’s (stiff
+
+root, soft point) have a slightly smaller vibrotactile signal compared to homogeneous whiskers, with their
+
+first natural frequency reduced by 15%; however, this reduction is offset by the amplification from the porous
+
+root (Fig. 2J).
+
+Finally, we look at how modulus grading affects tactile perception of impacts along the length of the
+
+whisker. We model whiskers using nonlinear beam finite elements in a loading scenario that approximates
+
+brushing past obstacles and subsequent free vibration in space (fig. S7D). We monitor the time-varying
+
+reaction moment at the root of the simulated whisker, where position and orientation are fixed, and compute
+
+the discrete Fourier transform of this signal to observe the frequency content of the information transmitted
+
+to the sensory ring (fig. S9A). Functionally graded whiskers transmit vibrations of exponentially higher
+
+amplitude under equivalent loading compared to homogeneous stiff whiskers (Fig. 4F-G, fig. S9C, movie
+
+S4).
+
+As the excitation location moves toward the root of a graded whisker, the vibration amplitude transmitted
+
+to the sensory ring grows non-linearly, enabling logarithmic differentiation (Fig. 4G) of transient contacts
+
+along the whisker. In contrast, a whisker with uniform properties exhibits near-linear signal differentiation
+
+(Fig. 4F). Signal power at the whisker root, known to drive the firing of sensory neurons [49], changes
+
+much more dramatically with contact location in graded whiskers than in uniform whiskers; compared to
+
+homogeneous whiskers in identical conditions, our simulations of graded whiskers show a 2 000% increase in
+
+signal power when plucked at 60% of their length (Fig. 4H), which is an additional 4 dB of signal power
+
+transmitted to the root (fig. S9D). These functional benefits of stiffness-gradient whiskers should allow more
+
+precise localization of transient contact along the whisker length.
+
+Conclusions
+
+Biological structures have functionally graded material properties, but these anisotropies are frequently
+
+ignored in favor of simple isotropic models that vary only in geometry. This assumption has limited our
+
+understanding of whisker-mediated touch and prevented bio-inspired whiskers from taking advantage of
+
+material shifts in porosity and modulus; existing designs are primarily soft materials that lack rigidity [50]
+
+or rigid materials that lack flexibility [51]. This work showed that the alpha-keratin in elephant whiskers
+
+7
+
+is functionally graded in geometry, porosity, and stiffness. The porosity and stiffness gradients of elephant
+
+trunk whiskers directly influence the frequency, amplitude, and power of the mechanical signals felt by
+
+mechanoreceptors in the follicle upon mechanical stimulation. Shifting from a stiff root to a soft point also
+
+amplifies the signal power connected to the firing of sensory neurons [49], potentially improving the animal’s
+
+ability to perceive the location of contact along each whisker, which would aid navigation and manipulation.
+
+Biological functionally graded material composites like elephant whiskers can inspire engineered devices
+
+that use functional gradients to achieve specific capabilities ranging from fatigue reduction to signal power
+
+increases. One of the first animal stiffness gradients discovered was the beak of the Humboldt squid [45],
+
+but mimicry of this stiffness gradient in soft materials posed a considerable manufacturing challenge at the
+
+time of this discovery. Recent advances in multi-material 3D printing enable unprecedented control over
+
+the deposition of materials with widely varying mechanical properties; cutting-edge inkjet systems create
+
+monolithic parts from materials with elastic moduli that span three orders of magnitude [52, 53]. Recent
+
+characterization of composites built from these materials enables inverse design, whereby one achieves desired
+
+system properties such as stiffness, toughness, and frequency response by prescribing both geometry and
+
+constituent materials at the microscale [54]. Fields ranging from material science and neuroscience to haptics
+
+and bio-inspired robotics rely on signal processing through material interfaces, and functional gradients have
+
+significant potential to enable programmable signal shifts tuned to specific use cases.
+
+Acknowledgments
+
+The authors thank C. Schwarz for advice on whisker neuromechanics, B. Sharratt for conversations regarding
+
+functionally graded materials, T. Hildebrandt for assistance in acquisition of the elephant specimens, S.
+
+Merker and the Stuttgart State Museum of Natural History for the bighorn sheep horn sample, the Berlin
+
+Zoological Garden for providing Asian elephant adult head hair, R. Faulkner for assistance with creating
+
+physical whisker mimics, S. Griego for assistance with SEM images, B. Javot for assistance with bighorn
+
+sheep horn sample preparation, N. Reveyaz for whisker collection assistance, and J. Burns for help with
+
+data curation. L.K. thanks the Berlin School of Mind and Brain at Humboldt University. M.B. thanks the
+
+NeuroCure Cluster of Excellence at Humboldt University.
+
+Funding:
+
+This work was supported by the Alexander von Humboldt Foundation (to A.K.S.), the Max Planck Society
+
+(to G.R. and K.J.K.), the Carl-Schneider-Stiftung (to G.R. and K.J.K.), BCCN Berlin, Humboldt-Universit¨at
+
+zu Berlin (to L.V.K. and M.B.), and the Deutsche Forschungsgemeinschaft (DFG, German Research Foun-
+
+dation) under Germany’s Excellence Strategy – EXC-2049 – 390688087 (to L.V.K. and M.B).
+
+8
+
+Author Contributions:
+
+A.K.S., G.R., and K.J.K. conceived the idea and designed the experiments. A.K.S., M.B., G.R., and K.J.K.
+
+supervised the research project. A.K.S., L.V.K., L.T.S., D.S.P., H.D., J.L., and G.R. conducted the exper-
+
+iments. A.K.S., L.V.K., L.T.S., D.S.P., H.D., J.L., M.B., G.R., and K.J.K. analyzed the data. All authors
+
+contributed to the writing and editing of the manuscript.
+
+Competing interests:
+
+The authors declare no competing interests.
+
+Data and materials availability:
+
+Raw indentation data, microCT data, and SEM images can be found at [55]. The authors have provided
+
+bitmap prints of all SEM images in the data repository for digital accessibility, along with lithograph 3D
+
+model files made using the process from Koone et al. [56]. The authors have also provided a repository
+
+for finite element simulation of whiskers with stiffness, porosity, and/or geometry gradients in static and
+
+dynamic cases [57].
+
+9
+
+Figure 1: Morphology of animal whisker systems with a framework for studying whisker
+geometry, porosity, and stiffness. (A) The rat whisker-skin system with whisker morphology shown
+in (B) displays differences between root and point. (C) The Asian elephant whisker-skin system showing
+distal trunk whiskers, which lack a follicle muscle [19], with whisker morphology shown in (D) displaying
+(E) Experiment flowchart used to study how the three variables of
+differences between root and point.
+whisker geometry, porosity, and stiffness affect tactile perception through the whisker. (F) Schematic of an
+elephant trunk showing the two regions (distal and proximal) from which whiskers were analyzed, with an
+enlarged microCT rendering and three cross sections for each representative whisker. (G) The maximum
+aspect ratio, γmax, of Asian elephant trunk whiskers compared to whiskers of aquatic and terrestrial species,
+with elephants displaying significant differences in cross-section geometry between distal and proximal regions
+(⋆⋆⋆ p < 0.001).
+
+10
+
+Figure 2: Elephant whiskers display horn-like microstructure that decreases mass and increases
+vibration frequency. SEM images of various whisker wall structures with adult elephant whisker root in
+(A), adult elephant distal whisker root in (B), baby elephant distal whisker root in (C), and rat whisker root
+in (D). SEM images of transverse whisker cross sections with rat whisker shown in (E), elephant whisker
+cortex and non-scaly wall in (F), tubule channels in elephant whisker root in (G), and individual longitudinal
+keratin fibers around tubule wall in (H). (I) Porosity of four different whisker types (rat, cat, elephant distal
+trunk, elephant proximal trunk) along the normalized whisker location. Data of rat whiskers taken from
+Voges et al. [9]. Significant differences were found between proximal and distal adult elephant whiskers
+at the root (⋆ p < 0.05). (J) FEA outputs of the free-vibration response of whiskers with three different
+density ratios between the point and root. Simulated whiskers with a porous root and dense point have
+eigenfrequencies that are spread across a broader range of frequencies than otherwise identical whiskers with
+constant density.
+
+11
+
+Figure 3: Elephant and cat whiskers have functionally graded stiffness spanning two orders
+of magnitude. (A) Illustration of the cube-corner indenter used for modulus characterization of whiskers.
+(B) Raw cyclic-loading data of cat whisker root indentation showing the specific depths at which moduli
+were extracted. Indentation of adult elephant whisker point (C to D) showing whisker wall resilience after
+indentation. Indentation of adult elephant whisker root (E to F) showing permanent plastic deformation
+after indentation. Indentation data shows four contact depths for the adult Asian elephant in (G), the baby
+Asian elephant in (H), and the domesticated cat in (I). The shaded background indicates elastomer and
+polymer regions [46], while stars indicate significant differences (⋆⋆⋆ p < 0.001).
+
+12
+
+Figure 4: Functionally graded elastic modulus provides both static and dynamic benefits for
+tactile sensing. Simulation results when fixed-root whiskers are loaded with an equivalent transverse force
+at the point, with homogeneous in (A) and functionally graded stiffness in (B). Simulation results show that
+when whisker point displacement is prescribed, the root of a stiff (E = 3 GPa) homogeneous whisker in (C)
+experiences far higher stress than that of a whisker with functionally graded stiffness in (D). (E) Simulated
+frequencies of free vibration for homogeneous stiff (black) and stiffness-gradient (red and yellow) whisker
+structures (fig. S8). Simulation outputs of the whisker response after transient contact for homogeneous in
+(F) and soft-point-to-stiff-root functionally graded stiffness in (G). (H) Simulation showing the percentage
+of signal power change communicated to the whisker root when plucked at different locations.
+
+13
+
+References
+
+[1] Michaela Eder, Shahrouz Amini, and Peter Fratzl. Biological composites—complex structures for functional diversity.
+
+Science, 362(6414):543–547, November 2018.
+
+[2] Bin Wang, Wen Yang, Joanna McKittrick, and Marc Andr´e Meyers. Keratin: Structure, mechanical properties, occurrence
+
+in biological organisms, and efforts at bioinspiration. Progress in Materials Science, 76:229–318, March 2016.
+
+[3] Mingrui Wu, Ziyu Shao, Nifang Zhao, Rongzhen Zhang, Guodong Yuan, Lulu Tian, Zibei Zhang, Weiwei Gao, and Hao
+Bai. Biomimetic, knittable aerogel fiber for thermal insulation textile. Science, 382(6677):1379–1383, December 2023.
+
+[4] John M. Squire and Peter J. Vibert. Fibrous Protein Structure. 1987. Google-Books-ID: DVl zQEACAAJ.
+
+[5] Wei Huang, Alireza Zaheri, Jae-Young Jung, Horacio D. Espinosa, and Joanna Mckittrick. Hierarchical structure and
+compressive deformation mechanisms of bighorn sheep (Ovis canadensis) horn. Acta Biomaterialia, 64:1–14, December
+2017.
+
+[6] Christopher M. Williams and Eric M. Kramer. The Advantages of a Tapered Whisker. PLOS ONE, 5(1):e8806, January
+
+2010.
+
+[7] Robyn A. Grant and Victor G. A. Goss. What can whiskers tell us about mammalian evolution, behaviour, and ecology?
+
+Mammal Review, 52(1):148–163, 2022.
+
+[8] Jochen F. Staiger and Carl C. H. Petersen. Neuronal Circuits in Barrel Cortex for Whisker Sensory Perception. Physiological
+
+Reviews, 101(1):353–415, January 2021.
+
+[9] Danja Voges, Kathrin Carl, Gertrud J. Klauer, Ren´e Uhlig, Cornelius Schilling, Carsten Behn, and Hartmut Witte.
+Structural Characterization of the Whisker System of the Rat. IEEE Sensors Journal, 12(2):332–339, February 2012.
+
+[10] Carly C Ginter. Comparative Analysis of the Morphology and Materials Properties of Pinniped Vibrissae. PhD thesis,
+
+Texas A&M, 2011.
+
+[11] H. Hans, J. M. Miao, and M. S. Triantafyllou. Mechanical characteristics of harbor seal (Phoca vitulina) vibrissae under
+different circumstances and their implications on its sensing methodology. Bioinspiration & Biomimetics, 9(3):036013,
+May 2014.
+
+[12] Sophie Laturnus, Adrian Hoffmann, Shubhodeep Chakrabarti, and Cornelius Schwarz. Functional analysis of information
+rates conveyed by rat whisker-related trigeminal nuclei neurons. Journal of Neurophysiology, 125(4):1517–1531, April 2021.
+
+[13] Maysam Oladazimi, Wieland Brendel, and Cornelius Schwarz. Biomechanical Texture Coding in Rat Whiskers. Scientific
+
+Reports, 8(1):11139, July 2018.
+
+[14] Chonglin Zhao, Shouming Zhang, Tao Xie, and Lu Zeng. A novel whisker sensor with variable detection range for object
+
+positioning. Review of Scientific Instruments, 93(3):035007, March 2022.
+
+[15] Jahan Zeb Gul, Kim Young Su, and Kyung Hyun Choi. Fully 3D Printed Multi-Material Soft Bio-Inspired Whisker Sensor
+
+for Underwater-Induced Vortex Detection. Soft Robotics, 5(2):122–132, April 2018.
+
+[16] Pablo Valdivia y Alvarado, Vignesh Subramaniam, and Michael Triantafyllou. Design of a bio-inspired whisker sensor for
+
+underwater applications. In IEEE SENSORS, pages 1–4, October 2012. ISSN: 1930-0395.
+
+[17] Joseph H. Solomon and Mitra J. Hartmann. Robotic whiskers used to sense features. Nature, 443(7111):525–525, October
+
+2006.
+
+[18] Jeong-Nam Kim, Ja-Young Yoo, Ju-Young Lee, Ki-Seok Koh, and Wu-Chul Song. A Mechanism of Rat Vibrissal Movement
+Based on Actual Morphology of the Intrinsic Muscle Using Three-Dimensional Reconstruction. Cells Tissues Organs,
+196(6):565–569, June 2012.
+
+[19] Nora Deiringer, Undine Schneeweiß, Lena V. Kaufmann, Lennart Eigen, Celina Speissegger, Ben Gerhardt, Susanne Holtze,
+Guido Fritsch, Frank G¨oritz, Rolf Becker, Andreas Ochs, Thomas Hildebrandt, and Michael Brecht. The functional anatomy
+of elephant trunk whiskers. Communications Biology, 6(1):1–12, June 2023.
+
+[20] Jun Takatoh, Vincent Prevosto, and Fan Wang. Vibrissa Sensory Neurons: Linking Distinct Morphology to Specific
+
+Physiology and Function. Neuroscience, 368:109–114, January 2018.
+
+[21] Brian W. Quist, Rafay A. Faruqi, and Mitra J. Z. Hartmann. Variation in Young’s modulus along the length of a rat
+
+vibrissa. Journal of Biomechanics, 44(16):2775–2781, November 2011.
+
+[22] Amar M. Kamat, Xingwen Zheng, Julian Bos, Ming Cao, Michael S. Triantafyllou, and Ajay Giri Prakash Kottapalli.
+Undulating Seal Whiskers Evolved Optimal Wavelength-to-Diameter Ratio for Efficient Reduction in Vortex-Induced
+Vibrations. Advanced Science, 11(2):2304304, 2024.
+
+[23] Maysam Oladazimi, Thibaut Putelat, Robert Szalai, Kentaro Noda, Isao Shimoyama, Alan Champneys, and Cornelius
+
+Schwarz. Conveyance of texture signals along a rat whisker. Scientific Reports, 11(1):13570, June 2021.
+
+[24] Robyn A. Grant, Ben Mitchinson, Charles W. Fox, and Tony J. Prescott. Active Touch Sensing in the Rat: Anticipatory
+and Regulatory Control of Whisker Movements During Surface Exploration. Journal of Neurophysiology, 101(2):862–874,
+February 2009.
+
+[25] Luke L. Longren, Lennart Eigen, Ani Shubitidze, Oliver Lieschnegg, Daniel Baum, John A. Nyakatura, Thomas Hilde-
+brandt, and Michael Brecht. Dense reconstruction of elephant trunk musculature. Current Biology, 33(21):4713–4720.e3,
+November 2023.
+
+14
+
+[26] Andrew K. Schulz, Madeline Boyle, Colin Boyle, Sophia Sordilla, Catalina Rincon, Scott Hooper, Catie Aubuchon, Joy S.
+Reidenberg, Claire Higgins, and David L. Hu. Skin wrinkles and folds enable asymmetric stretch in the elephant trunk.
+Proceedings of the National Academy of Sciences, 119(31):e2122563119, August 2022.
+
+[27] Andrew K. Schulz, Jia Ning Wu, Sung Yeon Sara Ha, Greena Kim, Stephanie Braccini Slade, Sam Rivera, Joy S. Rei-
+denberg, and David L. Hu. Suction feeding by elephants. Journal of The Royal Society Interface, 18(179):20210215,
+2021.
+
+[28] Mitra Hartmann. Vibrissa Mechanical Properties.
+
+In Tony Prescott, Ehud Ahissar, and Eugene Izhikevich, editors,
+
+Scholarpedia of Touch, pages 591–614. Paris, 2016.
+
+[29] Paule Dagenais, Sean Hensman, Val´erie Haechler, and Michel C. Milinkovitch. Elephants evolved strategies reducing the
+
+biomechanical complexity of their trunk. Current Biology, 31(21):4727–4737.e4, November 2021.
+
+[30] G. Dehnhardt, C. Friese, N. Sachser, G. Dehnhardt, C. Friese, and N. Sachser. Sensitivity of the trunk of Asian elephants
+for texture differences of actively touched objects. Zeitschrift fuer Saeugetierkunde, 62(Suppl 2):37–39, January 1997.
+Number: Suppl 2.
+
+[31] Bin Wang and Marc Andr´e Meyers. Light Like a Feather: A Fibrous Natural Composite with a Shape Changing from
+
+Round to Square. Advanced Science, 4(3):1600360, 2017.
+
+[32] Michael Garstang. Elephant Sense and Sensibility. February 2015. Google-Books-ID: OrSYBAAAQBAJ.
+
+[33] Liang-Wu Cai. Fundamentals of Mechanical Vibrations. June 2016. Google-Books-ID: KrI7CwAAQBAJ.
+
+[34] Samuel Andrew Hires, Lorenz Pammer, Karel Svoboda, and David Golomb. Tapered whiskers are required for active
+
+tactile sensation. eLife, 2:e01350, November 2013.
+
+[35] Shantanu P. Jadhav, Jason Wolfe, and Daniel E. Feldman. Sparse temporal coding of elementary tactile features during
+
+active whisker sensation. Nature Neuroscience, 12(6):792–800, June 2009.
+
+[36] Wen Yang, Yang Yu, Robert O. Ritchie, and Marc A. Meyers. On the Strength of Hair across Species. Matter, 2(1):136–149,
+
+January 2020.
+
+[37] Gary Dougill, Charlotte A. Brassey, Eugene L. Starostin, Hayley Andrews, Andrew Kitchener, Gert H. M. van der Heijden,
+Victor G. A. Goss, and Robyn A. Grant. Describing whisker morphology of the Carnivora. Journal of Morphology,
+284(9):e21628, 2023.
+
+[38] W. Yang, C. Chao, and J. McKittrick. Axial compression of a hollow cylinder filled with foam: A study of porcupine
+
+quills. Acta Biomaterialia, 9(2):5297–5304, February 2013.
+
+[39] Bonnie C. Yates, Edgard O. Espinoza, and Barry W. Baker. Forensic species identification of elephant (Elephantidae) and
+giraffe (Giraffidae) tail hair using light microscopy. Forensic Science, Medicine, and Pathology, 6(3):165–171, September
+2010.
+
+[40] Ruixin Mi, Z. Z. Shao, and F. Vollrath. Creating artificial Rhino Horns from Horse Hair. Scientific Reports, 9(1):16233,
+
+December 2019.
+
+[41] Mathew E. Diamond, Moritz von Heimendahl, Per Magne Knutsen, David Kleinfeld, and Ehud Ahissar.
+’what’ in the whisker sensorimotor system. Nature Reviews Neuroscience, 9(8):601–612, August 2008.
+
+’Where’ and
+
+[42] Benjamin S. Lazarus, Audrey Velasco-Hogan, Teresa G´omez-del R´ıo, Marc A. Meyers, and Iwona Jasiuk. A review of
+impact resistant biological and bioinspired materials and structures. Journal of Materials Research and Technology,
+9(6):15705–15738, November 2020.
+
+[43] R. F. Oliver. Whisker growth after removal of the dermal papilla and lengths of follicle in the hooded rat. Development,
+
+15(3):331–347, June 1966.
+
+[44] Yan Li, Zuying Feng, Liang Hao, Lijing Huang, Chenxing Xin, Yushen Wang, Emiliano Bilotti, Khamis Essa, Han Zhang,
+Zheng Li, Feifei Yan, and Ton Peijs. A Review on Functionally Graded Materials and Structures via Additive Manu-
+facturing: From Multi-Scale Design to Versatile Functional Properties. Advanced Materials Technologies, 5(6):1900981,
+2020.
+
+[45] Ali Miserez, Todd Schneberk, Chengjun Sun, Frank W. Zok, and J. Herbert Waite. The Transition from Stiff to Compliant
+
+Materials in Squid Beaks. Science, 319(5871):1816–1819, March 2008.
+
+[46] U. G. K. Wegst and M. F. Ashby. The Mechanical Efficiency of Natural Materials. Philosophical Magazine, 84(21):2167–
+
+2186, 2004.
+
+[47] Daniel A. Greenberg and Douglas S. Fudge. Regulation of hard alpha-keratin mechanics via control of intermediate filament
+hydration: matrix squeeze revisited. Proceedings of the Royal Society B: Biological Sciences, 280(1750):20122158, January
+2013.
+
+[48] Xiaoxiao Dong, Rui Zhang, Yu Tian, Melvin A. Ramos, Travis Shihao Hu, Zhihang Wang, Hong Zhao, Lipeng Zhang,
+Yiyang Wan, Zhenhai Xia, and Quan Xu. Functionally Graded Gecko Setae and the Biomimics with Robust Adhesion
+and Durability. ACS Applied Polymer Materials, 2(7):2658–2666, July 2020.
+
+[49] Eran Lottem and Rony Azouz. Mechanisms of Tactile Information Transmission through Whisker Vibrations. The Journal
+
+of Neuroscience, 29(37):11686–11697, September 2009.
+
+[50] Mohammad Sheikh Sofla, Srikishan Vayakkattil, and Marcello Calisti. Haptic Localization with a Soft Whisker from
+
+Moment Readings at the Base. Soft Robotics, January 2024.
+
+15
+
+[51] Mohamad-Ammar Sayegh, Hammam Daraghma, Samir Mekid, and Salem Bashmal. Review of Recent Bio-Inspired Design
+
+and Manufacturing of Whisker Tactile Sensors. Sensors, 22(7):2705, January 2022.
+
+[52] Viacheslav Slesarenko and Stephan Rudykh. Towards mechanical characterization of soft digital materials for multimaterial
+
+3D-printing. International Journal of Engineering Science, 123:62–72, February 2018.
+
+[53] J. Mueller, K. Shea, and C. Daraio. Mechanical properties of parts fabricated with inkjet 3D printing through efficient
+
+experimental design. Materials & Design, 86:902–912, December 2015.
+
+[54] Lawrence T. Smith and Robert B. MacCurdy. Digital Multiphase Composites via Additive Manufacturing. Advanced
+
+Materials, n/a(n/a):2308491, 2024.
+
+[55] Andrew Kyle Schulz, Lena Valentina Kaufmann, Lawrence Smith, Deepti Philip, Hilda David, Jelena Lazovic Zinnanti,
+Michael Brecht, Gunther Richter, and Katherine J. Kuchenbecker. Data for: Functionally graded keratin facilitates tactile
+sensing in elephant whiskers, 2025.
+
+[56] Jordan C. Koone, Chad M. Dashnaw, Emily A. Alonzo, Miguel A. Iglesias, Kelly-Shaye Patero, Juan J. Lopez, Ao Yun
+Zhang, Bernd Zechmann, Noah E. Cook, Mona S. Minkara, Cary A. Supalo, Hoby B. Wedler, Matthew J. Guberman-
+Pfeffer, and Bryan F. Shaw. Data for all: Tactile graphics that light up with picture-perfect resolution. Science Advances,
+8(33):eabq2640, 2022.
+
+[57] Lawrence Smith and Andrew Schulz. WhiskerAnalyses: A workflow for analyzing whiskers under various loading scenarios
+
+using finite element analysis, 2025.
+
+16
+
+

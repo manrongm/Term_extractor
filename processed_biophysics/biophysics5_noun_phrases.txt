@@ -1,0 +1,1166 @@
+(450 m
+(70 - 120 gpa
+(a) a 250-nm-thick micro-tome slice
+(a) sample
+(b) absorbance map
+(b) no pre
+(c) absorbance map
+(c) no previous dental treatment
+(cm-1)absorbance0º45º90º135º1163 cm-1
+(color/wavelength change
+(d) absorbance map
+(d) cross-polarized image
+(d) non-traumatic tooth extraction procedure
+(irm) beamline
+(parallel dichroism
+(pike technologies
+(po4 ∼1052 cm−1
+(tdm) ψ
+(the central pixel
+(zero noise)imagestep size
+, 1 wt.% organic matrix
+, 1425 cm−1
+, more sophisticated techniques
+-  µm
+- 20 µm
+-tooth cross-sectiondentinepoxy (a)(b)(c)(d)(e)100 µm(f)a-a’(∆x;∆y)= (;
+. method
+. results a. bamboo assignment
+0 - disorder
+1 dmax
+1 m
+1 minute
+1 thz
+1 µm
+1-1-1 umezono
+1/e2-intensity level
+10 n
+10 x. gao
+10 µm
+10-to-50 times
+1035 cm−1
+1080 cm−1
+1100 cm−1
+1104 cm−1
+1110 cm−1 c-o stretching
+1163 cm−1 c-o-c band
+120 - 15 thz
+1200 - 900 cm−1
+1370 cm−1
+1412 cm−1
+1457 cm−1 2−
+15 n
+150 g
+150 rpm
+1700 - 1600 cm−1
+18 g
+200 µmtransverse cross section
+24 hours
+25 nm
+2857 cm−1
+2896 cm−1 c-h band
+2896 cm−1 c-h stretching band
+2920 cm−1
+3 minutes
+3 µm
+3-15 µm
+3300 cm−1
+36× ir ob- jective
+3900–750 cm−1
+3d analysis
+3d imaging
+3d or- ganization
+3d space
+3−) ν3 vibration
+4 cm−1 spectral res- olution
+4 wt.% water
+4 µm
+4- pol. method
+4-angle polarization micro
+4-pol. method
+4. (a) optical image
+450 m
+47 mhz
+5 fig
+5 µm
+5-10 µm
+500 µm100
+6 fig
+6 µm (fwhm) beam size
+6 µmaperture diameter
+64 co-added scans
+7 fig
+8 co-added scans
+800 blackburn road
+9 crest-jst
+9 fig
+95 wt.% mineral
+= 1 2 tan−1 (cid:19
+= a0 sin
+[36, 37], non-caries lesions
+a 1 m height difference
+a 1% reduction
+a 100-nm-thick si3n4 membranes
+a 100-nm-thick si3n4 window
+a 3 gpa reduction
+a 3400 - 3350 cm−1
+a 4 µm pixel corresponds
+a 6-inch diamond
+a bands
+a bruker vertex 80v spectrometer
+a carbonate band ν1
+a change
+a chosen spectral band
+a clean area
+a clear shape anisotropy
+a combination
+a complex microstructure
+a confocal aperture
+a contribution
+a crucial role
+a deeper understanding
+a defined orientation
+a diamond saw
+a dig- ital demodulation
+a dip
+a field
+a filamentary pattern
+a fixed charge
+a fixed ori- entation
+a fixed orientation
+a focal spot
+a func- tion
+a function
+a fundamental link
+a gaussian beam
+a height difference
+a high resolution
+a higher resolution
+a hyperion 1000/2000 ftir microscope
+a large amplitude
+a linearly polarized incident beam
+a lower transmittance t
+a major contrib- utor
+a matching pair
+a maxillary premolar sample
+a mi- crotome slice
+a micro-tome cross
+a micrometer-wide scale
+a microscope
+a microtome bamboo slice
+a microtome slice
+a mirror polish
+a multi- spectral imaging version
+a nano-sharp needle
+a nearly parallel man- ner
+a new background spectrum
+a non-destructive way
+a non-linear least squares method
+a noticeable enhancement
+a numerical aperture
+a pair
+a pattern
+a peeled-off mm-sized flake
+a per- pendicular orientation
+a pinhole
+a pixel
+a polyhedral presentation
+a precision sectioning machine
+a preferential horizontal orientation
+a preliminary study
+a random orientation
+a rec- ognizable center line
+a refractive index
+a region
+a related problem
+a relatively minor decrease
+a reliable polarization analysis
+a review
+a si3n4 100-nm-thick membrane
+a significant contribution
+a similarity
+a simple model
+a simplified model
+a simplified numerical model
+a simplified-model
+a single oriented pixel
+a single pixel
+a single site
+a spec- tral range
+a spectra
+a step
+a strong orientation
+a strong signature
+a stronger reflectance r
+a struers epoxy resin mixture
+a switch
+a synchrotron radiation source
+a tabletop ftir microscope
+a time-lapse imaging sequence
+a toolbox
+a tooth
+a twofold difference
+a very thin sample
+a vir-
+a wave plate
+a white light photo-curable resin
+a wide range
+a wire-grid polarizer
+a λ/4-waveplate
+a. agashe
+a. b. mann
+a. belloni
+a. braly
+a. cernescu
+a. costantino
+a. diaspro
+a. k. dastjerdi
+a. kumar
+a. m. korsunsky
+a. marie
+a. p. tomsia
+a. privitera
+a. putignano
+a. reich
+a. s. nain
+a. thompson
+a. vailionis
+a2 iii
+absolute distance
+absorp- tion dichroism
+absorption bands
+acid exposure
+acrylic resin molds
+action recognition
+additionally, the origi- nal cross-sections
+adjacent cells
+advanced imaging and analysis techniques
+advanced industrial science
+advanced materials
+advanced molecular orienta- tion analysis
+align- ment
+all horizontally aligned pixels
+all light fields
+all procedures
+all synchrotron-ftir spectra
+all the characteristics
+amide a (n−h
+amide b
+amide ii
+amide iii
+an accumulation
+an active field
+an anisotropic material
+an aperture
+an array
+an averaging
+an epoxy puck
+an ftir spectrometer
+an im- proved s/n ratio
+an important role
+an increasingly lower con- tribution
+an individual tube
+an integral part
+an op- tical clock
+an optical clock
+an optical sys- tem
+an ordinary chopstick
+an ultra-thin slice
+another fundamental question
+any chemical agents
+any material
+any optical analy- sis
+apparent weight
+applied pressure
+applied sciences
+approximately 150 ±50 rotations
+approximately 5×5 pixels
+aronix d-800
+around 1069 cm−1
+arrangement patterns
+arxiv:229 [cond-mat.mtrl-sci
+asymmetric valence vibration
+australia 5 institute
+australian synchrotron
+b. microtome
+b. r. wood
+b. rocky
+b. simplified model
+b. tooth
+bam- boo fiber bundle
+bam- boo growth
+bamboo bamboo samples
+bamboo cel- lulose
+bamboo microtome slice
+bamboo samples
+bamboo slices
+banded spherulites
+based techniques
+bench- top
+ber dependence
+bioinspired structural materials
+biological structures
+biomedi- cal research ethics
+biomedical research
+biomimetic materials
+birefringence spectra
+blackman-harris 3-term apodization
+both enamel
+both hardness
+bridging spectroscopy
+bright regions
+bruker op-
+bruker optik gmbh
+c vibration
+c-h deformation
+c-h stretching
+c-o-c and c-n bands
+c-o-c and c-n vibrational modes
+c. besnard
+c. gassner
+c. synchrotron-ftir microspectroscopy synchrotron-ftir measurements
+c. ultra-thin microtome
+calcium content
+caries lesions
+caries research
+carious dentin
+cate orientation patterns
+cell wall polymers
+cellular struc- tures
+cellular structures
+cellulose ab- sorption
+cellulose absorption
+cellulose structure
+cellulose structures
+ch2 deformation
+challeng- ing
+chem- istry
+chemi- cal composition
+chemi- cal maps
+chemical absorbance maps
+chemical mapping
+chemical technology
+circle marker
+circular polarization conversion
+cm-1 c–h stretching
+complex 3d hierarchical arrangements
+complex structure
+confocal and super-resolution imaging
+continuous alignment
+crack growth resistance
+cross-polarized image
+cryogenic optical lattice clocks
+crystal maker
+crystal rods
+crystalline-based (e.g., enamel
+d. appadoo
+d. arola
+d. b. shieh
+d. bajaj
+d. h. wang
+d. narbutis
+d. p. lin- klater
+d. r. m.
+d. zhang
+d. zhu
+data acquisition
+default acquisition parameters
+den- mark
+dental fillings
+dental fluorosis
+dental materials
+dental treatment
+dentin parts
+dentin r spectra
+depth estimation
+diagonal orientation
+diagonal structures
+diapro dac
+different dipole contributions
+direct measurement
+dis- tance
+discussion a. resolution
+donatas narbutis6
+e. cerutti
+e. di franco
+e. giorgini
+e. jasiuniene
+e. k. mahoney
+e. p. ivanova
+e. romberg
+e. saiz
+e. salvati
+e. skliutas
+each cen- tral pixel
+each pixel
+each polarization angle
+each rod
+each step
+ed ∝ 1 r2
+elastic modulus
+electrical dipole
+electrical ein-field
+elliptical structures
+enamel anisotropy
+enamel demineralisation
+enamel demineralization
+enamel properties
+enamel rods
+enamel structure
+enhanced resolution
+epofix hardener
+epoxy resin
+equiv- alent
+established band assignments
+even brittle composite materials
+even nano-scale
+excess bubbles
+experimental observation
+f. barthelat
+f. chen
+f. guo
+f. lizzi
+f. s. casciani
+f. s. m. ismail
+f. vitiello
+faraday discuss
+fiber/bundle reinforced composites
+fibers polym
+finer sili- con carbide papers
+first permanent molar teeth
+four bamboo species
+four linear polarization angles
+four polarization angles
+four spec- tral maps
+four-angle polarization
+fracture processes
+ft-ir image
+ftir spectroscopy
+further investigation
+further theoretical analysis
+fψ ∈
+g. a. rebka
+g. d. quinn
+g. landini
+g. orilisi
+g. orsini
+g. vicidomini
+g. w. jr.
+g. w. marshall
+gaussian beam
+gaussian focus
+general relativity
+great interest
+h. bai
+h. elfarraj
+h. fujisawa
+h. ichikawa
+h. j. chang
+h. katori
+h. liu
+h. m. hsu
+h. shinkai
+h. shroff
+h. wang
+h. y. yu
+hard dental tissues
+height ∆h
+hence a larger absorbance
+hence the birefringence
+herman’s orientation function
+high dichroism
+high fracture toughness
+high sub-diffraction limited lateral resolution
+human dental caries
+human dental enamel
+human enamel
+human enamel demineralisation
+human molar enamel
+human molar tooth enamel
+human teeth
+human tooth analysis
+hydrogen peroxide
+hydroxyap- atite crystals
+hypomineral- ized enamel
+hypomineral- ized/hypoplastic enamel
+hypomineralised enamel
+i. c. secretary
+i. dumbryte
+i. mantouvalou
+i. ushijima
+i.e. its mechanical properties
+ii 1600 - 1500 cm−1
+informed consent
+infrared spectroscopy analysis
+ing blade
+instance segmentation
+intensity distribution
+inter- faces
+inter- national organization
+ir absorbance mapping
+ir absorption bands
+ir measurements
+ir transmission
+irma dumbryt˙e5
+isotropic)samplepixel1 µm(a)(b
+its accurate as- sessment
+its dichroism
+its gradient
+its mechanical and thermal properties
+its mechanical properties
+its shortest distance
+its use
+its π orientation
+iv b
+j. a. a. hood
+j. chen
+j. d. james
+j. hu
+j. j. kruzic
+j. l. cuy
+j. liu
+j. mater
+j. materials research
+j. mech
+j. min
+j. moffat
+j. morikawa
+j. oral sci
+j. vongsvivut
+j. zhu
+j.-l. li
+japan 2 national metrology institute
+k. j. livi
+k. kokado
+k. takeya
+l. a. darnell
+l. lanzan`o
+l. puskar
+lake bluff
+large field
+larger distance
+larization optics
+later the height
+leica em uc6) sub-wavelength slices
+length range
+linear dichroism
+lithuania 6 institute
+lithuania 7 laser research center
+local interactions
+lock-in detection
+long ir spectral range dis-
+lower intensity
+m. androulidaki
+m. das
+m. d’amico
+m. e. dickinson
+m. f. little
+m. f. teaford
+m. gulisano
+m. guo
+m. habelitz
+m. han
+m. j. tobin
+m. l. fac
+m. malinauskas
+m. mirkhalaf
+m. ryu
+m. staines
+m. storm
+m. takamoto
+m. toplak
+m. v. swain
+m. z. rahman
+ma- terial characterization
+machine learning
+mangirdas malinauskas7
+many non-oriented random pixels
+map- ping tooth microcracks
+marked bands
+mass density
+mat. s.
+material characterization
+material pixels
+matrix points
+mature enamel
+maximum absorption
+maximum s/n ratio
+mechanical properties
+medical society
+mertz phase correction
+methods a. microtome
+methyl and methylene groups
+methyl and methylene groups20
+mi- crocracks
+microtome processing
+microtome slices
+min- eralization
+mineral content
+molecular alignment
+molecular orientation
+monogr oral sci
+more detail
+morikawa8,9 1 school
+multi-modal imaging
+n a
+n. a. sims
+n. m. kilpatrick
+n. ohmae
+nano-cellulose fibers
+nanocellulose-doped biodegradable composite films
+nanoindentation mapping
+nanometer-scale carbonated hydroxyapatite crystals
+nanoscale horiz
+nanoscale volumes
+national institute
+nature pho- tonics
+nature photonics
+near-field light
+neighboring regions
+ness and elastic modulus
+new 4+ angle polarization toolbox
+new insights
+next section
+no anisotropy
+no aperture
+no dichroism
+no sur- prise
+no white spots
+non-contact reflectance ir mapping
+non-destructive biomedical imaging
+normal zone
+numerical aperture
+numerical validation
+o. lenz
+o. marushchenko
+object detection
+oblique orientations
+only the cell walls
+only the center line
+only κ
+op- s
+optical images
+optical near-fields
+optical polarization-based anal- ysis
+optical, mechanical, and thermal properties
+opus 8 software suite
+oral biol
+ordinary chopsticks
+orien- tation
+orientation maps
+orientation patterns
+orientational anisotropy
+orientational spectroscopy
+oxide polishing suspensions
+p. bianchini
+p. j. l. riviere
+p. lasch
+p. rai
+p. takkalkar
+p. zaslansky
+pace technologies
+parallel dichroism
+parenchyma cell walls
+parenchyma cells
+permanent teeth
+perpendicular dichro- ism
+perpendicular dichroic vibrational modes
+pho- tons
+po4 fig
+polarization angle
+polarization angles
+polarization-resolved light-sheet photoluminescence
+poly(l-lactic acid
+prism orientation
+propaga- tion
+quantitative determination
+r. a. harper
+r. honda
+r. m. shelton
+r. meguya
+r. monterub- bianesi
+r. o. ritchie
+r. oldenbourg
+r. rohanizadeh
+r. s. fischer
+r. v. pound
+random noise
+random orientation
+rec- carbonate
+recent studies
+reduced transmittance t
+reflectance spectra
+reflection mode
+refractive index ∆n
+representative single- point absorbance
+rev. lett
+room temperature
+rs.3.rs- 5981675/v1
+s. b. mehta
+s. fan
+s. guo
+s. h. ng
+s. j.
+s. j. marshall
+s. juodkazis
+s. lundgaard
+s. marathe
+s. park
+s. r. tripathi
+s. sasidharan
+sam- ple
+science tokyo
+scientific reports
+semantic segmentation
+several characteristic 3500300025002000150010.absorbance
+significant reductions
+single pixel
+situ 3d imaging analy-
+slice imaging
+small ∼ λ/10
+some steps
+soon hock
+sound human enamel
+specific absorption bands
+spectra band shape
+spectral analysis
+spectral mapping
+spectral window
+spher- ical indentation
+split-pin software en-
+starch–polyurethane nanocomposite films
+strong birefringence ∆n ∼
+stronger absorbance
+sub- wavelength thickness samples
+sub-diffraction-limited feature sizes
+sub-wavelength  −  µm slices
+sub-wavelength thickness
+subtle changes
+such cross
+surface engineering
+swinburne university
+synchrotron x-ray micro-computed tomography
+synchrotron x-ray tomography
+t =  µmlongitudinal cross section
+t. chandler
+t. e. moxham
+t. hashimoto
+t. i. baskin
+t. katkus
+t. ohkubo
+t. p. weihs
+t. t. lin
+t. yahagi
+t=  µm)diamond
+teeth enamel microcracks
+teeth microcracks
+teeth structure
+teeth structure analysis
+temperature dif- fusivity
+temperature diffu- sivity
+the ( µm diameter
+the (re
+the -1 thz spectral region
+the 1/e2-intensity level
+the 3d organization
+the 3d orientation
+the 4-pol
+the 4-pol. method
+the absorbance spectra
+the absorbed portion
+the absorption anisotropy
+the absorption anisotropy image
+the absorption coefficient
+the absorption map
+the actual bamboo cell
+the actual sample
+the alignment
+the ampli- tude
+the amplitude
+the angle
+the angular alignment
+the anisotropic properties
+the anisotropy
+the approximate isotropic intensity
+the arrangement
+the assignment
+the atr geometry
+the atr technique
+the australian syn- chrotron
+the australian synchrotron
+the axis
+the azimuth angle ψ
+the b 2− ν1 mode
+the bamboo sample
+the beam size
+the brittleness
+the c-o band
+the c-o-c cellulose vibration
+the c-o-c stretching vibrational mode
+the case
+the cell boundary
+the cell wall
+the cell wall thickness
+the cell walls
+the cellulose building blocks
+the cellulose structure
+the center
+the center horizontal line
+the center pixel
+the central pixel
+the cervical region
+the characteristic phosphates band
+the characterization
+the chemical bonding
+the chemical components
+the chemical compositions
+the color/wavelength change
+the combination
+the cor- responding wavelength
+the corresponding wavelength
+the crystalline hydroxyapatite ca10(po4)6(oh)2
+the curve
+the data analysis
+the dentin
+the dentin region
+the dentin section
+the dentin-enamel junc- tion
+the dentin-enamel junction
+the detected light
+the detection limit
+the detector
+the determina- tion
+the determination
+the development
+the dichroic ratios
+the diffraction limit
+the direction
+the distinctive microstructure
+the dominant contribution
+the edge enamel region
+the effect
+the effects
+the elastic modulus
+the enamel
+the enamel region
+the enamel rods
+the enamel surface
+the entire center line
+the equivalent change
+the established bands
+the experimental data
+the first step
+the fitting parameters
+the focal spot
+the four polarization
+the fracture
+the frequency
+the frequency changes
+the ftir mapping measurements
+the gaussian beam
+the gaussian focal spot
+the gaussian-like intensity dome
+the gradient
+the gravitational redshift
+the gravity
+the ground level
+the growth direction
+the guidelines
+the height change ∆h
+the high resolu- tion
+the high resolution image
+the high- est intensity
+the high-resolution
+the higher resolution images
+the highest gradient
+the human body
+the human tooth
+the hyper-spectral imaging
+the image
+the imagingfwhm
+the in- cident beam
+the incident ir beam
+the indentation testing
+the infrared microspectroscopy
+the inner enamel
+the inset
+the institute
+the inter- action energy ϵ
+the interaction energy
+the interna- tional organization
+the ir micro-spectrometry beamline
+the ir spectral range
+the isolated structure
+the known probed volume
+the lab
+the laser
+the length
+the light
+the line
+the linear
+the location
+the longitudinal and transverse directions
+the longitudinal slice
+the machine
+the main component
+the map
+the matrix
+the me- chanical properties
+the measured signal
+the measurement
+the measurements
+the mechanical properties
+the micro-
+the microscopic or molecular level
+the microstructural level
+the microtomed hard bio
+the mid-ir spectral range
+the middle
+the mineral (inorganic) component
+the mold
+the molecular alignment
+the molecular chain
+the most mineralized tissue
+the nanometre scale
+the national academy
+the nature
+the next level
+the next micro-tome cut
+the non-imaging mode
+the numerical aperture
+the numerical model
+the objective lens
+the on-axis
+the opti- cal clock
+the optical transition frequency
+the ori- entation
+the ori- entation function
+the orientation
+the orientation anisotropy
+the orientations
+the other slice
+the otherwise randomly oriented matrix
+the outer enamel
+the outer pixels
+the parenchyma cell wall
+the participant
+the particular regions
+the path
+the peaks
+the phosphate
+the pixel
+the pixel resolution
+the pixel size
+the pixels
+the plant’s growth direction
+the polishing protocol
+the possibility
+the presence
+the primary amides
+the probed transitions
+the process
+the readout gaussian profile
+the red- shift
+the reflectance
+the reflectance spectra
+the refractive index
+the region
+the relationship
+the relative ori- entation
+the relevant guidelines
+the rest
+the rod
+the rods
+the sam- ple plane
+the same ir window
+the same monitoring
+the same op- tical clock
+the same procedure
+the same region
+the same tooth
+the sample
+the sample plane
+the selected ir bands
+the side
+the simplest, non-contact modes
+the single-point reflection measurements
+the slice
+the slice t
+the sliced tooth
+the spa- tial orientation
+the spatial arrangement
+the spatial resolution
+the specimen
+the spectral band shape
+the spectral bands
+the spectral map
+the speed
+the step size
+the step/pixel size
+the strongest absorbance
+the strongest reflectance r changes
+the study protocol
+the sub-diffraction limit
+the surface
+the tdm
+the teeth
+the terahertz frequency region
+the thickness
+the tokyo skytree
+the tooth
+the tooth enamel region
+the tooth sample
+the tooth selection criteria
+the tooth’s mechanical strength
+the tooth’s surface
+the transition dipole moment
+the transmission measurements
+the transmittance results
+the transverse slice
+the type
+the typical strong absorbance
+the ultra-thin bamboo microtome
+the underlying dentin
+the upper clock ticks
+the use
+the used imaging conditions
+the used pixel/step size
+the vascular bundles
+the vibration band
+the vilnius regional committee
+the visible spectral region
+the volume concentration
+the wall region
+the walls
+the water
+the wavelength
+the whole healthy tooth
+the wings
+the xy-plane
+the λ
+the ψ angle
+the ψ angle/orientation
+their environment
+their loca- tion
+their natural fibers
+their position
+theoretical physics
+these mechanical properties
+thin microtomed slices
+this averaging process
+this case
+this direction
+this principle
+this slice
+this spectral region
+this study
+this type
+those spectral bands
+those two vibration modes
+three sections
+tik gmbh
+toagosei ltd.
+today commun
+tooth biomechan- ics
+tooth enamel
+tooth no.1
+tooth preparation
+tooth structural element
+tooth structure
+top inset
+traditional mechanical testing methods
+trans- mission
+transmis- sion
+transmis- sion measurement
+transmission and re- flection
+transmission and reflection modes
+transmission mode
+transmission spectra
+transmission spectroscopy
+transmittance spectra 200 µmbamboo directionwavenumber
+transparent zone
+transportable optical lattice clocks
+tsukuba central
+tubu- lar enamel structure
+two distinct classes
+two perpendicular orientations
+two polarization orientations
+two spectral windows
+type b carbonate ν1 mode
+typical patterns
+u. g. k. wegst
+ultra-thin microtome 3 slices
+ultra-thin microtome slices
+ultra-thin slices
+ultra-thin sub-µm slices
+unpolarized synchrotron radiation
+usual imaging
+v. anand
+v. conclusion
+v. imbeni
+v. jaumouill´e
+v. notarstefano
+v. singh
+v. swaminathan
+v. tosco
+vascular bun- dles
+vascular bundles
+vast possibilities
+very motivating
+vibrational imaging techniques
+vibrational modes
+vilnius university
+volumetric imaging
+w. du
+w. h. robinson
+w. ren
+water-based diamond suspensions
+wavelength ∆x
+wavenumber image
+width range
+x-ray micro- computed tomography
+x-ray spectro- scopies
+x-ray syn- chrotron tomography
+x-ray tomography
+x. d. zhou
+x. yao
+y h
+y. hikima
+y. liu
+y. nishijima
+y. r. jeng
+y. r. zhang
+y. su
+y. wang
+y. wu
+y. yu
+zero-filling fac- tor
+µm slice
+µm20 µm3900360016001400120010008.reflectancewavenumber
+µm20 µmrandom
+× 2 3 cos2
+× ∆h[cm
+αmax − αmin
+β < ◦
+β > ◦
+λ/n a
+λ/n a ≈ 20 µm
+ν = g∆h
+∆ν c2 ≈
+− 1000 cm−1
+∼  and absorption coefficient
+∼  µm
+∼ 1 µm
+∼ 10 cm−1
+∼ 1235 cm−1
+∼ 1242 cm−1
+∼ 1655 cm−1
+∼ 300 µm wave- length
+∼ 4 µm
+∼ λ/n a
+∼1043 cm−1
+∼1069 cm−1
+∼3 - 6 gpa
+≈ . i. introduction
+≈ 100 nm
+≈ 20 µm

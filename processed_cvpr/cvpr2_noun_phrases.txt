@@ -1,0 +1,765 @@
+(a) color-coded distance
+(b) histogram
+(m) rotation ate
+(m)↓ r-ate
+(ours)lego-loamlava beds national monumenticpicp
+(yaw angle
+-entropy (bce) loss
+1 multiway registrationlego-loamgpskitti
+1 − y) log(1
+2. related work pairwise registration
+27 dis- crete mapping sessions
+2d and/or 3d sensors
+3. method
+3. plete trajectory
+37,949 lidar scans
+4. experiment dataset
+7 lego-loamgpslego-loam
+8 kinematic odometrysurvey-grade mapkinematic odometry
+8 that consistency loss speed-ups
+: 1 |s|
+: train-then-test
+= 1 |x|
+= arg
+[48, 49], and point feature
+[mϕ (gi
+a batch
+a better map
+a better mapping quality
+a challenge
+a clear view
+a clearer demonstration
+a common problem
+a comprehensive eval- uation
+a connected graph
+a consistent improvement
+a differentiable manner
+a distance
+a faster convergence
+a frame
+a function
+a fundamental ability
+a global coordinate
+a global inference cue
+a global pose
+a good mapping result
+a ground-truth survey-grade map
+a large-scale dataset
+a large-scale environment
+a large-scale toy dataset
+a length
+a localization network
+a long indoor trajectory
+a map
+a map network
+a mapping problem
+a more detailed explanation
+a multiple registration method
+a neighboring frame’s global pose
+a new paradigm
+a ni × 3 matrix
+a noticeable difference
+a noticeable drift
+a place
+a point- cloud-based posenet
+a pose/pose-landmark graph optimization
+a pre-built map
+a pre-trained model
+a quantitative analysis
+a random organization
+a reasonable initialization
+a relatively satisfactory map
+a robot
+a segway robot
+a self-supervised loop closing method
+a self-supervised training
+a sequence
+a set
+a significant component
+a significant improvement
+a similar deep-learning based network
+a similar practice
+a single frame
+a single global frame
+a single point cloud
+a slam method
+a slam system
+a source point cloud
+a spatial group
+a sub-optimal global pose
+a target point cloud
+a velodyne hdl-32e 3d lidar
+a widely-used authoritative benchmark
+a ”warm start
+a ”warm start” mechanism
+abla- tion studies
+ablation studies
+ablation study
+absolute trajectory error
+abstract lidar mapping
+accurate gnss/imu
+accurate pairwise registrations
+act cross-frame point correspondences
+action recognition
+ag- gregation errors
+aggregation errors
+all corresponding points
+all implementations
+all lidar registration methods
+all spa- tially adjacent frames
+all the corresponding points
+all the results
+all these methods
+allel training
+almost any mapping front-end
+an agent’s location
+an anchor frame
+an anchor frame a
+an arrow
+an important role
+an inferior mapping result
+an intermediate state
+an interval
+an- chor frames
+anchor frames
+and the pairwise registration
+another binary occupancy network
+another key component
+another loss
+another option
+another scan
+any generalization issues
+any marker
+any scene parti- tioning
+arrangementspatial batch arrangement+.distance
+augmented reality
+autonomous mo- bile agents
+batch organization
+batch organization groups
+be- longs
+be- tween
+better alignment
+better illustration
+binary classifications
+blue puzzle
+both indoor and outdoor environments
+both point clouds
+both scenarios
+both the registered map
+bundle adjustment
+can consistency loss work
+cfeng@nyu.edu local-to-global point consistency loss
+challenging regions
+chamfer distance
+chen feng
+closest point
+closest point correspondence
+cloudglobal framelocal frametransformtransformtransform
+common ground
+conclusion limitation
+consistency loss
+correct poses
+correspondence matching
+data frames
+deep learning
+deep learning methods
+deep net- works
+deep networks
+deep neural networks
+deep-learning-based mapping methods
+deepmap- ping
+deepmap- ping2
+deepmapping loss
+deepmapping2 fol-
+deepmapping2 im-
+depth estimation
+descrip- tors
+different areas
+different batch organization
+different components
+different frames
+different methods
+different poses
+different transformation matrices t
+different versions
+distance metric
+dm loss components batch org
+each anchor
+each batch
+each cor- responding point
+each edge
+each frame
+each mapping session
+each mini
+each neigh- bor frame
+each neighbor frame’s global pose
+each neighbor-
+each node
+each point
+each point cloud
+each pose
+each proposed technique
+each scene
+each si
+each t
+edge/plane matching
+effec- tiveness
+either iterative closest point
+enough common points
+enough constraint
+enough inference cues
+excellent mapping per- formance
+existing lidar slam algorithms
+existing reg- istration methods
+feature- level matching
+fore bundle adjustment
+frames increases
+free-space inconsistencies
+front-end and back-end modules
+gen- eralizing deepmapping2
+gen- erate self-supervision
+generalization issues
+global inference cue
+global map optimization
+global pose esti- mation
+global registration
+global sfm
+globally reg- istered point clouds
+good loop closure
+good map quality
+gpu-based paral- lel optimization
+gradientglobal posea’n’global point
+ground truth trans- formation
+hand-crafted descrip- tors
+hand-crafted features
+hregnet geotransformer
+i.e. si ∈ rni×3
+i.e., a global spatial representation
+i=1 b
+imple- ment
+implicit loop closure
+inac- curate
+inaccurate point-
+incremental icp
+incremental icp multiway dgr lego-loam
+incremental registra- tion
+indoor environments
+ing frame
+ing row
+ing track
+ini- tialization
+instance segmentation
+introduction mapping
+is learning-based optimization
+iterative closest point
+its broad convergence range
+its consistency
+its corresponding occupancy proba- bility
+its distance
+its global coordinate
+its global coordinates
+its global localization network
+its global pose
+its neighbor frame
+its result
+its success
+its superior performance
+its topological/spatial neighbors
+its vari- ants
+keyframe-based slam
+kinematic odometry
+l-net pa- rameters
+l-net re-
+large datasets
+large errors
+large- scale datasets
+large-scale and/or outdoor scenarios
+large-scale datasets
+large-scale envi- ronments
+large-scale lidar datasets
+large-scale lidar mapping results
+large-scale maps
+large-scale scenarios
+large-scale scenes
+lava beds national monument
+learnable parameters
+learning-based algorithms
+learning-based features
+learning-based optimization
+lego- loam
+li ding2
+li- dar scanning
+li- dar/inertial/wheel odometry
+lidar map- ping
+lidar mapping
+lidar odometry and diffi- culties
+lidar point clouds
+lidar slam
+lidar slam methods
+lidar-based mapping
+local registration
+local-to-global consistency loss
+local-to-global point consistency loss
+locally accurate [25–28
+long-range sensing
+loop closing
+loop closure
+loop closure detection
+loop closure information
+loop closure-based batch organization
+loop closures
+loop-closure-based batch organization
+lower ates
+m- net
+m-net and bce loss
+mainly results
+man- ual hyperparameter tuning
+many revisits
+map topology
+mapping algorithms
+mapping result
+mapping results
+mate sensor
+mental icp
+michigan’s north campus
+min x∈x difference
+mo- tion
+more frames
+more informa- tion
+more research
+most classical loop
+most points
+multi-agent slam
+multiple mini
+multiple point cloud registration
+multiple registration
+multiway registra- tion
+multiway registration
+n s
+namic objects
+nclt dataset
+nearly one-half
+nebula dataset
+nebula dataset nebula odometry dataset
+nebula odometry
+neigh- bor ni
+neighbor frames
+new environ- ments
+no testing
+non-adjacent point clouds
+not only the bce loss
+novel techniques
+nsf cmmi-
+object detection
+one alternative
+one batch
+one scene
+orga- nization
+other labels
+other mapping methods
+other methods
+other scenes
+our ablation study
+our analysis
+our approach
+our contributions
+our convergence rate
+our deepmapping2
+our experiments
+our framework
+our method
+our problem
+our results
+our work
+outdoor scenarios
+overview problem setup
+pairwise local registration
+pairwise registration
+pairwise relations
+pairwise transforma- 2 tion
+pipeline batch organization
+place recog- nition
+place recognition
+place-recognition-based batch organization
+point cloud
+point cloud map- ping
+point clouds
+point correspondence
+point correspondences
+point-level correspon- dence
+point-level matching
+point-to- point correspondence
+pose-graph optimization
+pretrained pointnetvlad
+previous works
+pub- lic datasets
+qualitative comparisons
+qualitative evaluations
+quantitative comparisons
+quantitative evaluations
+quantitative result
+quantitative results
+random pairs
+real-world environments
+recogni- tion
+red circles
+red points
+red puzzle
+reg- istration
+regis- tering multiple point clouds
+registra- tion
+registration algorithms
+registration problem
+registrationnclttranslation ate
+relative transformation
+relatively accurate geometric information
+robust to initializa- tion
+rotation ate
+s =
+same scene optimization
+sat- isfactory results
+self- driving and mobile robotics
+self- supervised training
+self-driving and mobile robotics
+self-supervised *equal contribution
+self-supervised consistency loss
+self-supervised lidar map op- timization
+semantic segmentation
+several batch arrangements
+several methods
+several parts
+several spatially closed neighbor
+significant im- provements
+simple deep networks
+simultaneous localization
+slam algorithms
+slam-based algorithms
+slow convergence
+small datasets
+small- scale datasets
+smaller partitions
+some areas
+some geometric verification
+spatially adjacent frames
+spatially adjacent neighbors
+stronger gradients
+sual odometry
+such a global point
+such division
+such inconsistencies
+such lidar slam methods
+such methods
+sure information
+sure methods
+t a point cloud
+t g
+t g a
+t g n
+t j
+t ′
+team costar
+temporal and feature neighbors
+temporal neighbors
+ternative distance
+that deepmapping2
+the 50th epoch
+the ab- solute trajectory error
+the aforementioned challenges
+the agent
+the anchor
+the anchor frame
+the anchor frame a
+the arrows
+the ates
+the back-end
+the batches
+the benefits
+the best mapping quality
+the best mapping results
+the best result
+the best way
+the binary cross
+the bird’s eye view
+the bird’s eye view map
+the bottom examples
+the bundle adjust- ment
+the challenge
+the challenging underground dataset nebula
+the clos- est points
+the closest point
+the color
+the color-coded distance
+the com-
+the common machine learning paradigm
+the complex map estimation
+the components
+the computation time
+the computational problem
+the consistency loss
+the continuous map optimization
+the convergence
+the correct way
+the correspondence
+the current pipeline
+the darpa sub- terranean challenge
+the data
+the dataset
+the deep learning version
+the deepmapping framework
+the detected loop closure
+the difference
+the differences
+the difficulties
+the distance
+the distances
+the drift
+the effectiveness
+the environment
+the error
+the errors
+the estimated sensor pose
+the estimation
+the euclidean distance
+the ex- plored area
+the experi- ment
+the fact
+the feature extraction
+the figure
+the first one ad- dresses
+the first place
+the first stage
+the first version
+the following challenges
+the following idea
+the following sections
+the frame index
+the frames
+the free space
+the front-end initialization
+the general frame- work
+the global estima- tion
+the global frame
+the global frames
+the global map consistency
+the global mapping quality
+the global point cloud
+the global pose
+the global pose estimation
+the global registration
+the global registration quality
+the global sensor
+the goal
+the gps sensor
+the gps trajectory
+the ground truth
+the histogram
+the icp-based pose initializa- tion
+the idea
+the in- consistency
+the indices
+the information
+the ini- tial solution’s quality
+the initialization
+the input
+the input point cloud
+the input point clouds
+the kinematic odometry
+the kitti
+the kitti dataset
+the l2 difference
+the l2 distance
+the lack
+the large misalignments
+the last two rows
+the legend
+the local and global registrations
+the local registration’s results
+the local-to-global consistency loss
+the loop
+the loss
+the loss function
+the m-net and bce loss
+the majority
+the map
+the map quality
+the map topology
+the mapping quality
+the mapping result
+the mapping results
+the maps
+the method
+the methods
+the metric
+the multi-robot sys- tem
+the nclt dataset
+the nebula dataset
+the neighbor
+the neighbor frame
+the neighbor frames
+the neighbors
+the network
+the networks
+the new batch organiza- tion
+the new consistency loss
+the notation
+the number
+the objective function
+the odometry
+the odometry drift
+the opti- mized map
+the optimal network parameters
+the optimization
+the optimized map
+the organization
+the other hand
+the pairwise constraint
+the pairwise registration
+the pairwise relations
+the pairwise transformation
+the parameter
+the performance
+the pipeline
+the place
+the places
+the point cloud
+the point cloud s
+the point clouds
+the points
+the pre-built map
+the predicted occupancy probability p
+the predicted trajectory
+the prob- lem
+the problem
+the proposed techniques
+the qualitative results
+the quality
+the quantitative results
+the question
+the real-world dataset
+the reason
+the red boxes
+the registration
+the registration problem
+the relative transformation
+the relatively accurate pairwise transformation
+the results
+the road
+the same 3d point
+the same batch
+the same function
+the same line
+the same local point cloud
+the same point
+the sampling density
+the scale
+the second stage
+the second technique
+the self- supervised loss functions
+the self-supervised binary label y
+the self-supervised training process
+the sensor
+the sensor rotation
+the slow con- vergence
+the small-scale dataset
+the smaller area
+the solution
+the sparse sensor resolution
+the sparsity
+the start
+the supervised contrastive loss
+the supplementary
+the survey-grade map
+the testing
+the top k closest frames
+the total number
+the train-then-test category
+the training
+the training batches
+the training dataset domain
+the training process
+the trajectories
+the trajectory
+the transformation
+the transformed global anchor frame
+the translation and rotation ates
+the tunnel
+the two chal- lenges
+the two ends
+the two frames
+the two novel techniques
+the two point clouds
+the two pro-
+the two transforma- tions
+the two- way arrows
+the uni- versity
+the warm-start step
+the whole trajectory
+the xy-coordinate
+the year
+the “warm start” quality
+their closest points
+their distance
+their necessity
+them- selves
+these issues
+these ver- sions
+this correspondence
+this dataset
+this domain
+this generic method
+this global registration
+this information
+this line
+this metric
+this new consistency
+this optional step
+this problem
+this quality
+this step
+this work
+those con- straints
+those im- portant components
+those spatially adjacent frames
+three datasets
+three different categories
+topological map
+train- ing batches
+training batch
+training batches
+transforma- tion
+translation ate
+tween sequential frames
+two adjacent point clouds
+two consecutive frames
+two global point clouds x
+two main stages
+two neighboring frames
+two novel techniques
+two point clouds
+two spatially adjacent nodes
+two trajec- tories
+two transformations t
+two versions
+two ways
+unregistered neighboring frames
+various batch organization methods
+various indoor/outdoor public datasets
+very chal- lenging
+very trivial map initialization
+visual slam
+warm start
+what category
+widely-used pairwise registration meth- ods
+xinhao liu1
+yellow and blue blocks
+yiming li1
+{si}k i=1
+| (cid:88
+†the corresponding author
+↓                                             trajectory
+↓ t-ate
+− p
+− t ′s∥2
+−y log(p
+∥x − y∥2
+✓ ✓

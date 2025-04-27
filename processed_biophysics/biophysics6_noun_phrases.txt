@@ -1,0 +1,536 @@
+(n = 4) shifts
+-inspired robotics
+1 rat whiskers
+100 gpa
+1g, fig. 2i
+3 ±  gpa
+30–40 µm
+33% lower peak stresses
+5 2 0 2 r
+6 whiskers
+63 ±
+70569 stuttgart
+82 ±
+a 2 000% increase
+a behavior
+a blade-like structure
+a collagen protein wrapper
+a comparatively small 5 amount
+a considerable manufacturing challenge
+a dense structure
+a diameter
+a factor
+a few medulla channels
+a first natural frequency
+a function
+a functionally graded beam
+a functionally graded keratin
+a graded whisker
+a hollow shell
+a horn-like microstructure
+a hydrostat
+a large deformation
+a lifetime
+a loading scenario
+a long, slender rod
+a mammalian keratin structure
+a modulus ratio epoint/eroot
+a plasticity behavior
+a point modulus
+a reduced chance
+a role
+a root modulus
+a root porosity
+a scaly cuticle
+a significant functional material grade
+a single medulla channel
+a slightly smaller vibrotactile signal
+a soft point
+a soft point confers
+a soft root
+a softer point modulus
+a somewhat less-porous root
+a stiff root
+a strong porosity gradient
+a tiny diameter
+a whisker
+action recognition
+actuatable whiskers
+actuation impact
+added benefits
+adult elephant whiskers
+adult elephants
+adult elephant’s whiskers
+all examined elephant body hairs
+all previously studied whiskers
+all whiskers
+almost one order
+alpha helices
+alpha-keratin helices
+alpha-keratin structures
+ample whisker-object contact
+an additional 4 db
+an advantage
+an array
+an asian elephant
+an asian elephant’s trunk
+an axially scarred cuticle
+an influential method
+an isotropic structure
+an order
+an ovular cross-sectional shape
+andrew k. schulz
+andrew k. schulz1,∗
+approximately 90 000 muscle fascicles
+arctic temperatures
+armored trunk skin
+around 16 hours
+asian elephant
+asian elephants
+aspect ratio
+axially graded porosity
+baby and adult asian elephants
+baby and adult elephant whiskers
+baby elephant whiskers
+basic beam theory
+bighorn sheep horn
+bighorn sheep horns
+bio-inspired whiskers
+bird feather rachis
+body hairs
+both geometry
+central scientific facility
+clear higher-frequency signals
+co-corresponding authors
+collagen wrapper
+computational neuroscience berlin
+conclusions biological structures
+constant modulus  gpa
+constant properties
+constituent materials
+contact directionality
+contact location
+cross-sectional shape
+cryotome-sliced whisker sections
+cutting-edge inkjet systems
+damage reduction
+deepti s.
+depth estimation
+desired system properties
+different locations
+directional contact perception
+distal trunk whiskers
+distal whiskers
+diverse mechanical forms
+domesticated cats
+double that
+dynamic benefits
+each rat whisker
+each studied elephant whisker
+each whisker
+early cars
+elastic and plastic mechanical behavior
+elastic moduli
+elastic modulus
+elastomer-pointed elephant whiskers
+elephant body hair
+elephant proximal whiskers
+elephant trunk whisker roots
+elephant trunk whiskers
+elephant whisker geometry
+elephant whisker roots
+elephant whiskers
+elephas maximus
+elevated root porosity
+encode contact location
+energy dissipation
+engineered devices
+equal contribution
+equivalent loading
+equivalent point loading
+existing designs
+exponentially higher amplitude
+familiar whiskers
+fast head
+fatigue reduction
+felis catus
+few studies
+finite element analysis
+frequency response
+functional gradients
+functional grading
+functionally porous whiskers
+gecko feet
+geometrical and material differences
+germany 2bernstein center
+germany 3robotic materials department
+germany 4materials
+germany aschulz@is.mpg.de
+graded material
+graded whiskers
+graded-porosity whiskers
+gunther richter4
+highly dexterous manipulation
+hilda david4
+hollow tubules
+homogeneous stiff whiskers
+homogeneous whiskers
+horn structures
+horse hooves
+how modulus grading
+how whisker length
+humboldt university
+identical conditions
+impact loading
+individual whisker actuation
+instance segmentation
+intelligent systems
+introduction whiskers
+inverse design
+its blade-like whiskers
+its distal whiskers
+its ellipsoidal aspect ratio increases
+its flexural rigidity
+its length
+its point
+its root
+jelena lazovic5
+k ∝ d4
+katherine j. kuchenbecker
+keratin rods
+kjk@is.mpg.de abstract keratin
+large and small tubules
+large transverse displacements
+larger tip displacements
+lawrence t. smith3,+
+lena v. kaufmann2,+
+living organisms
+local whisker flexibility
+logarithmic differentiation
+lon- gitudinal keratin strands
+longitudinal tapering
+mam- malian epidermis
+mammalian horns
+mammalian mechanoreceptors
+mammalian whiskers
+many whisker researchers
+mass reduction
+material interfaces
+material properties
+material science
+material shifts
+max planck institute
+mechanical and functional properties
+mechanical curb feelers
+mechanical stimulation
+mechanical use
+michael brecht2
+micron-scale factors
+microscale arrangement
+microscopy and material characterization
+monolithic parts
+more precise localization
+morphology and composi- tion
+most asian elephant whiskers
+mouse whiskers
+movie s1
+movie s2
+movie s3
+movie s4
+multi-material 3d printing
+natural polymer-elastomer composites
+natural polymers
+near-linear signal differentiation
+nearly double the displacement magnitude
+no indication
+no permanent deformation
+no porosity
+nonlinear beam finite elements
+nonuniform cross section
+nonuniform material properties
+normalized whisker length
+not proximal elephant trunk whiskers
+object detection
+omnidirectional proximity sensing
+one order
+one well-studied example
+only 4 2–5%
+only a factor
+only a small modulus range
+other biological composites
+other terrestrial animals’ whiskers
+other terrestrial mammals
+our analysis
+our indentation data
+our simulations
+our understanding
+past research
+pinniped species
+polar bears thermoregulate
+poor eyesight
+porcupine quills
+porous cavities
+porous roots
+porous whiskers
+power increases
+precise tactile sensory discrimination
+precision manipulation
+preferred directions
+previous investigations
+previously studied keratinous horns
+primarily soft materials
+programmable signal shifts
+proximal and distal trunk whiskers
+proximal elephant trunk whiskers
+proximal sections
+proximal whiskers
+radius changes
+rat whiskers
+rattus norvegicus
+recent advances
+recent characterization
+rigid external stimuli
+rigid materials
+rigid stationary objects
+rough materials
+scanning electron microscopy
+seal whiskers
+semantic segmentation
+sensory benefits
+sensory neurons
+sensory ring
+sensory ring structures
+several robotic whisker designs
+shock absorption
+signal power
+signal processing
+signal transmission
+significant potential
+simple isotropic models
+skin structures
+soft materials
+soft point
+specific capabilities
+specific use cases
+squid’s composite beak
+static finite element analysis
+stiff point
+stiff root
+stiffness-gradient whiskers
+stress concentrations
+studied mammalian taxa
+studied whiskers
+subsequent free vibration
+such structures
+surface features
+table s1
+table s2
+table s3
+tapered ellipsoidal whiskers
+texture discrimination
+the 7-nm length scale
+the adult
+the adult elephant
+the alpha-keratin
+the amplification
+the animal
+the animal’s ability
+the animal’s sensory volume
+the baby elephant whisker point
+the beak
+the beam
+the bending rigidity
+the closest finding
+the current focus
+the cuticle
+the damage
+the dense, hollow fur
+the density difference
+the deposition
+the depth
+the dermis
+the diameter d
+the discrete fourier transform
+the displacement and stress fields
+the distal and proximal sections
+the distal portion
+the distal section
+the distal trunk
+the dynamic impacts
+the effects
+the elephant
+the elephant trunk
+the elephant whisker
+the elephant’s lack
+the elephant’s proximal whiskers
+the elephant’s whisker
+the energy cost
+the energy dissipation
+the environment
+the excitation location
+the face
+the firing
+the first animal stiffness gradients
+the first five vibration modes
+the focus
+the follicle
+the frequency
+the frequency content
+the frequency response
+the functionally graded elephant whisker
+the functionally graded geometry
+the gradient
+the hair
+the humboldt squid
+the increase
+the information
+the inner matrix
+the inverse ratio
+the keratinized structure’s functional use
+the length
+the lengths
+the location
+the macro channels
+the material porosity
+the mechanical frequencies
+the mechanical integrity
+the mechanical response
+the mechanical signals
+the mechanoreceptors
+the medullas
+the microct images
+the microscale
+the middle
+the moduli
+the modulus gradient
+the more numerous tubule channels
+the most similar keratin structures
+the natural frequency
+the neuromechanics
+the non-actuated whiskers
+the numerous medullary channels
+the point
+the porosity
+the porosity and stiffness gradients
+the porous root
+the primary function
+the protein keratin
+the proximal trunk
+the root
+the root follicle
+the root modulus
+the root modulus increases
+the roots
+the round-to-square cross-sectional transition
+the same ratio
+the scales
+the scarred outer wall
+the sensing structures
+the sensory function
+the sensory neurons
+the sensory ring
+the signal power
+the simulated whisker
+the skin
+the slender structures
+the smallest range
+the square
+the strain mechanoreceptors
+the structures
+the studied cat whiskers
+the studied elephant trunks
+the tail hair
+the tapering
+the thicker root
+the three components
+the three parameters
+the time
+the time-varying reaction moment
+the transverse cross section
+the trunk’s circumferential wrinkles
+the tubules
+the underlying properties
+the vibration
+the vibration amplitude
+the vibrotactile signal information
+the wall
+the whisker
+the whisker changes
+the whisker cross section
+the whisker follicle
+the whisker length
+the whisker length z
+the whisker point
+the whisker root
+the whisker wall
+the whiskers
+the whisker’s follicle
+the widest points
+the wild
+their aspect ratios
+their distal whiskers
+their first natural frequency
+their follicles
+their length
+their mechanical behavior
+their points
+these anisotropies
+these biological building blocks
+these channels
+these distinct functions
+these functional benefits
+these geometrical parameters
+these materials
+these moduli
+these non-whisking whiskers
+these scales
+these whiskers
+thin sensory horns
+this assumption
+this blade-like whisker structure
+this discovery
+this hypothesis
+this increased displacement
+this information
+this intriguing somatosensory structure
+this keratin-collagen inter- face
+this lack
+this large decrease
+this natural polymer
+this reduction
+this scenario
+this signal
+this smooth transition
+this stiffness gradient
+this work
+three orders
+tiny surface asperities
+transient contact
+transient contacts
+tree bark
+trunk movements
+trunk touch
+two orders
+uniform properties
+uniform whiskers
+unprecedented control
+very high root porosity
+volumetric mass
+whisker deformation
+whisker mass
+whisker mechanics
+whisker models
+whisker morphology
+whisker neuromechanics
+whisker parameters
+whisker tapering
+whisker-mediated touch
+widely varying items
+widely varying mechanical properties
+widely varying substrates
+y h
+±  gpa
+±  mm
+∼0% porosity
+∼15% porosity
+≤  gpa

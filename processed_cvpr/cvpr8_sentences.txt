@@ -1,0 +1,312 @@
+PointLoRA: Low-Rank Adaptation with Token Selection for Point Cloud Learning Song Wang1,2, Xiaolu Liu1, Lingdong Kong2, Gongfan Fang2, Wentong Li4, Jianyun Xu3*, Chunyong Hu3, Jianke Zhu1†, Xinchao Wang2† 5 2 0 2 r p A 2 2 ] V C . s
+c [ 1 v 3 2 0 6 1 . 4 0 5 2 : v i X r a 1ZJU 2NUS 3AD Lab, CaiNiao, Alibaba 4NUAA {songw, jkzhu}@zju.edu.cn, xinchao@nus.edu.sg
+Abstract Self-supervised representation learning for point cloud has demonstrated effectiveness in improving pre-trained model performance across diverse tasks.
+However, as pre- trained models grow in complexity, fully fine-tuning them for downstream applications demands substantial compu- tational and storage resources.
+Parameter-efficient fine- tuning (PEFT) methods offer a promising solution to mit-
+igate these resource requirements, yet most current ap- proaches rely on complex adapter and prompt mecha- increase tunable parameters.
+In this paper, nisms that we propose PointLoRA, a simple yet effective method that combines low-rank adaptation (LoRA) with multi-scale token selection to efficiently fine-tune point cloud mod- els.
+Our approach embeds LoRA layers within the most parameter-intensive components of point cloud transform- ers, reducing the need for tunable parameters while en- hancing global feature capture.
+Additionally, multi-scale token selection extracts critical local information to serve as prompts for downstream fine-tuning, effectively com-
+plementing the global context captured by LoRA.
+The ex- perimental results across various pre-trained models and three challenging public datasets demonstrate that our ap- proach achieves competitive performance with only % of the trainable parameters, making it highly effective for resource-constrained applications.
+Source code is available at: https://github.com/songw-zju/PointLoRA.
+1. Introduction 3D point cloud learning plays a vital role in computer vi- sion, advancing the understanding and reconstruction of complex 3D scenes [4, 12, 22, 30, 62].
+Training deep neural networks on point clouds presents unique challenges due to their unordered structure, sparsity, and irregularity.
+In recent *Project leader.
+†Corresponding authors.
+years, point-based methods [29, 33, 41, 42, 45, 64] have made significant progress in addressing these challenges.
+As the volume of available point cloud data grows, there has been a surge in interest toward pre-training on unlabeled point clouds to learn generalizable representa- tions
+[36, 43, 47, 64, 69, 76].
+Robust pre-trained mod- els enable efficient fine-tuning for downstream tasks, re- ducing dependency on labeled data, accelerating conver- gence, and improving accuracy
+[23, 66].
+However, conven- tional full fine-tuning can disrupt pre-trained knowledge, potentially diminishing the model’s generalization capabil- ity.
+Moreover, full fine-tuning requires storing multiple ver- sions of model weights, leading to substantial storage costs as datasets and tasks expand, along with increased compu- tational demands for larger pre-trained models.
+Recent studies [51, 72, 75, 77] have made strides in in- troducing parameter-efficient fine-tuning (PEFT) methods to pre-trained point cloud models, building on approaches widely used in natural language processing (NLP) and 2D vision
+[9, 65].
+As an illustration, IDPT utilizes instance-aware dynamic prompt tuning to enhance model robustness in downstream transfer learning tasks.
+The sub- sequent methods [51, 77] combine prompt tuning with adapter tuning, while relying on carefully crafted adapters and specialized prompt design.
+PPT presents positional prompt tuning, which doubles the sequence length and sig- nificantly increases computational requirements.
+To fine-tune in a more efficient manner and further re- duce the parameter count, we propose PointLoRA, which leverages low-rank adaptation (LoRA) , widely stud- ied in large language models, to enable better fine-tuning for point cloud models.
+As shown in Fig. 1 (a), during LoRA fine-tuning, instead of directly updating the pre- trained weights, two auxiliary low-rank matrices, Wu and Wd, are injected to update the network with fewer tunable parameters.
+From a 3D learning perspective, these matrices function as fully connected layers that effectively capture global point cloud features but lack local information ex- traction, akin to the architecture of PointNet .
+1 .
+Comparing our proposed PointLoRA approach against vanilla LoRA methods.
+Both LoRA and our approach incorporate low-rank adaptation matrices into the pre-trained weights to extract global information from the point cloud sequence.
+Furthermore, our approach integrates tokens selected at various scales to capture local information, which is refined using a shared Prompt MLP and then output alongside the results derived from the original low-rank matrices.
+Unlike 2D visual or language data, 3D point clouds con- tain distinctive local geometric features critical for down- stream tasks.
+Additionally, not all local positions contribute equally to the model, as their relevance varies depending on the specific task and data characteristics.
+To address this, we further design a Multi-Scale Token Selection module, providing local prior information as a prompt to comple- ment LoRA’s global feature aggregation capabilities.
+Us- ing multi-scale sampling and k-nearest neighbor aggrega- tion, we derive tokens that represent features across differ- ent scales.
+A shared Mask Predictor then selects a subset of these tokens to act as prompts.
+During fine-tuning, tokens from various positions are dynamically selected, processed through a Prompt MLP, and incorporated into the LoRA layer, as illustrated in Fig.
+1 (b).
+This design enables the in- tegration of essential local geometric features with global context, allowing the pre-trained model to adapt effectively to diverse downstream tasks.
+Our main contributions are summarized as follows.
+•
+We propose PointLoRA, a simple yet effective scheme for parameter-efficient fine-tuning in point cloud learning.
+• Low-rank adaptation is injected into the most parameter- intensive components of the point cloud transformer to capture global information, with a corresponding analysis in the context of PointNet provided.
+•
+We further design a multi-scale token selection module that dynamically incorporates local geometric informa- tion as prompt, enriching global low-rank adaptation with the crucial local context.
+• Extensive experiments across three challenging datasets and two widely used pre-trained models validate the ef- fectiveness of our method, achieving state-of-the-art per- formance with only % of the trainable parameters.
+2. Related Work Model Pre-Training on Point Clouds.
+Self-supervised pre-training for 3D point clouds has been widely explored [36, 43, 47, 55, 56, 64, 69, 76], generally categorized into contrastive-based approaches
+[1, 7, 39, 64, 66] and masked signal reconstruction methods [5, 6, 40, 69, 74].
+In con- trastive learning, PointContrast and CrossPoint leverage different views or instances to extract latent fea- tures through contrasting representations.
+SegContrast extends this approach to outdoor LiDAR data, extract- ing class-agnostic segments from augmented views .
+Reconstruction-based methods, such as Point-BERT and Point-MAE , employ masked point cloud recon- struction for pre-training.
+In ACT , a pre-trained autoen- coder serves as a cross-modality teacher, guiding 3D point cloud learning through knowledge distillation
+[17, 57, 58].
+PointGPT adapts the GPT framework for auto- regressive generation on point clouds.
+Additionally, Qi et al.
+[43, 44] propose a combination of reconstruction and cross-modal contrastive learning within generative models.
+While full fine-tuning is commonly applied to these pre- trained models for downstream tasks, the high computa- tional costs and potential dilution of pre-trained knowledge motivate our exploration of efficient fine-tuning strategies.
+Parameter-Efficient Fine-Tuning (PEFT).
+PEFT methods have gained traction in NLP and 2D vision tasks [8, 9, 19, 21, 28, 48, 63, 73] to enhance downstream performance with minimal tunable parameters.
+Mainstream PEFT ap- proaches include prompt and prefix tuning, adapter-based methods, and low-rank adaptation.
+Prompt and prefix tun- ing
+[21, 25, 28, 48] introduce additional tokens as tunable components, with VPT pioneering the use of prompt tokens for pre-trained vision transformers (ViTs)
+[11, 26, 49, 67].
+Adapter-based tuning inserts trainable modules be- tween frozen layers
+[8, 19, 27, 50], while LoRA applies a low-rank approximation to update linear layers within 2 Pretrained WeightsWuWd(a) LoRAPretrained WeightsWuWd(b) PointLoRA⊕⊕udWWW∆=⋅WpWpPrompt MLP(Shared)FrozenTrainable…Original Tokens:inputclsConcat(,)pTTT=…Original Tokens with Selected Tokens:input(,)pTS…………Mainly global informationEmbedded with Local PriorudWWW∆=⋅ attention blocks.
+Building on these techniques, recent in- novations explore alternative adapter placements
+[14, 31], tuning bias terms , and combining with Mixture-of- Experts (MoE) techniques
+[35, 70].
+Recent studies have also adapted PEFT to point cloud analysis [32, 51, 72, 75, 77].
+IDPT extends prompt tuning to DGCNN for instance-aware prompt extraction.
+Point-PEFT and DAPT combine prompt tuning with adapters to fur- ther improve fine-tuning performance, while PPT in- troduces positional prompt tuning for efficient 3D represen- tation learning.
+In contrast to these approaches, our work uniquely integrates low-rank adaptation with multi-scale to- ken selection, achieving competitive performance with a significantly reduced parameter footprint.
+3. Preliminary
+In this section, we revisit the architecture of point cloud transformer and the corresponding fine-tuning prototypes. .
+Point Cloud Transformer Point Tokenizer.
+Due to the sparsity and irregularity of point clouds, it is necessary to transform them into a to- ken sequence suitable for processing by the transformer.
+We follow standard settings [40, 69] by segmenting the point cloud into irregular patches using the farthest point sam- pling (FPS) and the k-nearest neighbors (k-NN) algorithm.
+Formally, given the point cloud P = {p1, p2, . . .
+, pN } ∈ RN ×3 with N points, the g group centers are obtained with FPS: Cg = FPS (P ) , Cg ∈ Rg×3, where Cg is the selected center points.
+Then, we use k-NN to select k nearest neighbor points for each center in Cg: Np = k-NN (P, Cg) , Np ∈ Rg×k×3, where Np is the corresponding neighbor point patch.
+No- tably, these local point patches are made unbiased by sub- tracting their center points, which promotes better conver- gence.
+Then a mini-PointNet is utilized to embed the point patches into discrete tokens Tp: Tp = mini-PointNet (Np) , Tp ∈ Rg×d, where d is the embedding dimension.
+Following the tok- enization process, the 3D point cloud is converted into a feature vector, enabling subsequent processing with Trans- former architectures similar to those used in natural lan- guage processing and 2D vision.
+Transformer Block.
+With a classification token Tcls and the obtained Tp, the input Tinput = Concat(Tcls, Tp) is further processed by L-layer transformer blocks.
+In each block, we first project Tinput into query, key, and value spaces: Q = TinputWQ, K = TinputWK, V = TinputWV , 3 where WQ, WK, WV ∈ Rd×d are trainable matrices in qkv projection layer.
+The attention layer then com- putes the self-attention with a skip connection as follows: T ′ output = Attention (Q, K, V) +
+Tinput.
+Then, the final output Toutput is computed as: (cid:1)(cid:1) +
+T ′ Toutput = FFN (cid:0)LN (cid:0)T ′ output output, where LN is the layer norm function and FFN is the feed-forward network layer .
+Through L Transformer blocks, the network extracts deep and essential features from the discrete tokens.
+Notably, the qkv projection parameters within the attention layer, along with those in the FFN layer constitute a significant portion of the model’s parameters and are crucial for performance. .
+Fine-Tuning Prototype Leveraging well-pretrained models, fine-tuning prototypes to adapt these models to diverse downstream tasks can be categorized as follows.
+Full Fine-Tuning.
+Full fine-tuning is the predominant ap-
+proach in current point cloud pre-training research for downstream tasks, involving the direct loading of pre- trained model parameters and joint training of the encoder alongside the task-specific head.
+Although this method of- fers a theoretically higher accuracy potential, it also entails substantial computational and storage overhead.
+Parameter-Efficient Fine-Tuning.
+Parameter-efficient fine-tuning adapts pre-trained models to downstream tasks by freezing most of the model’s parameters, introducing lightweight modules, and selectively fine-tuning a small subset of parameters.
+This approach provides a more practical solution, particularly as model sizes continue to increase.
+Existing methods typically combine adapter tuning, which inserts bottleneck-like layers, and prompt tuning, which introduces prior knowledge, to fine-tune point cloud pre-trained models.
+4. PointLoRA .
+Overview
+In this work, we aim to provide a simple but effective parameter-efficient fine-tuning method for point cloud pre- trained models.
+The complete framework of our proposed PointLoRA, integrated into the existing point cloud trans- former, is illustrated in Fig.
+2, addressing the parameter- intensive nature of the transformer-based network design.
+Our approach can effectively enhance downstream task per- formance while keeping most of the pre-trained model pa- rameters frozen.
+In the following section, we first outline the establish- ment of the vanilla LoRA baseline and analyze the fac- tors contributing to its effectiveness in point cloud learning. .
+Overview of PointLoRA integrated into point cloud transformer pipeline.
+Given an input point cloud, we first tokenize it using the original Point Tokenizer and perform token selection across multiple scales (Multi-Scale Token Selection).
+The tokens from both components are then concatenated and fed into the Transformer Block.
+Our approach is injected into the qkv projection and FFN layers, utilizing a shared Prompt MLP within these layers to enhance parameter efficiency.
+Then we present how our method extends LoRA’s feature extraction capabilities to achieve competitive performance in 3D scenarios. .
+Vanilla LoRA Baseline
+As mentioned in Sec. , the qkv projection and feed-forward network (FFN) layers in point cloud trans- former significantly increase the number of parameters, lim- iting the fine-tuning efficiency and hindering deployment in resource-limited environments.
+To address this issue, we incorporate Low-Rank Adaptation (LoRA) into these lay- ers by introducing low-rank matrices to adapt pre-trained weights, thereby reducing the number of trainable param- eters while preserving model performance.
+Given a pre- trained weight matrix Wp, LoRA modifies it as follows: Wupdate = Wp + ∆W = Wp + Wu ·
+Wd, where ∆W and Wupdate denotes the updated weight and new weight matrix, respectively.
+Wu ∈ Rd×r and Wd ∈ Rr×d are low-rank matrices, where r ≪ d indicates the rank, con- trolling the complexity of the adaptation.
+During training, only Wu and Wd are updated, while the pre-trained weight Wp remains frozen.
+For inference, the adaptation ∆W can be merged with the original weights, yielding in a single consolidated weight matrix:
+Winfer = Wp + ∆W .
+This consolidation enables the model to re- tain the benefits of low-rank adaptation while avoiding ad- ditional computational overhead in the inference phase.
+Analysis.
+LoRA’s architecture is particularly well-suited for point cloud data, as it can capture the complex relationships between points essential to understanding 3D shapes and spatial arrangements.
+Its MLP-like structure (i.e., two low- rank matrices) effectively learns global features while align- ing with PointNet’s principles of handling unordered point sets and extracting permutation-invariant features.
+The syn- ergy between LoRA and PointNet’s feature extraction ca- pabilities establishes a robust framework for harnessing the rich information in point cloud data, enhancing both gener- alization and adaptability in complex environments. .
+PointLoRA with Token Selection While global features provide a comprehensive understand- ing of the overall structure of the point cloud, local features capture intricate details vital for accurate downstream task performance.
+To fully investigate LoRA’s capabilities, it is crucial to complement the extracted global features with robust local features.
+The tokenization process produces a sequence of tokens that capture various aspects of the point cloud data.
+However, not all tokens are valuable for downstream tasks; some may encapsulate redundant or non- informative content, offering limited contribution to over- all model performance.
+This necessitates a systematic ap- proach for filtering and selecting the most informative to- kens to enhance the model’s representation of local features.
+To tackle the above concerns, we introduce a Multi- Scale Token Selection module integrated with vanilla LoRA, which is presented in Fig.
+3.
+This module dynam- ically selects tokens from the raw point cloud at multiple scales, allowing the model to capture local features at differ- ent levels of detail.
+Additionally, PointLoRA incorporates a shared Prompt MLP to further embed local information from these selected tokens, enhancing the vanilla LoRA’s performance.
+Multi-Scale Token Generation.
+Specifically, we apply far- thest point sampling (FPS) on the input point cloud P with varying numbers of centroids (i.e., N1, N2, ..., NM ) to gen- erate tokens at M different scales.
+As described in Sec. 3, we can obtain M sets of center points, C 1 g , . . .
+, CM g , g , C 2 4 Point TokenizerDownstream HeadMulti-Scale Token SelectionSelf-AttentionFeed-Forward NetworkCLayer Norm⊕⊕PointLoRATransformer Block ×L:Concatenation⊕C:Addition…………QKV ProjectionClassification Segmentationand etc. FrozenTrainableMini-PointNetPointLoRA for downstream tasks.
+These tokens are then concatenated with the original inputs to form a local geometry prompt.
+In each LoRA layer of the point cloud transformer block, a Prompt MLP with a GELU activation function encodes the new input features alongside the local prompt.
+This pro- cess integrates the encoded features of the selected tokens with the LoRA adaptation output.
+The resulting combined output can be formulated as follows: Oupdate = Prompt MLP(Tinput, Sp) + ∆W · (Tinput, Sp), where Oupdate is the updated amount of the PointLoRA layer.
+Notably, to further optimize the efficiency of the pa- rameters, the Prompt MLP is configured independently for both the qkv projection and FFN layers, while being shared across all blocks.
+The multi-scale token selection process improves model performance by prioritizing the most relevant local fea- tures during fine-tuning.
+By incorporating this approach, our scheme effectively refines both global and local feature representations, thereby enhancing its adaptability and ac- curacy across a range of 3D tasks. .
+Training & Inference Overall Loss Function.
+When fine-tuning on diverse downstream tasks across various datasets, we follow the common practice of maintaining consistency between the adopted loss and the loss function of the original task.
+Ad- ditionally, we introduce a regularization term to further su- pervise the Mask Predictor.
+In general, the total loss func- tion Ltotal = Ltask +λ·Lmask, where Ltask is the task-specific loss for classification or segmentation.
+Lmask is the regular- ization loss for mask predictor with the balanced weight λ: Lmask = − 1 Ntotal (cid:88)Ntotal i=1 (si log(si + ϵ)+ (1 − si) log(1
+− si + ϵ)), where Ntotal = N1 +N2...+NM , si denotes the importance score for each token and ϵ is a small constant (e.g., 10−6) to prevent undefined values in the logarithm.
+Inference.
+During inference, the additional parameters in- troduced by LoRA in the transformer block are directly merged into the original pre-trained weights, with the only newly added component being a small shared MLP dedi- cated to embed the selected tokens.
+5. Experiments .
+Setup Datasets.
+We validate the effectiveness of our approach through extensive experiments on three widely used 3D datasets: ScanObjectNN , ModelNet40 , and ShapeNetPart .
+ScanObjectNN is a challenging .
+Illustration of Multi-Scale Token Selection.
+In a two- scale setup, we first sample different numbers of center points, then cluster around each center point and apply Mini-PointNet encoding to generate the corresponding tokens.
+These tokens are also fed into a Mask Predictor to estimate importance scores, al- lowing us to select the Top-K tokens at each scale.
+p , T 2 p , . . .
+, T M each containing g1, g2, . . .
+, gM center points.
+Subsequently, k-NN is employed to retrieve the corresponding neighbor point patches, which are then embedded into discrete tokens using a shared Mini-PointNet.
+Mask Predictor for Selection.
+The above process yields M token sets, T 1 p , encoding local informa- tion at multiple scales.
+Our goal is to select tokens from these sets that are most beneficial for fine-tuning on down- stream tasks.
+Therefore, a simple but effective Mask Pre- dictor is designed to estimate the importance of each token, producing a score vector sm ∈ Rgm×1 for each token in p ∈ Rgm×d, m = 1, ..., M .
+In particular, the Mask Pre- T m dictor comprises two multi-layer perceptron (MLP) layers followed by a Sigmoid activation function: sm = Sigmoid(MLP((T m p ))).
+This design enables the model to assign scores between 0 and 1 to each token, indicating their relevance for downstream tasks.
+We then select a predefined number N ′ M of tokens from each scale based on their im- portance scores using Top-K selection, resulting in a refined token set {Sm 1, ..., N ′ p }M m=1: p =
+TopK(T m Sm p , N ′ m), m = 1, ..., M. Local Geometry Prompt.
+With the selected Ns = N ′ ...+N ′ 1 + M tokens Sp, we can capture crucial local information 5
+Mask PredictorFarthest Point Sampling (FPS), N1k-NNTopKSelectionLinearReLULinearSigmoidImportance Score…Mini-PointNetSelected Multi-Scale Tokensp1{}mMmS=1{}mMms=Farthest Point Sampling (FPS), N2k-NN…Mini-PointNet .
+Performance comparison on three variants of the ScanObjectNN and the ModelNet40 datasets, respectively, for real- world and synthetic object classification.
+Both the number of tunable parameters and overall accuracy (OA) are reported.
+All methods only employ the default data argumentation without voting as the baseline.
+∗ denotes results reproduced from the public source code.
+Methods Publication Tunable Params.
+ScanObjectNN ModelNet40 OBJ-BG OBJ-ONLY PB-T50-RS Points Num. OA (%) PointNet PointNet++ DGCNN MVTN PointNeXt PointMLP RepSurf-U ADS OcCo Point-BERT MaskPoint Point-MAE Point-M2AE ACT RECON Traditional Supervised Learning Only  M  M  M  M  M  M  M -    - - - - -    - - - - - Self-Supervised Representation Learning (Full Fine-Tuning)  M  M  M  M  M  M  M               CVPR’17
+NeurIPS’17 TOG’19
+ICCV’21 NeurIPS’22
+ICLR’22 CVPR’22
+ICCV’23 ICCV’21
+CVPR’22 ECCV’22
+ECCV’22 NeurIPS 22 ICLR’23 ICML’23                Self-Supervised Representation Learning (Parameter-Efficient Fine-Tuning) Point-MAE (Full-FT) Point-MAE + IDPT Point-MAE + DAPT Point-MAE + PPT∗ Point-MAE + PointLoRA ECCV’22
+ICCV’23 CVPR’24 arXiv’24 Ours  M (100%)  M (%)
+M (%)  M (%)
+M (%)  (+) (+) (−) (+)  (+) (+) (+) (+)  (−) (−) (−) (+) 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k 1k                 (+) (+) (+) (+) real-world 3D object classification dataset, which contains approximately 15, 000 indoor point cloud instances across 15 categories.
+The object classification task is performed on three variants of increasing complexity, OBJ-BG, OBJ- ONLY, and PB–T50–RS, each representing different lev- els of scene realism and occlusion.
+ModelNet40 , a classical synthetic dataset for 3D object recognition, con- sists of 12, 311 meshed 3D CAD objects that span 40 cate- gories.
+We perform synthetic object classification and few- shot learning experiments on ModelNet40 to evaluate the robustness of the model in both standard and low-resource settings.
+Additionally, to evaluate performance on detailed structures and component segmentation, we provide exper- iments on ShapeNetPart , a widely used benchmark for part segmentation, comprising 16, 881 point-level synthetic objects across 16 object categories and 50 part categories.
+Evaluation Metrics.
+In the evaluation, overall accuracy (OA) is adopted to assess performance on the 3D object classification task, representing the ratio of correctly clas- sified instances to the total number of instances, thus pro- viding an aggregate score over all classes.
+For the part seg- mentation task, we employ mean Intersection over Union (mIoU) to evaluate the overlap between prediction and ground-truth segments, averaged across all classes.
+Implementation Details.
+Our method can be directly in- tegrated into existing point cloud pre-trained models.
+Dur- 1 = 32 and N ′ ing fine-tuning, we follow a commonly used setup, freezing most parameters of the pre-trained model, and primarily up- dating the newly inserted parameters.
+The number of scales, M , is set to 2.
+At these two scales, we apply farthest point sampling (FPS) and k-NN clustering with (128, 32) and (64, 64) center and neighboring points, respectively, and then select tokens with N ′ 2 = 8.
+The balanced weight λ for Mask Predictor learning is set to  For real-world and synthetic object classification, we fine-tune using Point-MAE , training for 300 epochs with a learn- ing rate of 5e−4 and a weight decay of .
+For few-shot learning and part segmentation, we utilize the Recon model for fine-tuning to further validate the generalizabil- ity of our approach, with a learning rate of 2e−4 for part segmentation.
+All experiments are conducted on a single GPU.
+More implementation details with different baselines are provided in the Supplementary Material. .
+Comparative Study Real-World & Synthetic Object Classification.
+We con- duct real-world and synthetic object classification on three variants of ScanObjectNN (OBJ-BG, OBJ-ONLY, PB-T50- RS) and ModelNet40 , using default data aug- mentation and without voting.
+As illustrated in Tab.
+1, our proposed approach demonstrates consistent performance improvements, especially on the most challenging vari- 6 .
+The t-SNE visualization results on the PB-T50-RS split of the ScanObjectNN dataset with different fine-tuning schemes.
+We adopt Point-MAE as the baseline model for fair comparison.
+TP: Number of tunable parameters.
+OA: Overall accuracy.
+Symbol ∗ denotes re-produced with official implementation.
+Best viewed in colors and zoomed-in for additional details. .
+Performance comparison on ModelNet40 for few- shot learning.
+We report the scores of the overall accuracy (%) ± the standard deviation (%) without voting.
+The top two highest accuracies are highlighted in bold and underline, respectively.
+Methods Publication 5-way 10-way 10-shot 20-shot 10-shot 20-shot .
+Performance comparison on the ShapeNetPart for part segmentation.
+Both the mIoU for all classes (Cls.) and in- stances (Inst.) are provided.
+TP indicates the number of tunable parameters.
+† means the resuluts reported from DAPT .
+∗ de- notes the results reproduced from the official implementation.
+Methods Publication TP Cls. mIoU (%) Inst.
+mIoU (%) Self-Supervised Representation Learning (Full Fine-Tuning)
+Traditional Supervised Learning Only OcCo Point-BERT MaskPoint Point-MAE Point-M2AE ACT ICCV’21 ± ± ± ± CVPR’22 ± ± ± ± ECCV’22 ± ± ± ± ECCV’22 ± ± ± ± NeurIPS’22 ± ± ± ± ICLR’23 ± ± ± ±
+Self-Supervised Representation Learning (Efficient Fine-Tuning) RECON (Full-FT) RECON+ IDPT RECON+ DAPT RECON+ PPT RECON+ PointLoRA Ours ICML’23 ± ± ± ±
+ICCV’23 ± ± ± ± CVPR’24 ± ± ± ± arXiv’24 ± ± ± ± ± ± ± ± ant, PB-T50-RS, where it is the only parameter-efficient fine-tuning method that surpasses the full fine-tuned Point- MAE (% vs. %) and significantly outper- forms the state-of-the-art method, DAPT .
+Notably, our approach requires only M tunable parameters, the fewest among all methods.
+Furthermore, the t-SNE feature visualization of existing methods and PointLoRA is presented in Fig.
+4.
+Our method enables the pre-trained model to fine-tune with a minimal number of parameters, producing distinctive feature representations.
+Few-shot Learning.
+We also perform few-shot learning ex- periments on ModelNet40 to validate the transfer learn-
+ing capability of our method with limited annotations.
+Fol- lowing standard protocols
+[15, 43], we evaluate the fine- tuning performance with ReCon in the 5-way / 10-way and 10-shot / 20-shot settings, respectively.
+As shown in Tab. 2, our method achieves the best or second-best accu- racy in all configurations, further demonstrating the gener- alizability of the proposed scheme.
+Point Cloud Part Segmentation.
+The part segmentation results on the ShapeNetPart dataset are provided in PointNet PointNet++ DGCNN APES CVPR’17
+NeurIPS’17 TOG’19 CVPR’23 - - - -         Self-Supervised Representation Learning (Full Fine-Tuning) OcCo MaskPoint Point-BERT Point-MAE ACT - ICCV’21  M ECCV’22
+CVPR’22  M ECCV’22  M ICLR’23  M           Self-Supervised Representation Learning (Efficient Fine-Tuning) RECON (Full-FT) RECON+ IDPT†
+RECON+ DAPT RECON+ PPT∗
+RECON+ PointLoRA ICML’23  M  M ICCV’23  M CVPR’24  M arXiv’24  M Ours           Tab.
+3.
+In this fine-grained scene understanding task, our approach still achieves competitive performance with a con- strained parameter budget.
+Unlike prior classification mod- els, the increase in the parameter count is primarily at- tributed to the segmentation head.
+Comparison with Other PEFT Methods.
+We further present a comparison with existing PEFT methods designed for other tasks, including NLP and 2D vision.
+We select the most challenging PB-T50-RS variant and use the pre- trained Point-MAE model as a baseline.
+As shown in Tab. 4, these methods designed for other tasks provide lim- ited performance gains when fine-tuned in 3D scenes, de- spite their parameter efficiency compared to existing 3D fine-tuning approaches.
+In contrast, our method not only achieves the highest accuracy, but also uses significantly fewer parameters than the three current fine-tuning tech- niques specifically developed for point clouds, underscoring the strong potential of PointLoRA.
+7
+Full fine-tuning Linear Probing*DAPT (CVPR’24)PPT* (arXiv’24)PointLoRA (Ours)TP: M OA:%TP:M OA:%TP: M OA:%TP: M OA:%TP: M OA:% .
+Performance comparison with other parameter-efficient methods designed for NLP and 2D Vision tasks on the hardest variant of ScanObjectNN .
+Methods Publication TP PB-T50-RS Point-MAE Linear probing ECCV’22 -  M  M + Adapter + Perfix tuning + BitFit + LoRA† + VPT-Deep + AdaptFormer + SSF + IDPT + DAPT + PPT∗ + PointLoRA ICML’19
+ACL’21 ACL’21 ICLR’22 ECCV’22
+NeurIPS’22 NeurIPS’22 ICCV’23 CVPR’24 arXiv’24
+Ours  M  M  M  M  M  M  M  M  M  M  M              .
+The impact of each module of our scheme.
+We provide the overall accuracy (%) on the hardest variant of ScanObjectNN and corresponding tunable parameters (TP).
+“MS-FPS” indicates multi-scale furthest point sampling.
+LoRA Token
+Selection MS-FPS TP PB-T50-RS Full Fine-Tuning Linear Probing ✔ ✔ ✔ ✔ ✔ ✔  M  M  M  M  M      .
+Ablation Study
+In this section, we perform exhaustive ablation experiments on the challenging PB-T50-RS variant to investigate the ra- tionale and effectiveness of the design choices of our pro- posed approach.
+The pre-trained Point-MAE is adopted as a baseline for a fair comparison.
+Ablation on PointLoRA Scheme.
+Firstly, we provide the ablations on each module of the proposed method.
+As il- lustrated in Tab. 5, directly applying low-rank adaptation (LoRA) produces a significant improvement over linear probing, demonstrating the effectiveness of incorporating global information during the fine-tuning process.
+Inject-
+ing selected tokens as prompts into LoRA further improves accuracy with only a marginal increase in the number of parameters.
+Finally, the local information obtained from se- lected tokens across multiple scales complements the global features of LoRA, achieving the best performance.
+Ablation on Low-Rank Adaptation.
+Then we perform ab- lation experiments on rank (r) in our approach, as shown in Tab.
+6.
+Different ranks have a noticeable impact on fine- tuning performance.
+Taking into account both parameter count and accuracy, we set the rank to 8 to maximize the extraction of global information for fine-tuning.
+Ablation on Multi-Scale Token Selection.
+Given the crit- improvement from multi-scale token selection for ical PointLoRA, we first perform ablation experiments on the number of tokens selected at the same scale.
+As shown in .
+Ablation study on rank (r) of the proposed method.
+Rank r TP Ratio PB-T50-RS 4 8 16 32  M  M  M  M %
+% %
+%     .
+Ablation study on scale number M and selected token number Ns in Multi-Scale Token Selection.
+Scale M Token Num.
+Ns PB-T50-RS 1 1 1 2 2 2 3 64 32 16 64 & 16 32 & 8 16 & 4 32 & 16 & 8        .
+Ablation study on the dimension of Prompt MLP.
+Dimension TP Ratio PB-T50-RS 8 16 32 64  M  M  M  M
+%
+% % %     the upper part of Tab. 7, selecting 16 tokens at the orig- inal scale yields the best results, demonstrating the effec- tiveness of token selection.
+Furthermore, when incorporat- ing tokens from multiple scales, optimal performance is achieved by selecting 32 and 8 tokens from two different scales, as shown in the lower part of Tab.
+7.
+Ablation on Prompt MLP.
+We provide the ablation study on the dimension of the shared Prompt MLP, as this affects the embedding of local information in our method.
+As il- lustrated in Tab. 8, setting this dimension to 32 yields the best fine-tuning performance.
+Additionally, adjusting the di- mension causes only minimal changes in tunable parameter counts, suggesting flexibility in selecting this hyperparame- ter for different datasets and tasks.
+6. Conclusion In this paper, a simple yet effective parameter-efficient fine- tuning approach named PointLoRA, is presented with low-rank adaptation and multi-scale token selection for point cloud models.
+Low-rank adaptation efficiently re-
+duces the parameter-heavy components of the point cloud transformer architecture while capturing global informa- tion.
+Multi-scale token selection effectively encodes essen- tial local features as prompt, further enhancing the fine- tuning process.
+The integration of global and local informa- tion enables our approach to achieve state-of-the-art results on the most challenging dataset with a minimal number of tunable parameters while also delivering competitive per- formance across other datasets and models.
+8

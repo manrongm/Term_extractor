@@ -1,0 +1,679 @@
+(a) t
+(b) t
+(blue dotted line
+(blue line
+(c) t
+(ca) values
+(green dotted line
+(infection rate
+(recovery rate
+) compartments
+) t=10
+*corresponding author(s
+, φ = −0
+1 introduction infectious disease
+1/time unity
+10 s e r fig
+100 75 j
+100 independent simulations
+1: compartmental diagram
+2 cas
+2 methodology cellular automata
+2: time
+2graduate program
+3 si model
+3: time evolution
+4: diagram
+5 7 6 7 fig
+5 seir model
+5: time evolution
+6 conclusions
+60 ±
+62 ±
+7 ±
+75 j
+76 ±
+7: compartment diagram
+= k
+= n
+= s
+= γi
+] e p
+a bell shape
+a ca formulation
+a cell
+a circle
+a continuous and simpliﬁed view
+a continuous medium
+a delay
+a detailed view
+a direct comparison
+a disease
+a disease propagation
+a good adjustment
+a grid
+a hyperbolic tangent
+a key ﬁnding
+a lifelong infection
+a long simulation time
+a major advantage
+a microscopic level
+a model
+a more detailed picture
+a new compartment
+a new parameter γ
+a numerical simulation
+a permanent immunity
+a phase
+a plateau
+a population
+a power-law
+a power-law function
+a power-law growth
+a power-law representation
+a probability
+a probability γ
+a rapid increase
+a rapid spread
+a rate
+a recovered cell
+a relationship
+a s cell
+a signiﬁcant part
+a signiﬁcant r2
+a similar analysis
+a similar behaviour
+a simpliﬁed
+a single exponent
+a spatially organized structure
+a square grid compose
+a strong candidate
+a strong correlation
+a substantial contribution
+a sum
+a summary
+a susceptible cell
+a time interval
+a two space dimension
+a wave
+a worldwide problem
+a ﬁxed step
+action recognition
+adjacent cells
+adjusted function
+all models
+all s
+all susceptible individuals
+all the cells
+all the considered models
+all the population
+all the ﬁts
+although, the growth rates
+an adjacent s cell
+an adjustment
+an algebraic expression
+an analysis
+an approximate solution
+an average
+an epidemic
+an exponential
+an exponential function
+an exponential increase
+an extension
+an eﬀective approach
+an important contribution
+an important topic
+an infected cell
+an infected state
+an ode approach
+analytical or numerical solutions
+another diﬀerence
+antonio m. batista2,4†
+any real disease
+at least one infected neighbor
+black colour
+both adjustments
+both approaches
+both ca
+both cases
+both curves
+both formulations
+both growth
+both mathematical formulation
+both methods
+both represen- tations
+both representations
+both the speed
+both ﬁttings
+ca and odes formalism
+ca approach
+ca compartmental epidemiological models
+ca formalism
+ca formu- lation
+ca framework
+ca model
+ca models
+ca) values
+cellular automata
+compartmental epidemiological models
+compartmental models
+complex behaviors
+contact rates
+continuous and discrete compartmental models
+continuous research and develop- ment
+controlling epidemics
+damped oscillations
+densely populated areas
+depth estimation
+dif- ferences
+diogo l. m. souza2†
+discrete and spatially distributed populations
+discrete representations
+discrete space
+discrete time
+disease control strategies
+disease dissemination
+disease prop- agation dynamics
+distinct growth rate
+distinct perspectives
+diﬀerent compartments
+diﬀerent mathematical approaches
+diﬀerent mathematical frameworks
+diﬀerent shape
+diﬀerential equations
+dynamic systems
+e compartment
+e state
+each adjacent infected cell
+each aggregation
+each cell
+each compartmental model
+each epidemiological model
+each i cell
+each individual
+each iteration
+each mathematical approach
+each s
+each s individual
+emerging epidemiological challenges
+enrique c. gabrick3*†
+epidemic outbreaks
+epidemiological studies
+experimental data
+exponential functions
+exponential representations
+exposed cells
+eﬀective approaches
+eﬀective overview
+fundamental relationships
+future studies
+green dotted line
+green line
+healthy individuals
+homogeneous populations
+human mobility
+hyperbolic tangent
+hypothetical scenarios
+i and r curves
+i b - q
+i individuals
+i − e. parameters values
+i(t) corresponds
+i. a comparison
+i.e., an incidence factor
+individu- als
+infec- tious disease transmission
+infec- tious diseases
+infected cells
+infected individuals
+infected state
+infection probability
+infection speed
+infectious dis- ease transmission
+infectious disease control
+infectious disease gustavo a. sousa1†
+infectious disease propagation
+infectious diseases
+initial individuals
+instance measles
+instance segmentation
+intervention and control strategies
+inﬁnite series
+inﬁnite sums
+its neighbours
+its own advantages
+john conway’s “game
+john von neumann
+k =
+k =  ±
+k = 77 ±
+k = ±
+knowl- edge
+large and homogeneous populations
+latent period
+lifelong infection
+local interactions
+local rules
+long times
+long-term epidemiological behaviors
+m × m cells
+machine learning
+many infection focus
+mass action
+mathematical epidemiology
+mathematical frameworks
+mathematical modelling
+mathematical models
+mathematical representation
+modern compartmental models
+more accurate predictions
+multiple infected cells
+namely latent period
+nearly the entire population
+neighbour infected cells
+neuronal modelling
+new cases
+new infected individuals
+new ones
+new patterns
+no i individuals
+non-linear diﬀerential equations
+not only the sir model
+numerical solutions
+numerical tests
+object detection
+odd powers
+ode approach
+ode framework
+odes approaches
+one individual
+one infected agent
+one or more neighbors
+one powerful tool
+one random initial condition
+one recent example
+ordinary diﬀerential equations
+other cells
+other models
+other position
+our conclusions
+our grid
+our main observation
+our para- metric conﬁguration
+our results
+our study
+our work
+oﬀers complementary tools
+partial diﬀerential equations
+patr´ıcio d. c.
+pendulum oscillations
+periodic boundary conditions
+permanent immunity
+ponta grossa
+possible analyses
+power-law growth
+pre- deﬁned rules
+probability γ
+probability ω
+public health policies
+purple line
+quantitative analysis
+r = n −
+r compartment
+r individuals
+r state
+r. combinations
+r2 =
+real data
+recovered (seir
+recovery rate
+recovery rates
+red line
+s = n −
+s adjacent cells
+s cells
+s compartment
+s fig
+s r fig
+s ≈
+seir model
+semantic segmentation
+several models
+short and medium times
+short times
+si model
+simple rules
+simulated data
+solid evidence
+some cases
+spatial evolution
+spatial interactions
+spatial structure
+spatial variations
+spatially heterogeneous populations
+speciﬁc diseases
+stanislaw ulam
+state university
+state variables
+statistical modelling
+strategic control
+susceptible (s
+susceptible individuals
+susceptible–exposed–infected–recovered (seir) models
+s˜ao paulo
+t ≈
+temporal dynamics
+temporal evolution
+that compartment
+the 1940s
+the 1980s
+the 4th- order runge-kutta method
+the ability
+the addition
+the adjustment
+the adjustments
+the amplitude
+the analysed case
+the analysed cases
+the analysis
+the arrow
+the authors
+the average infectious time
+the beginning
+the behavior
+the behaviour
+the black color
+the black triangle
+the black triangles
+the blue dotted line
+the both frameworks
+the ca
+the ca curve
+the ca model
+the ca rule
+the capital notation
+the cases
+the cell
+the centre
+the change rate
+the changes
+the choice
+the circle
+the circle evolve
+the closest neighbors
+the colour
+the comparison
+the compartment
+the compartmental models
+the compartments
+the concept
+the constraint
+the constraint s
+the curve shape
+the curves
+the decrease
+the delay
+the diagram
+the disease
+the disease spread
+the diseases
+the diﬀerence
+the diﬀerences
+the diﬀerential equations
+the dynamics
+the e individuals
+the each cell ci
+the edos solutions
+the emergence
+the entire population
+the entire simulation
+the epidemic curves
+the eqs
+the equations
+the equilibrium
+the evolution
+the experimental data
+the exposed cell
+the exposed compartment
+the exposed individuals
+the eﬀective rate
+the fact
+the force
+the forecast and control methods
+the foundation
+the four closest cells
+the fraction
+the green dotted line
+the grid
+the growing
+the growing rate
+the growth
+the health
+the healthy individual
+the history
+the host population
+the humanity
+the hyperbolic function
+the hyperbolic tangent
+the i
+the i curve
+the i individuals
+the i number
+the illness
+the impact
+the inclusion
+the increase
+the incubation period
+the individuals
+the infected cell
+the infected cells
+the infected curve
+the infected initial condition
+the infected initial growth
+the infected number
+the infected population
+the infected populations
+the infected state
+the infection
+the infection contraction
+the infection rate
+the infectious agents
+the infectious period
+the infectious stage
+the inherent nature
+the initial condition
+the initial grow
+the initial growth
+the initial infected cells
+the initial position
+the initial time evolution
+the integration
+the interaction
+the interactions
+the investigation
+the inﬂuence
+the latent period
+the limit
+the limit t
+the local interaction
+the macroscopic description
+the main compartments
+the main models
+the mathematical description
+the mathematical framework
+the mathematical models
+the mathematical representation
+the model
+the modelling
+the modelling output
+the models
+the modern science
+the most appropriate method
+the most inﬂuential models
+the most useful tools
+the neighborhood
+the neighbors
+the next analyzed models
+the notation βi
+the number
+the ode
+the ode approach
+the ode formula- tion
+the ode formulation
+the ode growth rate
+the ode model
+the only diﬀerence
+the onset
+the outbreak
+the panel
+the panels
+the paper
+the parameter
+the parameter values
+the parameters
+the parameters values
+the pathology
+the peak
+the population
+the position
+the power-law
+the prediction
+the presence
+the previous descriptions
+the previous rules
+the probability
+the problem
+the product
+the proliferation dynamics
+the r state
+the rapid infection
+the rate
+the recovered individuals
+the recovery rate
+the red line
+the representation
+the respective infected curve
+the rest
+the restriction
+the results
+the rules
+the s
+the s and i compartments
+the s cell
+the same dynamics
+the same strategy
+the scope
+the second model
+the seir
+the seir model
+the set
+the shape
+the si
+the si model
+the sick individuals
+the similarities
+the simplest compartmental models
+the simulation
+the sir
+the sir model
+the snapshot
+the snapshots
+the solution
+the solutions
+the spa- tial evolution
+the space dimension
+the spatial and temporal dynamics
+the spatial and temporal evolution
+the spatial-temporal evolution
+the spread
+the spread dynamics
+the spread patterns
+the start
+the state transition rules
+the states
+the status
+the study
+the susceptible cell
+the susceptible cells
+the susceptible, red colour
+the system
+the temporal development
+the temporal evolution
+the time
+the time evolution
+the time interval
+the time step
+the total num- ber
+the total population
+the transition
+the transition rules
+the transmission
+the trends
+the unique characteristics
+the update rules
+the use
+the von neumann neighborhood
+the von neumann neighbourhood
+the whole grid
+the whole time
+the ﬁnal state
+the ﬁrst model
+the ﬁrst terms
+the ﬁtting
+the ﬂow
+their continuous and analytical approach
+their development
+their discrete approach
+their nearest neighbors
+their origins
+their own individuality
+their relevance
+their respective sections
+their results
+these cells
+these compartments
+these curves
+these method- ologies
+these models
+these parametric conﬁgurations
+these results
+these snapshots
+these successful results
+these techniques
+these two approaches
+this analysis
+this approach
+this combination
+this compartment
+this condition
+this constraint
+this curve
+this diﬀerence
+this function
+this model
+this paper
+this successful result
+this way
+this work
+three coupled diﬀerential equations
+three epidemiological models
+three odes systems
+transmis- sion
+transmission probability
+transmission rate
+transmission rates
+two distinct mathemat- ical approaches
+two diﬀerent techniques
+two diﬀerential equations
+various diseases
+various ﬁelds
+where n = s
+william hamer
+× m identical cells
+α =  ±
+α = 27 ±
+ξ =  ±
+φ = − ±
+†these authors
+− γi
+ﬂuid dynamics

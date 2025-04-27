@@ -1,0 +1,966 @@
+#params fid↓
+(0,1),t (cid:2)||ϵ − ϵϕ(vθ(y)t
+(a) enumeration-based diffuser classifier
+(c.f. table iii
+(cid:2)||ϵ − ϵθ(xt
+(cid:2)||ϵ − ϵϕ(v′ t
+(high recall
+(i.e., those
+(vocabulary lookup
+1) setup
+100 images
+100 objects
+12 ms
+19 v
+1some works
+2 17 18 function eval(v
+2 images
+2) comparison
+2) conditional branch
+2) optimization-based diffusion model inversion
+2) results
+200 different timesteps
+200 steps
+2000 images
+200k iterations
+2025 ieee
+21 ms
+256 + 1 embeddings
+256 × 256 resolution
+2: illustration
+3 fig
+363m parameters
+4 # optimization loop
+4 nvidia 3090 gpus
+4) influence
+4: visualization
+5 steps
+500 images
+500k iterations
+5: visualization
+6 table
+7 table ii
+8 fig
+8 ms
+8 nvidia a100 gpus
+9 ms
+9 table iv
+90ms   r101-fpn 29ms
+= arg min y
+[], corresponding embs
+[none] embeddings
+a abstract—diffusion models
+a batch size
+a bicycle
+a branch
+a c-way classification task
+a class-conditional layout encoder
+a class-conditional model
+a compet- itive average performance
+a deeper analysis
+a diffusion model
+a diffusion process
+a discriminative detection model
+a down- sampling factor
+a downsampling factor
+a fair comparison
+a family
+a feasible solution
+a feasible way
+a fixed 2000 steps
+a fixed length
+a fixed number
+a fixed order
+a fixed padding length
+a forward process
+a general evaluation metric
+a given image
+a given test image
+a gradient-based discrete optimization approach
+a group
+a label generation model
+a large optimization space
+a larger dataset
+a larger speedup ratio
+a learnable embedding layer
+a loop
+a lower accuracy
+a markov chain
+a markov chain structure
+a maximum
+a model
+a model inversion approach
+a model size
+a modified resnet-18
+a monitor
+a more advanced a100 gpu
+a more recent method
+a natural and proper way
+a non-enumeration-based approach
+a novel evaluation metric
+a number
+a nvidia 3090 gpu
+a person
+a potential novel solution
+a practical issue
+a prediction label
+a pretrained image-generation diffusion model
+a prior distribution model
+a purely generative- based approach
+a reasonable p(y) value
+a relatively lower prior probability
+a resolution
+a self-contained evaluation metric
+a sequence
+a set
+a significant computational cost
+a similar architecture
+a single a100 gpu
+a single conditional pixel
+a single nvidia 3090 gpu
+a single object
+a size
+a smaller image size
+a smaller subset
+a standard resnet-50
+a stronger discriminative ability
+a subset
+a test image
+a theoretical issue
+a to-be-optimized result
+a training dataset
+a transformer
+a transformer encoder
+a type
+a uniform distribution
+a uniform prior p(y
+a variational bound
+a variety
+a web-scale dataset
+a y
+a “diffusion classifier
+a ∼ 14× speedup
+a ∼ speedup ratio
+a. dive
+ablation studies
+about 3 days
+about 5 days
+about 80 seconds
+action recognition
+adamw optimizer
+additional discriminative heads
+additional training
+advanced purely discriminative methods
+advertising or pro- motional purposes
+alexnet resnet-18
+all images
+all other uses
+all possible predictions
+all potential detection labels
+all the results
+all these works
+an a100 gpu
+an adaptive optimization-step strategy
+an early stopping strategy
+an encoder mapping images
+an exception
+an ideal alternative
+an image
+an image resolution
+an image-generation model
+an increase
+an interesting phenomenon
+an object detector
+an optimization-based approach
+another challenge
+another smaller ldm
+any copyrighted component
+any current or future media
+any detection layout y.
+any prior models
+ap / acc detection classification
+architecture modification
+autoregressive models
+average precision
+b) results
+b. dive
+b. generative models
+b/16 swin-b 8 ms
+backward propagation
+balanced classification datasets
+basic discriminative detectors
+basic discriminative object detection baselines
+bayes’ rule
+best reconstruction performance
+better detection results
+better image realism
+better visualization
+both classification and detection tasks
+both components
+both decoupling classes
+both types
+bounding boxes
+box and class) sequence
+boxes ap      ap50 ap75
+c) decoupling classes
+chinese academy
+cid:2)||ϵ − ϵϕ(vθ(y)t
+class label
+class labels
+class-conditional models
+classification accuracy fluctuate
+clearer visualization
+coco dataset
+coco show
+coco validation set
+coco- stuff dataset
+common discriminative detectors
+competitive performance
+competitive results
+complex discriminative tasks
+computing technology
+conditional diffusion model evaluation following
+conditional diffusion models
+conditional image generation models
+conditioning inputs
+continuous optimization
+controllable image synthesis
+correct classes
+corresponding author
+corresponding convergence optimization steps
+corresponding models
+corresponding vocabularies
+cosine distance
+countless potential detection labels
+cross- attention layers
+data distribution
+dataset and evaluation protocol
+deeper backbones
+dense tasks
+depth estimation
+detection datasets
+detection labels
+detection performance
+detr baselines
+detr models
+diffdet baselines
+diffdet models
+differ- ent evaluation metrics
+different conditional diffusion models
+different gpus
+different images
+different iterations
+different methods’ behavior
+different tasks
+different timesteps
+diffu- sion classifier
+diffusion classifier
+diffusion classifier dive
+diffusion detectors
+diffusion feat
+diffusion feature
+diffusion mod- els
+diffusion model
+diffusion models
+diffusiondet (diffdet s
+dis- criminative heads
+dis- criminative tasks
+discrete autoencoders
+discrete optimization
+discrimi- native tasks
+discrimina- tive labels
+discriminative ability
+discriminative approaches
+discriminative classi- fiers
+discriminative detectors
+discriminative image features
+discriminative methods
+discriminative models
+discriminative object detectors
+discriminative predictions
+discriminative task
+discriminative tasks
+discriminative tasks yinqi li
+disregard p(y
+distribution similarity
+dive aligns
+dive default
+dive detection results
+dive metrics
+dive’s optimization process
+each bounding box
+each class
+each class’s posterior
+each image
+each possible class
+each potential previous work
+each step
+each trial
+each update
+effective image repre- sentations
+eforϕ =
+eforϕ return
+embedding vectors
+embedding vocabularies
+embs[argmin(monitor values
+empirical results
+encoder-based approaches
+enumeration-based generative clas- sifiers
+equivalent positions
+evenly spaced timesteps
+exact reconstruction
+exper- iments
+external models
+extracting representations
+fair comparisons
+faster in- versions
+faster r-cnn
+feature pyra- mid network
+final result
+fixed noises
+frequency output
+future research
+gen- erative adversarial networks
+generated images
+generative classifiers
+generative methods
+generative models
+generative-discriminative hybrid methods
+generative-discriminative-mixed methods
+gradient accumulation
+gradientdenoising network
+greater generative diversity
+h. chang
+high dive
+high precision
+high-fidelity contents
+higher precision
+hong chang
+i. introduction r ecently
+i.e., object layouts
+illegal boxes
+illegal objects
+image and video genera- tion
+image classification
+image classification task
+image editing
+image generation
+image generation diffusion models
+image layouts
+image-text-matching tasks
+imagenet-1k’s label distribution
+improvement works
+inception dis- tance
+inception score
+increasing interest
+index terms
+ing accuracy
+instance segmentation
+integer class indices
+integer precision
+intelligent information processing
+invert conditional diffusion models
+inverting conditional diffusion models
+inverting diffusion models
+its effectiveness
+its implementation
+its importance
+its influence
+its size
+its speed
+its strengths
+key laboratory
+l #
+larger and fewer objects
+last stage
+layout emb
+layout-conditional image generation model
+layout-conditional models
+ldm-8 h       discriminative methods
+ldm-8-s ldm-8
+ldm-8’s coco
+learnable discriminative heads
+learnable vocabularies
+likelihood-based generative models
+longer training schedules
+manipu- lating
+many false positives
+many other cases
+many redundant objects
+max θ
+maximum optimization
+method dive
+model parameters
+modern architectures
+more accurate use
+more complex dense tasks
+more complex discriminative tasks
+more steps
+most other metrics
+ms generative methods
+multiple intersection
+namely ϵθ(xt
+nearest neighbors
+nearly the same accuracy
+networknearest emb
+new collective works
+new data
+new images
+new words
+new-word semantics
+no other reasons
+noise ϵ
+noised layout embeddings
+non-likelihood-based models
+none and illegal boxes
+none boxes
+none)embedding mapping
+none- value-contained objects
+none-value-contained and illegal boxes
+nonenoneboxclassvocabulariesembedding mapping
+object coordinates
+object detection
+one thing
+optimization steps
+optimization-based approaches
+optimized architectures
+other designs
+other diffusion-model-based methods
+other evaluation metrics
+other generative baselines
+other generative-discriminative-mixed methods
+other ldm-8-based meth- ods
+other metrics
+other more complex discriminative tasks
+other numbers
+other widely used metrics
+other works
+our approach
+our comparisons
+our contributions
+our diffusion model inversion method
+our discriminative metric align
+our dive
+our embeddings
+our formal experiments
+our knowledge
+our learnable param- eters
+our learnable parameters
+our limited resources
+our method
+our optimization-based method
+our preliminary experiments
+our proposed dive
+our purely generative method
+our situation
+over 200 epochs
+overall ap
+performance and efficiency gaps
+personal use
+photorealistic images
+poorer aps and apm values
+positional inputs
+possible bounding boxes
+possible labels
+posterior maximization
+potential directions
+preci- sion/recall
+predefined possible class
+predic- tion
+predictionw/o in-voc
+preprint 1 dive
+pretrained diffusion models
+pretrained diffusion transformer
+pretrained frozen generative diffusion models
+pretrained frozen image generation models
+pretrained generative models
+pretrained image generation models
+pretrained image-generation models
+previous diffusion classifier method
+previous diffusion-based classification methods
+prior layout model
+prior model
+prior modeldivegenerated image
+prior modeldiveground truthsynthetic dataillegal boxes
+prior modeling
+purely discrimina- tive methods
+purely discriminative detectors
+purely generation- based image classification
+purely pretrained generative models
+r. hou
+r50 faster r-cnn
+rare layouts
+real and generated images
+real images
+recently, – invert diffusion models
+relatively lower reproduced results
+remarkable progress
+repeated experiments
+repurpos- ing
+resnet-50 resnext101 vit-l/32 vit
+richer prior knowledge
+robust diffusion classifiers
+ruibing hou
+s. shan
+sd v
+section iii
+section iii-b3
+section iv
+section iv-a
+section iv-b
+section iv-b4
+segmentation-related tasks
+semantic seg- mentation
+semantic segmentation
+sequence-length learnable positional encodings
+sequencelayout sequence
+several times
+shiguang shan
+significant ap gains
+single thresholds
+small and medium objects
+smaller objects
+some additional dropped objects
+some im- ages
+some objects
+some other works
+some recent methods
+some regularization terms
+some works
+some “easier” test images
+specific architectures
+stable diffusion
+stronger detectors
+such a model
+such a study
+such a uniform prior distribution
+such an inversion approach
+such models
+superior attention
+syn- thetic data
+synthetic data
+synthetic data diffusion feature
+synthetic training data
+table ii
+table iii
+table iv
+table v
+table vi
+table vi(a
+task gpu time
+task labels
+task performances
+test image x
+test imageclass-conditional diffusion modelconditional
+test images
+text-conditional mod- els
+textual inversion
+that dataset
+that image
+the 3× schedule
+the ablation studies
+the ablation study’s experimental scale
+the above hypothesis
+the above issue
+the accuracy
+the added noise sequence
+the advantage
+the amount
+the architecture
+the assumption
+the attention maps
+the average convergence step
+the backbone
+the background
+the base- line design
+the basic discriminative detector
+the bayes
+the bayes’ rule
+the bottom
+the bounding box vocabulary
+the case
+the challenging object detection task
+the classes
+the classical way
+the classification task
+the clean image x0
+the coco object detection dataset1
+the combinations
+the commonly used imagenet-pretrained inceptionv3
+the comparison
+the complex object detection task
+the compressed modeling space
+the computational cost
+the con- text
+the concept
+the conclusion
+the conditional branch
+the conditional diffusion
+the conditional diffusion model
+the conditional encoding branch
+the conditional input
+the conditional input space
+the conditional likelihood pθ(x|y
+the conditional log-likelihood
+the conditional model
+the conditioning input
+the content
+the context
+the contribution
+the convergence step
+the convergence steps
+the convolu- tional unet architecture
+the corresponding class c
+the corresponding distributions
+the corresponding visualization results
+the cost
+the countless possible predictions
+the data
+the data distribution
+the default
+the default metric
+the definitions
+the denoising network
+the detection experiments
+the detection performance
+the detection task
+the detection visualization results
+the differences
+the diffusion classier
+the diffusion classifier
+the diffusion feature baseline
+the diffusion feature method
+the diffusion model
+the diffusion models
+the diffusion process
+the discrete optimization trick
+the discrete output space
+the discriminative
+the discriminative ability
+the discriminative capability
+the discriminative models
+the discriminative task arg
+the early stopping method
+the effectiveness
+the efficacy
+the embedded layout
+the embedding mapping pro- cess
+the embedding space
+the encoding
+the encoding process
+the enumeration method
+the enumeration-based method
+the even interval
+the expectations
+the exploration steps
+the faster r-cnn
+the feature extractor
+the feature-extraction module
+the features
+the final objective
+the final prediction
+the final result
+the findings
+the first problem
+the first work
+the following challenges
+the following experiments
+the following questions
+the following three aspects
+the forward process
+the framework
+the frozen pretrained vocabularies
+the frozen vocabularies
+the full content
+the full inverted sequence
+the full inverted sequencenone boxes
+the generation process
+the generative model
+the given image
+the given images
+the gpu memory limit
+the gradient
+the gradient method
+the gradients
+the heavy prediction enumeration process
+the help
+the high cost
+the highest posterior value
+the image
+the image classification task
+the imagenet real dataset
+the impact
+the implementation
+the in-vocabulary discrete optimization trick
+the indices
+the influences
+the initial noise
+the initial noise representation
+the input
+the input image
+the input layout sequence
+the internal discriminative ability
+the inversion
+the inversion paradigm
+the inversion process
+the inverted diffusion model
+the inverted noise representations
+the inverted sequence
+the inverted sequences
+the inverted texts
+the label space
+the labels
+the last line
+the last line “cow
+the latent diffusion model
+the latent space
+the latter
+the layout encoder
+the layout-conditional model
+the learnable embeddings v
+the learned model
+the learning rate
+the left part
+the likelihood
+the literature
+the loss value
+the loss values
+the losses
+the main aim
+the main denoising network
+the main focus
+the maximum
+the maximum optimization
+the maximum speedup ratio
+the model
+the model inversion paradigm
+the model parameters
+the modeled data distribution
+the monitor
+the monitor value
+the more complex detection task
+the nearest embeddings
+the nearest neighbor
+the network
+the networks
+the next paragraph
+the noise space
+the noises
+the noisy image
+the number
+the object detection
+the object detection results
+the object detection task
+the objective
+the objects
+the official code
+the one
+the optimization
+the optimization process
+the optimization step
+the optimization-based approach
+the optimized sequence
+the optimized v
+the original learn- able parameters
+the other hand
+the overall computational cost
+the overall diffusion model
+the overall framework
+the overall performance
+the paper
+the paradigm
+the parameters
+the perspective
+the posterior objective
+the prediction
+the pretrained conditional diffusion model
+the pretrained conditional diffusion models
+the pretrained conditional model
+the pretrained diffusion model
+the pretrained dit-xl/2 network
+the pretrained model
+the pretrained vocabularies
+the previous choices
+the previous detection section
+the previous diffusion-based method
+the previous enumeration-based method
+the previous subsection
+the prior label distribution
+the prior layout distribution
+the prior layout model
+the prior model
+the prior modeling model
+the prior p(y
+the problem
+the proposal boxes space
+the proposed approach
+the proposed components
+the proposed diffusion model inversion
+the proposed optimization-based approach
+the proposed optimization-based method
+the pseudo
+the purpose
+the qualitative results
+the quantitative results
+the reason
+the reconstruction goal
+the reconstruction loss
+the reconstruction purpose
+the relationships
+the replacement
+the reported dive results
+the research community
+the resolution
+the result
+the results
+the reverse process
+the right
+the same box layouts
+the same optimization step
+the same pretrained diffusion model
+the sd backbone
+the second label
+the sequence
+the sequences
+the setup
+the speed
+the speeds
+the standard detection task
+the standard object detection task
+the steps
+the still high compute cost
+the stop-gradient operator
+the superior content generation capacity
+the synthetic images
+the synthetic training
+the task label
+the test
+the test dataset
+the test image
+the test set
+the trained diffusion models
+the trained generative model
+the trained ldm
+the trained prior model
+the training
+the training data distri- bution
+the training dataset
+the training framework
+the training loss
+the training procedure
+the transformer
+the transformer architecture
+the transformer encoder
+the two approaches
+the two diffusion models
+the two models
+the two proposed components
+the typical setting
+the underlying prior distribution
+the vocabularies
+the vocabulary
+the v∗.
+the whole framework
+the whole network
+the “w/o prior model” method
+their ability
+their backend
+their code
+their discriminative ability
+their function
+their goals
+their locations
+their noise and timestep values
+their original aspect ratios
+their solution
+these ablations
+these baselines
+these box and class embeddings
+these detectors
+these different timesteps
+these discrim- inative detectors
+these generative methods
+these learnable parameters
+these methods
+these models
+these redundancies
+these redundant objects
+these two families
+these undetected objects
+these values
+these works
+these “new words
+this ablation
+this approach
+this capability
+this case
+this design
+this discrete optimization trick
+this end
+this idea
+this issue
+this material
+this method
+this method diffusion model inversion
+this observation
+this optimization component
+this paper
+this paradigm
+this phenomenon
+this prior model
+this process
+this remarkable generation ability
+this result
+this section
+this strategy
+this subsection
+this way
+this work
+timesteps t
+trained layout-conditional image generation model
+training costs
+training data
+training samples
+transformer-based architectures
+true positive bounding box predictions
+truly fair comparisons
+two hyper
+two prior distribution models
+typical works
+un-decoupling) method
+unet architecture
+unusual aspect ratios
+v t ∼ t
+v)||2 update v
+val losses
+various backbones
+various generative tasks
+varying numbers
+vert image-generation diffusion models
+video generation
+what boxes
+whether the discriminative ability
+x. chen
+xilin chen
+y. li
+y∗ = nnindex(v∗
+zero-shot) image classifiers
+||ϵforθ − ϵθ(xt
+· t
+θ eϵ∼n
+ϵforθ ∼ n
+ϵforϕ ∼ n
+“a person
+“discriminative models
+“harder” ones
+…nonenoneboxclassvocabulariesdenoising network
+→ v
+− v
+− ϵϕ(vt
+∼ 2× speedup
+∼ 2× speedup ratio
+∼ n
+∼220 epochs
+∼270 epochs
+∼37 epochs
+≈ min ϕ eϵ∼n

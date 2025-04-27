@@ -1,0 +1,511 @@
+(1 − αt
+(a) effect
+(first column
+(no refinement
+(observation a.
+(pd l
+(pd pd t t
+(pd t
+(second column
+) lidpm†
+1 inria
+1 − ¯αt
+1 − βt xt−1
+1 − γ) εθ
+1. formulation
+10 scans
+1000 points
+180k points
+180k-point clouds
+2, bottom
+2. point diffusion methods
+20 sampling steps
+20 steps
+3 ligm, enpc
+3. effect
+3. v. conclusion
+3d space
+40 epochs
+5 2 0 2 r
+5 cm
+5. pure generation
+50 m.
+<10k pts
+= pd
+>100k pts
+a abstract— training diffusion models
+a basis
+a batch size
+a benchmark
+a broad field
+a byproduct
+a careful formulation
+a complete point cloud
+a constant decay
+a custom diffusion
+a data point
+a denoising problem
+a dense
+a dense point cloud pd
+a diffusion model
+a flat disc
+a forward process
+a large body
+a large enough t
+a latent scene encoding
+a lidar scan
+a local denoising
+a local diffusion
+a local diffusion process
+a loss
+a major limitation
+a markov chain
+a mean and standard deviation
+a network
+a new method
+a noisy estimate
+a noisy version
+a novel “local diffusion” formulation
+a particular case
+a point cloud
+a range
+a reverse process
+a signed distance field
+a simple and efficient formulation
+a single scan
+a single sparse lidar scan
+a slight performance drop
+a small subset
+a sparse cnn
+a sparse point cloud ps
+a starting point
+a starting point pd t
+a straight, crossing
+a sweet spot
+a vanilla
+a variance schedule
+a well-chosen starting point
+a workaround
+a zero-centered distribution
+a. comparison
+a. formulation
+a. preliminaries
+accurate distances
+acquisition patterns
+action recognition
+additional regularization
+aggregated scans
+all baselines
+all batch normalization layers
+all metrics
+all the above methods
+all the gaps
+all the others
+an additional regularization term
+an attractive solution
+an equivalent cd
+an extension
+an implicit function
+an intermediate step
+another signal
+any additional regularization
+arbitrary point clouds
+arbitrary positions
+arbitrary shapes
+augment datasets
+automotive lidar scans
+automotive scenes
+autonomous driving
+b. hyperparameter
+b. limitations
+based surface reconstruction algorithms
+baselines, metrics and ground-truth data
+batch normalization layers
+batchnorm instancenorm fig
+beam count
+better results
+both completion
+c. third
+classifier-free guidance
+cloud completion
+cloud ps
+complete method
+continuous space
+corentin sautier
+custom strategies
+d. preventing instabilities
+data generation
+ddpm formulation
+dense input point clouds
+dense point clouds
+denser completions
+depth estimation
+depth or lidar data
+different scan patterns
+different starting points t0
+different voxel sizes
+diffusion frameworks
+diffusion models
+diffusion models ddpms
+diffusion-based methods
+diffusionat step
+diffusionat step tnormalnoisedensepcsparsepcestimatednoise
+discrete time steps
+domain adaptation
+domain generalization
+downstream tasks
+dpm-solver steps
+each instance
+each step
+entirely new scenes
+ex0,ε ∥ε − εθ
+existing methods
+existing point-level
+far ranges
+faster eval- uations
+few methods
+fine-grained details
+fixed bounds
+form data
+forward process
+gaussian noise
+generationdense cnnupdate pc t
+generative models
+global diffusion
+global point denoising
+good results
+grants ad011014484r1
+ground-truth point clouds
+hpc resources
+i. introduction lidars
+i.e., moving points
+image or video synthesis
+implementation details
+instance normalization
+instance normalization layers
+instance segmentation
+its standard deviation
+its starting point
+its use
+iv-d. iv
+jsd 3d
+jsd bev
+k duplications
+k times
+k-duplicating ps
+key sensors
+large holes
+large point clouds
+large scenes
+large- scale lidar point clouds
+large-scale point clouds
+large-scale urban scenes
+less preserved (lower precision
+lidar point clouds
+lidar points
+lidar scans
+lidar scene completion tetiana
+lidiff authors
+lidiff lidpm fig
+lidiff satisfies t
+lidiff† lidpm†
+lidiff† local diffusion
+lidpm (bottom
+lidpm exhibit less spurious structures
+lightweight 2d networks
+local denoising paradigm
+local diffusion
+local diffusion scene-level point diffusion
+local point denoising
+local point dif- fusion
+local point diffusion
+low recall
+major approximations
+method lidpm
+mickael chen
+missing structures
+mohammad fahes
+more realistic and accurate completions
+most methods
+moving objects
+new sensors
+no refinement
+no weight
+noisy point cloud
+non-normalized point clouds
+object completion
+object detection
+observation b.
+observation c.
+occupancy iou
+only one approximation
+our approach
+our choices
+our concerns
+our contributions
+our diffusion model
+our diffusion process
+our formulation
+our learned global diffusion model
+our lidpm† fig
+our main objective
+our method
+our method’s iou
+our network
+our results
+our simpler formulation
+our sole approximation
+our work
+outdoor lidar point clouds
+outdoor scenes
+particular, direct diffusion
+pd process
+pd t
+perception algorithms
+point clouds
+point diffusion
+point offsets
+point-based scene completion
+pointwise scene completion
+post-processing (refinement
+prior work
+probabilistic models
+promising results
+radius  m
+raoul de charette1
+reduced evaluation set
+regularization losses
+related work a. diffusion
+relevant design choices
+reverse process
+scanned points
+scene completion
+scene level
+scene occlusions
+scene-level generation
+scene-level surface reconstruction
+semantic segmentation
+sensor limitations
+sensor models
+separate training
+several ways
+size  m
+small shapes
+some methods
+some works
+sparse lidar scans ps
+speech generation
+stabilitysingle training forgeneration
+subsequent works
+surface- or point- oriented normals
+t = t
+t − pd
+t ∼ n
+t ≤ t
+t0 < t
+that end
+that ps
+that vanilla
+the 3d space
+the above local point diffusion
+the achievable speedup
+the actual scene completion
+the all-zero point cloud
+the appendix
+the approximate reverse denoising process
+the approximations
+the architecture
+the authors
+the backbone
+the batch statistics
+the best results
+the car
+the center
+the chamfer distance
+the common practice
+the complete scene
+the completed scene
+the conclusion
+the conditioning
+the cost
+the current practice
+the data preprocessing
+the ddpm formulation
+the denoised reconstruction
+the denoising process
+the dense ground-truth point cloud
+the details
+the different behaviors
+the different scales
+the difficulty
+the diffusion
+the diffusion output
+the diffusion parameters
+the diffusion process
+the diffusion t0
+the door
+the dpm-solver
+the emergence
+the endpoint
+the entries
+the expected values
+the fact
+the factor
+the features
+the field
+the following formula
+the formulation
+the forward diffusion process
+the forward process
+the gap
+the gaussian noise
+the general ddpm paradigm
+the generated point cloud
+the generation
+the ground height
+the ground truth
+the image space
+the input
+the iou
+the justification
+the latest works
+the level
+the lidiff authors
+the local (re-)formulation
+the local diffusion formulation
+the local point denoising methods
+the local table
+the main advantages
+the major properties
+the marching cubes algorithm
+the mean and standard deviation
+the metric space
+the minkunet εθ
+the network
+the noise
+the noise level
+the number
+the object level
+the optimization objective
+the original data distribution
+the original ddpm
+the original ddpm formulation
+the original diffusion process
+the original structures
+the other diffusion-only methods
+the output
+the outputs
+the past years
+the point
+the point cloud
+the point cloud axes
+the point clouds
+the point diffusion process
+the point level
+the possibility
+the practices
+the pre- dicted local noise
+the predicted noise
+the problem
+the project page
+the proofreading and valuable feedback
+the provided ego-
+the qualitative results
+the quality
+the recall
+the refinement network
+the refinement step
+the regularization loss
+the reliance
+the results
+the reverse denoising
+the reverse denoising process
+the reverse denoising process satisfies
+the reverse diffusion process
+the running statistics
+the same formulation
+the same order
+the scale
+the scale difference
+the scene completion task
+the scene level
+the scenes
+the sizes
+the sparse input ps
+the sparse point
+the starting point
+the starting point cloud
+the statistics
+the step
+the task
+the time
+the transferability
+the update
+the validation sequence
+the vanilla ‘scene-level’ diffusion
+the vehicle environment
+the voxel
+the voxel level
+the voxel resolution
+the voxel size
+the work
+their use
+these domain gaps
+these expected values
+these gaps
+these limitations
+these methods
+these two lines
+these two perspectives
+these works
+this approach
+this architecture
+this behavior
+this diffusion process
+this formula
+this forward local diffusion process
+this issue
+this local formulation
+this observation
+this paper
+this problem
+this process
+this section
+this study
+this task
+this work
+tinitializeupdate pc t
+tsparsepcsparse cnnrescale noiset
+turn shape
+typically a lidar scan
+unconditional generation
+univ gustave eiffel
+unnecessary approximations
+validation set
+vanilla ddpm
+vanilla ddpms
+various generative tasks
+very dense point clouds
+very far ranges
+visible areas
+voxel occupancy
+voxel-like discretization
+where z ∼ n
+white noise
+whose results
+wide gaps
+widely different point clouds
+xt ∼ n
+z ∼ n
+zero mean
+zt ∼ n
+¯αt x0
+˜pd t0
+βt z
+γ εθ
+εt ∼ n
+λ lreg(εθ
+→ t-1==forward diffusionat step
+− xt−1
+√ 1 − ¯αt
+√ αt 1 −

@@ -1,0 +1,653 @@
+(b) camera
+(c3) e.g. static scenes
+(m)↓ rpe rot
+(m)↓ rpe tr
+, classical sfm
+, interactions
+1,000 videos
+1. cartoons
+1. semantic segmentation
+10 pixels
+100,131 internet videos
+100.             varied appearance
+100k videos
+10k correspondences
+10k image pairs
+10k precise correspondences
+137k dynamic videos
+2. object interaction segmentation
+2d tracks
+3. focal length
+3. motion segmentation
+30 px↑
+36 sequences
+3d assets
+4 input video
+4 to 10 seconds
+40k diverse videos
+4d scenes
+5. optical flow
+52 videos
+5px↑ %
+6. point tracking
+720p %
+720p baselines
+720p images
+[27, 37] and turntable-style videos
+[59, 60] a series
+a carefully combined set
+a carefully designed pipeline
+a cartoon
+a challenging problem
+a challenging, photorealistic benchmark
+a classifier
+a clear frame
+a combination
+a considerable margin
+a consistent se- quence
+a dataset
+a dif- ferent approach
+a dynamic mask
+a dynamic pose
+a filtering pipeline
+a frame
+a generalist
+a generalist vlm
+a good benchmark
+a grid
+a large boost
+a large collection
+a large-scale dataset
+a large-scale video dataset
+a larger number
+a level
+a low recall
+a manner
+a mix
+a moving car
+a new method
+a photorealistic synthetic rendering dataset
+a pipeline
+a result
+a sim2real gap
+a single tracklet
+a slid- ing window
+a sliding window
+a standalone approach
+a static scene
+a statistical analysis
+a strict final filter
+a substantial number
+a sufficient number
+a threshold
+a va- riety
+a variety
+a vlm
+a wide range
+a wider range
+abla- tion studies
+abrupt disappearance
+abrupt shot changes
+abstract annotating camera
+accurate masks
+accurate poses
+action recognition
+all 36 videos
+all 90 estimable videos
+all alternatives
+all base- lines
+all frames
+all methods
+all other methods
+all pairs
+all sequences
+all three classes
+all videos
+ambiguous or blurry frame
+ambiguous reference frames
+an ambiguous reference
+an annotated correspondence
+an entire sequence
+an input video
+annotating dynamic internet videos
+annotating large-scale dynamic internet video
+another as- signing scores
+any recall
+ap- propriate video length
+apparent dynamic object sizes
+applica- tions
+as much as 90%
+at least one se- quence
+average trajectory error
+better trajectory error
+binary outputs
+blurred background
+blurry background
+both cases
+both challenges
+bottom: monst3r
+bundle adjustment
+cam- era data
+cam- era information
+camera annotations
+camera estimation
+camera information
+camera pose
+camera pose estimation
+camera poses
+camera-controlled dynamic videos
+camera-controlled video generation methods
+candidate video selection
+carefully designed video
+chal- lenging
+challenging indoor and outdoor scenes
+circu- lar camera motion
+classical sfm
+coarse accuracy
+collection details
+colmap struggle
+common classes
+common dynamic classes
+common nouns
+common nounsmanpersonwomanfrontcamerapeopleroomshirttablegroupfoodhandkitchencarstreetfrequency
+common reasons
+complementary dynamic masks
+computer screen recordings
+computer vision
+concurrent work datap-sfm
+concurrent work tracksto4d predicts
+controlled exper- iments
+corre- spondences
+correspondence estimation
+corresponding 3d assets
+data curation
+dataset analysis
+dataset curation dynpose-100k
+dataset size
+dataset statistics
+dence estimation
+dence tracking
+dense view- points
+dense viewpoints
+dense, long-term correspondences
+denser correspondences
+depth estimation
+desirable attributes
+di- verse dynamic internet content
+di- verse internet video
+direct comparison
+direct evaluation
+diverse content
+diverse cues
+diverse dynamic apparent size
+diverse dynamic object size
+diverse environments
+diverse internet video
+diverse internet video datasets
+diverse settings
+downstream applications
+downstream tasks
+dust3r struggle
+dy- namic internet videos
+dynamic camera
+dynamic camera pose
+dynamic camera pose estimation
+dynamic camera poses
+dynamic content
+dynamic correspondences
+dynamic in- ternet video
+dynamic internet video
+dynamic internet videos
+dynamic masking
+dynamic methods
+dynamic ob- jects
+dynamic object
+dynamic object size
+dynamic objects
+dynamic pose
+dynamic pose estimation
+dynamic re- gions
+dynamic scenes
+dynamic settings
+dynamic sizes
+dynamic video filtering
+dynamic videos
+dynpose-100k con-
+dynpose-100k videos
+dynpose-100k. how-
+dynpose-100k’s operating thresholds
+e.g. cartoon
+e.g. content
+e.g. diverse content
+e.g. humans
+e.g. scenes
+e.g. static scene
+e.g. training
+e.g. turntable-style captures
+each component
+each corresponding task
+each example
+each frame
+each frame com- bination
+each pair
+each step
+each video
+easy sequences
+efficient processing
+ego- centric videos
+ego- motion
+eight questions
+en- gineered dynamic assets
+enabling pose evaluation
+estimable camera poses
+estimable videos
+estimation algorithm
+estimation challeng- ing
+estimation pipeline
+estimation pipelines
+estimation videos
+evalu- ation
+excessively large predicted mask sizes
+exciting new possibilities
+existing and alternative filtering methods
+existing diverse datasets
+expert annotators
+extended reality appli- cations
+extremely sta- ble tracks
+far higher precision
+fewer frames
+fewer videos
+filtering evaluation
+filtering performance
+finally the vlm
+fisheye captures
+flowing water
+frame pairs
+frame rate
+frequent nouns
+full details
+general vlm
+generative models
+global bundle adjustment
+glue match
+gold standards
+gpt-4o mini
+grid-based point
+ground truth
+ground truth camera
+ground truth camera pose
+ground truth camera poses
+ground truth pose
+ground-truth camera data
+hand-collected videos
+held-out 1k video panda-test set
+high dynamics
+high mean error
+high peak sequential optical flow
+high precision
+high predicted distortion
+high predicted focal length variance
+high sampson error
+high-quality camera information
+high-quality camera poses
+high-quality synthetic dataset lightspeed
+human labels
+human manipulation
+i.e. not cartoons
+identity rota- tions
+ily edited processed content
+imitation learning
+inaccurate videos
+individual filters
+induc- ing dense correspondences
+instance segmentation
+interaction classifier hands23
+internet video
+internet video analysis
+internet videos
+introduction our contributions
+is- sues
+its original form
+its precision
+large amounts
+large datasets
+large dynamic objects
+large dynamic regions
+large-scale and di- verse
+large-scale training
+learned methods
+less dense dynamics
+less than 80%
+light- speed
+limited dynamics
+lit- tle ego-motion
+long focal length
+long focal lengths
+long-term correspondences
+long-term track-
+longer video
+loop closure
+low mean sequential flow
+low quality
+low scores
+low scoring videos
+low-quality or non-real content
+lower mean error
+m panda-70m videos
+m videos
+m)↓ rpe tr
+many challenging sequences
+many more videos
+many overlapping views
+many prob- lems
+many videos
+mary issues
+mask dynamics
+mask propagation
+masking+classical sfm
+mean error
+mean reprojection error
+mean size
+michigan2 nvidia1 tsung-yi
+moderate errors
+more frames
+more robust global bundle adjustment
+more videos
+most existing datasets
+most internet videos
+most videos
+motion masking
+moving cameras
+multiple cameras
+multiple frames yields
+nearly the entire frame
+necessary videos
+neither the camera
+night lighting
+no baseline
+no such match
+non-perspective distortion
+non-static tracks
+normalized 720p resolution
+not realquality
+nvidia racer rtx
+ob- jects
+object detection
+one line
+only 9%
+only a few dynamic frames
+only iden
+only small amounts
+optical flow
+other complex dynamics
+other problems
+our analysis
+our approach
+our collection pipeline
+our evaluation approach
+our fil- tering pipeline
+our filtering
+our filtering method
+our filtering pipeline
+our general pipeline
+our main metrics
+our method
+our objective
+our primary evaluation metrics
+our primary point
+our sfm reconstructed points
+outdoor pov walking
+outperforming baseline methods
+overall performance
+paired correspondences
+pairwise estimation
+panda-70m dataset
+panda-70m’s captions
+panda-test dataset statistics
+panda-test next
+panda-test our goal
+parent sizes
+perfor- mance
+person views
+perspective distortion
+pet turntable videos
+photorealistic renderings
+point grids
+point tracking
+point trackingdynamic maskingglobal bundle
+pose annotation
+pose estimation
+pose estimation approach
+pose prediction
+pose sequence
+post-edited text
+pr curves
+preci- sion
+precise object boundaries
+predicted flow
+predicted point tracks
+predicted relative camera pose
+predicted trajectories
+previous windows
+prior work
+propagated optical flow
+random uniform translations
+rang- ing
+rea- sons
+real data
+real videos
+real-world and quality video
+real-world video
+realistic simulation environments
+realistic video generation
+recent work
+recent works
+reg.↑ ate
+registered frames
+related work
+relative error
+relative pose error
+reliable correspondences
+reliable pose esti- mation
+reliable pose estimation
+representative internet video datasets
+reprojec- tion error
+reprojection error
+restricted domains
+resulting videos
+richer data
+s. fisheye
+sample videos
+sampson error
+scene dynamics
+self-driving videos
+semantic classes
+semantic segmentation
+sequential frames
+several communities
+several important char- acteristics
+several key attributes
+several rc cars
+several seconds
+severe zoom-in or zoom-out effects
+sfm. synthetic datasets
+short videos
+shorter videos
+shot change
+significant challenges
+significant constraints
+similar diversity
+similar trends
+sliding window tracking
+small dynamics
+small size
+smaller apparent dynamic objects
+smaller-scale datasets
+smooth and accurate trajectories
+smooth masks
+smooth sequences
+solid ■
+specialist filters
+specialist models
+specialized experts
+specialized models
+specific actions
+specific criteria
+specific set- tings
+sports equipment
+standard sfm method colmap
+state-of- the-art methods
+static cameras
+static corre- spondences
+static correspon- dence
+static correspon- dences
+static correspondences
+static methods
+static methods droid-slam
+static scenes
+static settings
+static tracking
+static videos
+stereo fisheye
+stronger 2d tracking bootstap
+subsequently defined data filtering steps
+substantial camera motion
+substantial post
+such a dataset
+such setups
+such videos
+sufficient quality
+sufficient static correspondences
+suit- able dynamic video
+suitable target videos
+suitable videos
+synthetic data
+synthetic flyingthings3d
+target videos
+targeted video length
+task-specific and generalist models
+task-specific models
+tate correspondences
+tem- porally subsampled frames
+temporal information
+test precision
+the 90 videos
+the 90-video subset
+the background
+the cam- era focal length
+the camera estimation algorithm
+the cameras
+the case
+the central challenges
+the challenges
+the characteristics
+the collected data
+the con- straints
+the corre- spondence
+the corresponding cam- era
+the criteria
+the curated dataset dynpose-100k
+the dataset
+the dataset size
+the datasets
+the distort filter
+the distribution
+the diverse internet video dataset
+the effectiveness
+the epipolar line
+the extended tracking duration
+the fact
+the filtering process
+the full set
+the fundamental matrix
+the generalist
+the high cost
+the human-labeled points
+the identity
+the lack
+the largest alternatives
+the latest point
+the latest techniques
+the majority
+the most videos
+the num- ber
+the other hand
+the pose estimation efficacy
+the potential
+the predicted poses
+the process
+the re- cent vision-language models
+the real world
+the remaining static tracks
+the requirement
+the resulting dataset
+the same point
+the same size
+the scene
+the square root
+the squared dis- tance
+the state
+the static scene
+the subset
+the synthetic data
+the threshold
+the tracklet
+the underlying static scene
+the vast majority
+the video
+the videos
+the vlm
+their combined use
+their large scale
+these 90 videos
+these cases
+these challenges
+these matches
+these models
+these setups
+these short clips
+these specialized models
+these three criteria
+this approach
+this data
+this dataset
+this dynamic setting
+this end
+this linguistic variety
+this masks
+this paper
+this purpose
+this section
+this work
+three criteria
+tifies common reasons
+top: dynamic methods
+tr. if fail) 8 videos
+tracking method
+trajectory alignment
+trajectory error
+trivial linear trajectory
+two challenging problems
+two pri-
+two versions
+typically <500 videos
+unique image pairs
+unlabeled dynamic internet videos
+unsuitable videos
+var- ied subjects
+varied appearance
+varied clip lengths
+various challenging objects
+various downstream applications
+various issues
+varying appearances
+varying lighting
+very long focal length
+video content
+video length
+video lengths
+video rejection
+video suit- ability
+view synthesis
+window fashion
+zoom effects

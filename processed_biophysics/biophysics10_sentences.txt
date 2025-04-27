@@ -1,0 +1,340 @@
+5 2 0 2 r p A 1 2 ] t f o s .
+t a m - d n o c [ 1 v 7 0 1 5 1 . 4 0 5 2 : v i X r a Learning via mechanosensitivity and activity in cytoskeletal networks Deb S. Banerjee,1 Martin J. Falk,1, 2 Margaret L. Gardel,1, 2, 3, 4 Aleksandra M. Walczak,5, 1, 2 Thierry Mora,5, 1, 2 and Suriyanarayanan Vaikuntanathan†1, 6 1James Franck Institute, University of Chicago, Chicago, IL 60637 2Department of Physics, University of Chicago, Chicago, IL 60637 3Department of Molecular Genetics and Cell Biology, University of Chicago, Chicago, IL 60637, USA 4Pritzker School for Molecular Engineering, The University of Chicago, Chicago, IL 60637, USA 5Laboratoire de physique de l’ ´Ecole normale sup´erieure, CNRS, Paris Sciences et Lettres University, Sorbonne Universit´e, and Universit´e Paris-Cit´e, Paris, 75005, France 6Department of Chemistry, University of Chicago, Chicago, IL 60637
+In this work we show how a network inspired by a coarse-grained description of actomyosin cytoskeleton can learn - in a contrastive learning framework - from environmental perturbations if it is endowed with mechanosensitive proteins and motors.
+Our work is a proof of principle for how force-sensitive proteins and molecular motors can form the basis of a general strategy to learn in biological systems.
+Our work identifies a minimal biologically plausible learning mechanism and also explores its implications for commonly occuring phenomenolgy such as adaptation and homeostatis.
+I. INTRODUCTION Single cells in multicellular organisms perform complex tasks and remain functional in changing environments by adapting and maintaining cellular or tissue-level home- ostasis.
+Examples of such phenomenology include the adaptation of force generation in airway smooth muscle cells in response to mechanical perturbation and adap- tation of cellular connectivity and cell division orientation in response to tension in developing tissues [48, 49].
+Such tasks demand sensing and processing of information about their environment and altering chemical or mechanical processes inside the cell to optimize cellular functions.
+Recent studies in single cells and tissues suggest that retention of memories of cellular morphologies and tuning of cellular features based on local cell environment may help their biological functionality [50–53].
+This process is reminiscent of the concept of learning wherein properties and behaviors are tuned such that multiple desired input output relations can be obtained.
+While mechanisms that enable learning are well studied in the neuronal context, it is not immediately clear if such mechanisms can be supported more broadly in cell mechanics.
+In this work, we focus on a simplistic form of learning that aims to achieve a desired mechanical response.
+Our main results show how biomolecularly plausible force- sensitivities - such as mechanosensitive proteins and force generator motors - allow systems to learn desired input- output force relations.
+Our work is built on the new † Corresponding author.
+Email: svaikunt@uchicago.edu paradigm of physical learning
+[54–57] and adapts recent work to show how learning may be possible with generic biomolecular ingredients present in a cell.
+More specifically, we consider a simplified mechanical network caricature that could represent a coarse-grained version of the cellular cytoskeleton with essential regula- tory actors - these mimic the various mechanosensitive proteins and motors that interact with the cytoskeleton - and try to understand whether learning may emerge as a result of cell-autonomous mechanochemical interactions between these few key elements.
+Our main finding is that with particular kinds of mechnosensitivities, and rules for network remodelling due to stresses, our mechanical network caricature is able to learn (potentially multiple) input-output relations encoded in environmental signals.
+Building on and extending work in Ref. , we show that our cytoskeleton inspired mechanical networks can perform a version of contrastive learning, a framework used routinely in machine learning.
+Importantly, we show how this learning persists even in cases with biophysical ingredients such as turnover of the constituent elements of the network.
+We also advance our analysis to explore if a cell- autonomous process can replace the external environment and if a self-organized physical learning mechanism may emerge.
+Finally, to elucidate the role of physical learning in cellular functionalities, we explore how a version of our learning mechanisms may be vital for achieving the homeostasis of the mechanical state of the cell, e.g., homeostasis of tension or strain in the cytoskeletal structure.
+2 capture the functional role of mechanosensitive LIM- domain proteins and molecular motors.
+We describe the state of this cytoskeletal network by the position of the nodes {r}, the number density of the molecular motor (m) and mechanosensitive protein (n) on the edges (Fig. 1B).
+The length of the edge between the nodes j and k is given by Ljk = |rj − rk| and determined by the dynamics of these two node positions.
+The node position changes according to overdamped dynamics and the equation for jth node is given by γ ˙rj = nn (cid:88)
+k −kjk(|rj − rk| − L0 jk)ˆrjk + f a jk ˆrjk , where the sum is over the neighbors of node j set by the network connectivity and the unit vector ˆrjk denotes the direction from the jth node to kth node.
+γ is the friction coefficient, kjk and L0 jk are the stiffness and rest length of the edge between the nodes j and k.
+The active force in the edge due to motor contractility is given by f a jk = ξmjk where mjk is the number density of the bound motors and ξ is a positive constant known as the contractility or activity parameter.
+The motor binding-unbinding kinetics is known to be associated with mechanosensitive proteins .
+The motor dynamics in the edge depends on the number density of mechanosensitive proteins, njk, and is given by ˙mjk = k0 b + k1 b njk − kumjk, where k0 b and ku are the bare binding and unbinding rates and k1 b is a constant factor that determines how these proteins promote motor binding.
+Motivated by the tension-dependent recruitment of mechanosensitive proteins
+[68–70], we consider force-dependent catch-bond- like dynamics for the number density of bound proteins where a higher strain rate leads to a lower unbinding rate.
+The number density of bound proteins in the edge between nodes j and k given by ˙njk = kbn − k0 une−β ˙ϵjk njk , where kbn and k0 un are the bare binding and unbinding rate.
+Here ˙ϵjk is the strain rate and the strain (ϵjk) in the edge is defined as ϵjk = (Ljk −L0 jk) and β is the coefficient for strain-rate dependent unbinding.
+We linearize and rescale the above equations to derive a set of dynamical equations with unitless parameters as detailed in the Supplementary Section A.
+We focus on a simple form of learning, namely, learning a desired strain response in mechanical networks [55, 57].
+Learning, in the current context, occurs when a system changes its internal interactions between its components based on the system’s response (output) to an external stimulus (input), such that its response to subsequent stimuli improves its ability to reach a desired state .
+We want the strain of a given magnitude in one part of the network (i.e. input at source) to create a desired amount of strain in a faraway part of the network (i.e. output at FIG.
+1.
+Physical learning via structural remodeling in a model inspired by the cytoskeleton: (A)
+Our model is a disordered spring network of nodes connected by edges.
+The source and target edges are indicated in color.
+The learning mechanism involves supervised driving at the target edge.
+(B) Schematic representation of the molecular mechanism of learning showing the dynamic coupling between the network elasticity and agents mimicking molecular motors and mechanosensitive proteins that can bind/unbind from each edge.
+(C) Schematic showing how driving at the target edge creates local strain and enables an update of the learning degree of freedom (rest length) at any arbitrary edge of the network, via mechanosensation and active force generation.
+(D) Learning dynamics in one edge of the network.
+The change in the learning degree of freedom (rest length) at the edge in response to active forces generated by motor dynamics.
+The dashed line indicates where the active force reaches the threshold active force value f a = gc above which rest length changes according to the learning rule.
+II.
+MODEL
+We consider a disordered network inspired by the actomyosin cytoskeleton
+[59–61] (Fig. 1A).
+The edges of this disordered network can be conceived as cross- linked bundles of actin filaments that undergo structural remodeling based on local quantities such as active stress [62–66].
+We shall consider the edges to be Hookean springs (i.e., linear elasticity) given by stiffness (k) and rest length (L0).
+In addition, we consider the coupled dynamics of two molecular components: one that mimics an active stress-producing motor and one that mimics a mechanosensitive protein, both of which can bind/unbind from the edges.
+Although there are many types of molecular motors such as myosin, kinesin, etc., and different mechanosensitive proteins such as the LIM- domain proteins like zyxin, and paxillin, for simplicity here we consider two generic molecular components to SourceTargetStrainForce generationMechanosensationStrain rateRemodellingDynamics at the ith edge ABCDContrastive learningActive forces remodel rest lengthStrain due to drivingChange in motor density 0 1 2 5 6 7 8 0  Training time target).
+To build such an input-output relationship, the learning dynamics or training changes the interactions, that is, the rest length (L0) and stiffness (k) of the edges based on the local active force (f a).
+Thus, the rest length and stiffness of the edges become the learning degree of freedom (LDOF) governed by the learning dynamics or In the following, we show how this the learning rule.
+setup naturally allows our system to learn and remodel in response to environmental stimuli.
+In particular, adapting Ref , we argue that the mechanosensitive proteins and remodeling by active forces allow our network to implement a contrastive learning protocol - a common learning framework in the machine learning context.
+III.
+FEEDBACK BETWEEN MECHANOSENSITIVE PROTEINS AND MOLECULAR MOTORS CAN PROVIDE A PATHWAY FOR LEARNING To see how this setup can enable the learning and encoding of mechanical response via external signals, we begin by considering the coupling of the mechanosensitive protein (n) and motor (m) dynamics.
+The strain rate dependence of the mechanosensitive protein kinetics enables the local motor dynamics to have a history of local strain, providing a way for biologically plausible contrastive learning .
+Using the linearized form of the above equations Eq. 2-3, we can show that the motor dynamics possesses the memory of the local strain in the form of, δm = (cid:90) t −∞ K(t − t′)δϵ(t′)dt′, where the memory kernel K is given by K(t − t′)
+= β1 (cid:18) δ(t − t′)
+− e− (t−t′) τk (cid:19) , 1 τk where δm and δϵ are the variation of motor density and strain around a steady state given by m0 and ϵ0 (see Appendix A for details).
+Using the consistency between the integral form (Eq. 4) and the motor dynamics described in Eq. 2 we can identify the kernel timescale τk and the coefficient β1 to be k−1 b βn0 respectively
+It is evident from the (see Appendix B for details).
+memory kernel (Eq. 5) and the form of the constant β1 = k1 b n0β that the strain-rate-dependent mechanosensitive protein dynamics (β ̸= 0) and its coupling with the motor dynamics (k1 b ̸= 0) are crucial for the local motor dynamics to have the memory of the local strain.
+We shall use the value of β1 as a measure of mechanosensitivity later in this study.
+u and k1 Recent work by Falk et al shows that implicit memory of the quantity of interest (e.g., memory of local strain in the current case as given by Eq. 4, 5) can enable learning through a mechanism commonly referred to as contrastive learning.
+In the most generic implementation 3 of this paradigm, the LDOF of the system are updated by comparing the quantity of interest in the free and the clamped state which correspond to the native and desired state of the system after applying the input.
+According to Ref , if the system is exposed to a signal that periodically oscillates between imposing a constraint on the output nodes that nudges it towards a desired value — while the input nodes are held fixed at a specific value (i.e., clamped ) — and being free, the system can remodel through a contrastive learning mechanism so that it learns the desired responses.
+These arguments, specialized for now to the linear limit, show how force-sensitive kinetics can enable a learning mechanism.
+Importantly, in the following, we show that this learning mechanism works broadly, even with non-linear effects and biophysical effects such as turnover, and not just in the linear limit.
+IV. DYNAMICS OF TRAINING AND LEARNING We apply the dynamical procedure described in the previous section to our system, driving it periodically to shift between the free and the clamped states by applying an external force at the target.
+The system is taken from the free state to the clamped state very fast over a timescale τf and slowly brought back over a longer timescale τs (Supplementary Fig.
+S1).
+Training involves driving the system through many such cycles, that is, the time duration of one cycle is τcyc = τf + τs.
+We shall discuss the training process in more detail in the following sections.
+The external drive and implicit memory combine to train the system by changing the learning degrees of freedom via a learning rule.
+Based on the structural remodeling dependent on the active force in the network edges, we shall consider the dynamics of the LDOF, i.e. the rest length (L0 jk) and the stiffness (kjk) of the edges depending on the local active force f a jk in the edge.
+First, we shall consider unalterable edge stiffness and only the rest length to be the LDOF with the dynamics given by ˙L0 jk = αg(f a jk) , where α is the learning rate parameter and g(x)
+= x for all |x| ≥ gc and 0 otherwise.
+The parameter gc represents a threshold active force above which the edges remodel their rest length.
+The active force being proportional to the motor density which possesses the implicit memory of strain, the above learning rule results in contrastive update of the LDOF (rest length).
+While we introduce the learning mechanism considering linear elasticity of the network without turnover of edges and linear approximation in the mechanosensitive protein dynamics (Eq. 3), we shall discuss how the learning mechanism is affected by nonlinearities and network turnover later in this work.
+V. LEARNING STRAIN RESPONSE IN A MODEL CYTOSKELETAL NETWORK Using the dynamics described above, we explore whether the network can learn a specific desired mechan- ical response.
+In particular, we consider two edges —one source edge and one target edge (Fig. 1A) — and train the network to learn to contract to a specific strain value ϵ∗ T at the target edge when we apply an extension of ϵ∗ S at the source edge.
+To train the network to produce the desired strain ϵ∗ T at the target edge, we first apply the strain ϵ∗ S at the source edge which takes the system into the free state.
+Then, on the target edge, we apply an external supervised force f e which is proportional to the difference between the strain value at the target edge in the free state ϵT and the desired strain value at the target edge ϵ∗ T , and is given by f e = −λ(t)∇( 1 2 |ϵT − ϵ∗ T |2) , where λ(t) controls the temporal dynamics of forcing.
+It goes from λ = 0 where the system is in the free state to λ = λmax where the system is in the clamped state over the fast timescale τf and returns to λ = 0 over the slow timescale τs (Supplementary Fig.
+S1).
+This asymmetry in the timescale of driving (i.e., τf < τs) is a hyperparameter which in previous work was shown to be necessary for successful learning .
+Due to this driving, the force balance equation on the target nodes (nodes connected by the target edge) becomes γ ˙rj = nn (cid:88)
+k −kjk(|rj − rk| − L0 jk)ˆrjk + ξmjk ˆrjk + f e .
+i Driving at the target edge changes the density of the mechanosensitive proteins and motors and subsequently the strain at other edges in the network (Eq. 2, 3 & Fig.
+1C).
+As indicated previously, we expect that due to the implicit memory (Eq. 4), the motor dynamics at any edge (i) estimates the derivative of the local strain, which in turn has the information of the difference in local strain in the clamped and free states ∼ ϵclamped − ϵfree
+i because of the temporal driving at the target edge which periodically takes the system from the free to clamped state and back.
+Thus, this information gets fed back in the local active force which is proportional to the bound motor density and the active force-dependent remodeling of rest length facilitates contrastive learning (Fig. 1D).
+The training error, defined as |(ϵT − ϵ∗ T shows the effectiveness of the contrastive learning mechanism as it reaches close to zero as the training progresses (Fig. 2A).
+The spatial distribution of increase and decrease in the rest length values (∆L0) over the network shows the trained network with altered interaction that led to this learned mechanical response (Fig. 2B).
+The trained network shows a distinctly different strain value which is close to the desired value ϵ∗ T at the target edge compared to the un-trained network (Fig.
+2C).
+The learning dynamics T )|/ϵ∗ 4 FIG.
+2.
+Learning strain response in cytoskeletal networks by changing rest lengths.
+(A) Time evolution of training error over many cycles of exposure to desired behavior.
+(inset)
+The network at the initial unstrained state.
+The source and target edges are denoted by “S” and “T” respectively.
+(B) Trained network reflecting the magnitude of changes in the rest length (|∆L0|) of the edges given by the edge thickness.
+The colors indicate if the rest length increased (red) or decreased (blue) with respect to the original rest length values after training.
+(C)
+The strain at the target edge on the application of the source strain on the trained network.
+The untrained response at the target edge is shown in a red dashed line which is far from the desired target strain (gray dashed line) (D) Training error vs training time at different values of activity given by the contractility parameter ξ.
+Here the rescaled parameter values are k = 1, ξ = , β = , ku = , λmax =  and α = 1. remodels the rest lengths of various edges to achieve the desired strain at the target edge.
+This leads to a trained network that is appropriately pre-strained (i.e., with non- zero edge strain, ϵjk = Ljk − L0 jk, in equilibrium without any source strain) to achieve the desired mechanical response (Supplementary Fig. S3).
+We repeat the learning problem in randomly chosen target and source edges on the periphery of the network to find the average training error to reduce over time indicating the learning capability to be independent of the particular choice of source and target edges (Supplementary Fig. S4).
+We do not find any significant effect of the network size on learning capability (Supplementary Fig. S4).
+The contractility parameter, ξ (f a jk = ξmjk) gives the extent of activity in the network.
+We find the learning to become better with increasing activity (ξ) reaching lower training error values as the activity increases (Fig. 2D).
+Depending on various hyper-parameter values such as threshold active force (gc) and timescales of driving (τf , τs)
+the learning Training errorTraining time /ACSTD   1 0 2500 5000STTraining time /    1 0 25.- 0     1 50 100Edge strainTesting time/TargetSourceUntrainedDesired valueTraining errorBas line width04-404-4XY may slowdown with increasing activity (Fig.
+2D) which stems from increased unlearning (reversal of the change in rest length) in each cycle during training (Supplementary Fig.
+S5).
+5 and the network learns the desired target strain value (Fig.
+3A) and the network develops a spatial pattern of heterogeneous but always positive stiffness value changes over the network, with the largest increase close to the target (Fig.
+3B).
+Here, the trained network achieves the desired mechanical response which is distinctly different from the untrained response (Fig. 3C).
+In contrast to the previous case, here the trained network does not have any pre-strain (Supplementary Fig. S3).
+Rather, it reaches the correct solution by changing how the target edge contracts in response to the source edge extension (Fig. 3C).
+In the above results, we use a linear approximation in the dynamics of the mechanosensitive proteins (Eq. 3) e−β ˙ϵjk ≃ 1 − β ˙ϵjk.
+We find no significant qualitative or quantitative changes in the learning dynamics (i.e., training error evolution over time) when we consider nonlinearities in the strain-rate dependent unbinding term in the protein dynamics while learning a desired mechanical response by changing rest length of the edges, same as described earlier in this section.
+We consider higher-order terms up to 3rd order (i.e., e−β ˙ϵjk ≃ 1 − β ˙ϵjk + β2 jk) which changes the implicit memory the motor dynamics contains compared to the linear case.
+With the nonlinearity, the motor dynamics becomes dependent on a nonlinear function of strain rate δ ˙m ∼ β1δ ˙ϵ − β2δ ˙ϵ2 + β3δ ˙ϵ3 (see Appendix C for details).
+Despite this imperfection in implicit memory, which is not simply the derivative of local strain at each edge and does not estimate the difference in local strain between the free and clamped states, the learning capacity of the network remains largely unaffected for moderate strength of the nonlinear terms (Fig. S2A).
+This indicates that the linear approximation is adequate for describing the learning mechanism.
+jk − β3 2 ˙ϵ2 6 ˙ϵ3 3 k2ϵ3 + 1
+Apart from the nonlinearity in the mechanosensitive protein dynamics, one could also consider the nonlinear elastic response of the network, e.g., strain stiffening.
+Cytoskeletal networks are known to have nonlinear elastic properties [71, 72].
+We consider a network with nonlinear elasticity where the energy as a function of edge strain(ϵ) 2 kϵ2 + 1 is given by:
+Eel = 1 4 k3ϵ4 to see the effect of nonlinear elasticity on learning.
+Here, k2 and k3 are the elastic constants for higher-order terms in the elastic energy.
+For a network with nonlinear elasticity, the nonlinearities in the mechanosensitive protein dynamics (up to 3rd order) lead to the correct implicit memory required for the temporal contrastive learning (see Appendix.
+C for details).
+Thus, nonlinearity in the protein dynamics enables contrastive learning in Interestingly, we a network with nonlinear elasticity.
+find lower training error with increasing strength of the nonlinearity indicating nonlinear elasticity can aid learning (Fig. 3D).
+FIG.
+3.
+Learning strain response in cytoskeletal networks by changing stiffness.
+(A) Time evolution of training error over many cycles of exposure to desired behavior.
+(B)
+The trained network topology and edge stiffness change |∆k| which is proportional to line width.
+The source and target edges are denoted by “S” and “T” respectively.
+(C)
+The strain at the target edge on the application of the source strain in the trained network.
+The untrained response at the target edge is shown in a red dashed line, which is far from the desired target strain (gray dashed line).
+(D) Learning with non-linear protein dynamics and non-linear elasticity.
+Training error vs training time shows that increasing the strength of nonlinearity in both the protein dynamics (β2, β3 ̸= 0) and network elasticity (k2, k3 ̸= 0) leads to lower training errors.
+The numbers in the legend indicate these parameter values.
+We consider a simple case of the same values for the unitless nonlinear coefficients β2 = β3 = , k2 = − & k3 =  with other parameters same as Fig. 2 except λmax =  and ξ = .
+For panels (A-C) the rescaled parameter values are ξ = 5, β = , ku = , λmax = 10 and α = 103.
+We arrive at a different type of solution for the same learning problem (i.e., as described at the beginning of this section) if we consider active force-dependent remodeling of the edge stiffness values while the rest length values remain unaltered.
+In that case, the dynamics of edge stiffness depends on ϵf a and for ith edge, is given by ˙kjk = αg(ϵjkf a jk) .
+Similar to the previous case, the driving at the target edge affects local motor density and strain values at each edge and that in turn changes the stiffness incrementally in every switching from free to clamped state.
+The training error reduces as the edges change their stiffness ATarget strainSource strainTraining errorTraining time/- 0     1 100200 0 2 4TargetSourceUntrainedDesired value  1 0 2500 5000 7500 10000STBDC00010000LinearTraining time/Training errorTesting time/STas line width04-404-4XY 6 T distinct types of environmental mechanical signals.
+This strain gradient is relative to the source edge indices chosen according to their spatial position along the y- axis (Fig. 4B).
+The slopes of the gradients are drawn from two uniform distributions U1 ∈ (, ) and U2 ∈ (−, −).
+We consider 10 source edges (S1, S2, . . .
+, S10) in the network and two target edges, target edge “+” and target edge “−” to encode the information of the positive and negative gradients as the desired target strain values ϵ∗(+) at the “+” and ϵ∗(−) at the “−” target edge correspondingly via training.
+T
+During training, one slope value (s) was drawn randomly from either U1 or U2 in each switching cycle (i.e., a time duration of τs +τf ) and depending on the sign of the slope, either the “+” or the “−” target edge was trained to reach the corresponding target strain values.
+The source strain of the nth source edge is given by ϵ∗ S(n) = nsr for the positive slope of strain and ϵ∗ S(n)
+= 1 − (n − 1)sr for the negative slope of strain with r being a uniform random number used to introduce small noise (up to 20%, i.e., r ∈ [0, ]) in the source strain values.
+The training error for both the positive (| ϵ(+)
+(| ϵ(−) progresses (Fig. 4C).
+In the trained network, the target strain values obtained in response to the imposed source strain pattern will be used to evaluate the performance of the classification task.
+For example, if the target edge “+” reaches the closest to the desired strain value ϵ∗(+) and the difference is smaller than a tolerance value (Etol), i.e., |ϵ(+) T − ϵ∗(−)
+| when a positive strain gradient is presented in the sources, the classification of that strain signal by the network is considered successful.
+We define classification accuracy as the ratio of the number of successful classifications to the number of imposed source strain gradients, i.e., the number of tests.
+|) input strain-gradients reduces as the training | <
+Etol and |ϵ(+) T −ϵ∗(−) T ϵ∗(−) T T −ϵ∗(+)
+T ϵ∗(+)
+T |) and negative T − ϵ∗(+)
+T − ϵ∗(+)
+| < |ϵ(−) T T T T
+A set of strain gradients was drawn from U1 and U2 and the classification output was checked as we trained the network.
+The behavior of the trained network indicates the successful classification of the two classes of environmental signals as the classification accuracy increases with the progression of training (Fig. 4D).
+Since increasing the network activity, as measured by the connectivity parameter ξ, leads to lower training error, we find increasing activity to result in faster classification in the network (Fig. 4D).
+VII.
+LEARNING IN THE PRESENCE OF TURNOVER OF NETWORK COMPONENTS Cellular cytoskeletal networks undergo continuous turnover of their components.
+To understand how learning dynamics is affected by the turnover of network components, we introduce dynamic turnover of the FIG.
+4.
+Classification of environmental signals in cytoskeletal networks.
+(A) Schematic showing a cell in an environment with a strain gradient.
+(B) Environmental mechanical signal as the positive and negative gradient of strain.
+The strain pattern input is imposed on source edges (green) and two target edges are chosen to encode the two classes “ + ” (purple) and “ − ” (orange).
+(C) Training error vs training time for both positive and negative strain gradients as inputs.
+(D) Classification accuracy increases as the training progresses.
+The network learns to classify faster with higher activity (given by contractility parameter ξ).
+Here τf /τs = 1/10, ϵ∗(+)
+T = −ϵ∗(−)
+T = , Etol =  and the rescaled parameter values are same as used in Fig. 2 except α = 10. VI.
+CLASSIFICATION OF ENVIRONMENTAL SIGNALS Another classic learning task is solving a classification problem via learning to distinguish between input signals of different types (classes) and produce different responses as output by creating a map between these sets of input and output signals.
+Living cells continuously interpret noisy environmental signals to decide the future course of their action .
+For example, both chemical and mechanical environmental signals are known to affect stem cell differentiation decisions .
+Synthetic chemical reaction networks that can classify chemical signals within the cell have recently been reported .
+Here we consider a task where the cytoskeletal network is trained to differentiate between different mechanical signals, in particular, different strain gradients in the environment (Fig. 4A).
+Deciphering such environmental mechanical signals may be important for cellular functions such as cell motility and tissue remodeling during development .
+We consider increasing and decreasing strain patterns (i.e., positive and negative strain gradients) as two Training errorTraining time/ABCOutput(+ve slope)(-ve slope)XTarget edge "-"Target edge"+"Source edges015-15015-15Y 0     1 1000 2000 3000 4000D(+)
+Strain gradient(-)
+Strain gradientClassiﬁcation accuracyinputstrain values 0     1 1000 2000 3000 40S1S2S10. .
+.(+)(-)Training time/ 7 FIG.
+6.
+Activity dependent recovery from loss of learning.
+(A) Training error for different activity values (given by the contractility parameter ξ) for τsev/τcon = 9. (B) A phase diagram in activity and rescaled severing timescale.
+The arrow indicates the direction of the faster turnover of network edges.
+The parameter values used here are the same as Fig.
+2. Additionally ϵcrit = , τcon = 10τcyc.
+reconnecting events at the edges (Fig.
+5B) which leads to a large number of edges being severed during training (Fig. S6).
+Learning becomes slower and the ability to learn decreases as the severing timescale becomes smaller and similar to the timescale of reconnecting (Fig. 5C).
+The learning altogether stops (i.e., target edge strain cannot reach the desired value) at small values of the ratio of the severing timescale and the reconnection timescale τsev/τcon ≲ 10.
+Note that we consider severing and reconnection timescales larger than the timescale of driving (i.e., τsev, τcon > τcyc) and faster turnover dynamics would result in loss of learning even at high τsev/τcon values.
+The connectivity, defined as the average number of neighbors of a node, of the dynamic network decreases as the severing time scale decreases, that is, the severing rate increases, which may lead to the loss of learning ability seen at low severing timescales (Fig. S6).
+The choice of the critical strain value (ϵcrit) also significantly affects learning and leads to a slowdown of learning with increasing ϵcrit and loss of learning ability for high ϵcrit values (Fig. 5D).
+This loss of learning may be the result of the loss of edges that propagate tension from the target edge to the network, getting remodeled.
+Interestingly, we find that the network can recover from the loss of learning with increased activity (Fig. 6A).
+At a fixed ϵcrit value, increased activity reduces the probability of severing the edges by increasing the strain of the edges, which leads to the recovery of learning.
+The ability of the network to learn in the presence of edge turnover depends on the balance between the severing dynamics and the activity of the network.
+The network learns better at higher activity values (large ξ) and slower severing rates (larger τsev) while low activity and fast turnover lead to loss of learning in the network (Fig.
+6B).
+FIG.
+5.
+Learning in the presence of network turnover.
+(A)
+The schematic on the top shows edge severing and reconnection processes.
+The bottom part shows an example of network remodeling.
+Green and red dashed lines mark the bonds to (B) Training in the get created and severed respectively.
+presence of network remodeling.
+Training error decreases over time.
+The solid and the dashed gray lines show the number of severing and reconnection events as the training progresses.
+(C) Training error as a function of the training time at various severing timescales (τsev).
+The dashed line shows training without remodeling.
+(D) Training error with training time at different critical strain values ϵcrit.
+τsev/τcon = 50.
+The parameter values used here are the same as Fig. 2 except ϵcrit = , τcon = 10τcyc.
+network edges during training.
+The edge turnover dynamics is implemented by severing of edges with a timescale τsev and reconnecting the nodes of the edge severed with a timescale τcon.
+During reconnecting, the instantaneous distance between the nodes is set as the new rest length of the reconnected edge.
+Additionally, edges with strain higher than a critical value ϵ > ϵcrit do not sever (Fig. 5A).
+This strain dependence of the severing captures catch-bond-like dynamics seen in the cytoskeletal networks, where parts of the network with higher tension are more stable [78, 79].
+Thus, in each update during training (i.e., from t → t + dt), the edges with strain smaller than the critical strain (ϵ < ϵcrit) sever with a probability given by dt/τsev.
+Similarly to severing, reconnection of the severed edges occurs with a probability dt/τcon.
+We train the network to achieve a desired mechanical response using the rest length of the edges to be the LDOF, the same as described in Section.
+V.
+To avoid trivial errors, the source and target edges were excluded from the severing and reconnecting dynamics.
+We find the learning to be successful with a significant number of severing and Training errorTraining errorNumber of eventsTraining time/ABCSeveringReconnectionYYXXnew   1 0 5001102050100   1 0 500 0 100 200 300 40050severingreconnectingTraining time/Training error   1 0 5Training time/D 0
+20 40 60 80 100 0  1  2SeveringActivityfasterseveringLearningNo LearningTraining error    1 0 500 1000 1500 20ActivityTraining time/AB VIII.
+LEARNING VIA SELF-ORGANIZED PULSATION
+The learning mechanism that we have discussed so far requires an external drive at the target edge.
+This driving requires knowledge of the desired target strain ϵ∗ T (Eq. 7) that determines the clamped state.
+In all of the above cases the training was performed with a fictional “supervisor” who knows the value of ϵ∗ T playing the crucial role of driving the system from the free to clamped state (Fig. 7A), thus making the above learning mechanism a supervised one.
+Although such a learning process may be realized in biomimetic systems of the actomyosin cortex with prescribed external force application in a part of the network, it is not clear how it can happen in a living cell in its native environment.
+Here we shall relax the consideration of having an external supervisor in the learning process and ask if meaningful learning is possible through a process that lacks the a priori knowledge of the desired target strain ϵ∗ T leaving the role of the supervisor obsolete.
+Cytoskeletal networks are often driven by self-organized actomyosin forces or pulses in various scenarios such as tissue morphogenesis and cell migration during development
+[80– 83].
+Such actomyosin pulsation can travel spatially
+[81, 82] leading to asymmetric driving forces by giving rise to fast contractions due to the influx of myosin motors and slow relaxation determined by local turnover timescales.
+Thus, the forces applied by the supervisor can instead come from such pulses asymmetrically driving the system between the free and clamped states.
+The clamped state is not set a priori by any external drive but emerges from the local regulation of these pulses.
+Here we shall consider a single pulse train at the target edge and study the resulting learning dynamics (Fig.
+7A).
+We consider a case where the source edge is extended and the target edge experiences actomyosin pulsation that contracts the edge periodically.
+For simplicity, we shall consider the same sawtooth-like temporal dynamics for actomyosin pulsation defined by a fast and slow timescale (τf and τs) as we have used before.
+For pulse trains of constant amplitude A = A0, i.e., the driving force given by Eq. 7 becomes f e = λ(t)ˆr with λmax = A0.
+We find that the target edge learns to contract where the target strain increases with time and is only set by the duration of training as the pulsation has no means of setting a particular target strain value (Fig. 7B).
+Thus, a meaningful desired target strain value does not arise since there is no coupling between the driving force (the pulses) and the network.
+A specific target strain value may emerge in the case where the pulse amplitude is coupled with the state of the network via a quantity such as the target edge length.
+We find that if the actomyosin forces exerted on the target edge depend on the edge length (L), e.g., A = a0L such that the driving force becomes f e = λ(t)ˆr with λmax = a0L where a0 is a constant coefficient, the learning dynamics converges to finite target strain values.
+With the length- 8 FIG. 7. Self-organized learning via actomyosin pulsation.
+(A) Schematic showing self-organized pulse driving the target edge instead of the supervisor.
+(B) Target strain with training time for driving by pulses of constant amplitude A = A0.
+(C) Target strain with training time for driving by pulses with target edge length (L) dependent feedback A = a0L.
+Here τf /τs
+= 1/4 and the rescaled parameter values are β
+= , ku = , ξ = 1 and α = 1. dependent driving, a shorter target edge experiences a smaller force from the actomyosin pulsation creating a negative feedback on the driving force.
+This target edge length-dependent negative feedback on the pulsation amplitude gives rise to specific target strain values in an amplitude-dependent manner (Fig. 7C).
+Although the described learning mechanism does not say how to control the pulsation to train or test when needed, biochemical signaling pathways in the cell may provide such functionalities.
+It should be noted that a persistent change in the mechanical behavior of the network (i.e., the strain at the target edge) has occurred here via irreversible changes in edge rest length values, indicating that learning has taken place.
+Our results suggest that a learning mechanism may emerge from the coupling between the actomyosin pulsation and the cytoskeletal network making it possible to self-organize a physical learning process in a cytoskeletal network of a cell.
+We further explore the viability of such self-organized learning with negative feedback (Fig. 7C) at different regimes of activity, motor dynamics, and mechanosensi- tivity.
+We categorize the learning outcomes into three groups: (i) No learning where the rest lengths do not change at all and no learning occurs, (ii) Conserved geom- etry learning where the rest length of the edges locally remodel to give rise to a well-defined target strain with SupervisorSelf-organized pulseTarget edgeTarget StrainTraining time/Target StrainABCA=A0A=a0 LTraining time/--- 0 2000 4000 6000A0=A0=A0=5--- 20000 40000 60000 80000a0=5a0=8a0= 9 Interplay between motor dynamics, activity and FIG.
+8.
+mechanosensitivity enables self-organized learning.
+(A) Example of trained networks in three different cases corre- sponding to the points highlighted by broken circles in the phase diagram.
+(B) Phase diagram showing phases of No learning (white), Conserved geometry learning (gray shaded) and altered geometry learning (yellow shaded) at different values of activity parameter ξ and motor turnover rate ku.
+(C) Phase diagram showing phases of No learning (white), Conserved geometry learning (gray shaded) and altered geom- etry learning (yellow shaded) at different values of activity parameter ξ and a measure of mechanosensitivity β1 (same as β in rescaled units).
+The phases are determined from visual- ization of trained networks and the boundaries are lines drawn as guides to the eyes.
+Here τf /τs
+= 1/4 and the rescaled parameter values are β =  (in panel B), ku =  (in panel C), and α = 10.
+no change in network geometry and (iii) Altered geometry learning where the rest length changes are large and lead to network geometry changes (Fig 8A).
+Note that the network still learns to reach a finite target strain value in the Altered geometry learning case, but goes through large deformations of some of its edges and changes its geometry.
+This effect will crucially depend on the nature of the negative feedback and on the network size with smaller networks more prone to larger changes in geometry.
+We find that higher activity ξ and lower motor turnover rate ku (i.e., slower relaxation of motor density) take the network from a non-learning state to conserved geometry and altered geometry learning states (Fig. 8B).
+Lower values of mechanosensitivity (β1) and activity hinder learning in the network, while increasing values of these two parameters enable learning and take the system from conserved geometry learning at moderate values to altered geometry learning at large values of ξ and β1 (Fig. 8C).
+FIG. 9.
+Adaptation via learning.
+(A) Schematic showing desired low-strain region in the cell in the presence of external mechanical perturbations.
+(B)
+The trained network shows the external forces acting on the network (magenta arrows) and the low-strain region in green.
+(C) Training error reduces obtaining the desired target strain value ϵ∗ T = 0 for all target edges.
+(D) Target strain values with training time at three target edges.
+The τcyc and rescaled parameter values are the same as Fig. 2 except α = 10.
+IX.
+ADAPTIVE RESPONSE FROM UNDERLYING LEARNING PROCESS
+The results of the previous sections show how learning can happen in a cytoskeletal network.
+This capability to learn may aid the cell in various complex tasks that require cellular decision-making, but a clear connection between learning and cellular behavior or response is not present.
+Previous work hypothesized a relationship between learning in biological systems at the cellular scale and cellular adaptation and homeostasis .
+Here, we show that a self-organized physical learning process can lead to an adaptive mechanical response in the network.
+The cell nucleus carries the genetic material, the DNA of the cell, and is vital for essential physiological functions of the cell.
+In a noisy mechanical environment, cellular deformations impart mechanical perturbations on the nucleus via the cytoskeletal network and may cause DNA damage , nuclear rupture and cell death .
+To avert such adverse outcomes, the nucleus is known to actively maintain mechanical stability by avoiding large deformations
+[88, 89].
+The cytoskeletal network surrounding the nucleus is reported to help maintain nuclear stability by reducing Inspired by this observed its deformability .
+mechanosensitivity of the nucleus and the need to adapt to mechanical perturbations, we propose an adaptation problem where the cytoskeletal network adapts to lower ..MechanosensitivityActivity.8.81TurnoverRateActivityConserved Geometry LearningNo LearningAltered Geometry Learning40-440-440-440-42-20-440-4ACBTarget strainTraining time/ACExternal perturbationLow strain region 1
+1 0 500010000 15000- 0  0 500010000 15000T1T2T3Training errorTraining time/T1T2T3S1S2S340-440-4BD 10 The learning paradigm specified here can, in principle, be applicable to a variety of scenarios.
+Recent works indicate that the memory of cytoskeletal network configurations controls cell motility and gaits in varying conditions [52? ].
+Our learning paradigm might shed light on how mechanosensitivity in addition to external forcing, can allow cytoskeletal networks to encode such information and accurately adapt to changes in the environment.
+In a broader context, our work can potentially have applications in vertex-like models used to describe various developmental processes.
+In these scenarios, our work can offer insight to how myosin pulsation can help actuate desired mechanical responses
+[63, 91, 92].
+Our work also offers experimentally testable predictions.
+For example, our approach predicts that cells with reduced levels of mechanosensitive proteins should exhibit impaired adaptation to mechanical stimuli.
+Similarly, we predict that adaptation to mechanical stimuli should increase (decrease) with actomyosin contractility (turnover).
+Recent experimental studies focusing on long-term memory of cellular morphology and the spontaneous local (cellular) strain-dependent process of achieving the desired shape in a drosophila wing disc tissue offer the possibility to experimentally test these predictions in the future.
+XI.

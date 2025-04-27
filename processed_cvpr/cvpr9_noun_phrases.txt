@@ -1,0 +1,663 @@
+( “+ multiple
+(0,i),t||ϵ − ϵθ
+(a) incorrect chair orientation
+(bottom row
+(e.g. text prompts
+(ours)-multiple+ multiple
+) synthetic
+, mirrorfusion  cor-
+/o multiple
+1 com-
+10, 000 iterations
+19 cam- era positions
+3 and additional exam- ples
+3,049 7,011 198,204 207,610 rgb
+3,140 scenes
+300 images
+3d concepts
+3d model
+3d-aware image editing
+4 nvidia a100 gpus
+4,018 9 scenes
+40 different samples
+40, 000 iterations
+5. experiments
+50 time steps
+512×512 pix- els
+58, 109 ob- jects
+64k objects
+7 mirrorfusionoursours
+7, 953 common household objects
+8 (b
+800k diverse 3d assets
+991 images
+a 3 stage training curriculum
+a 3d scene
+a 45◦ an- gle
+a 5 monocular depth estimator
+a base dual branch network
+a batch size
+a better choice
+a cfg value
+a chair
+a chair model
+a challenge
+a clean image x0
+a cluttered cable
+a consequence
+a contemporary method
+a convincing geom- etry
+a coun- terfactual dataset
+a curated list
+a curriculum strategy
+a dataset robust
+a denoising network
+a diffusion model
+a dual branch architecture
+a dual-branch architecture
+a fixed reference point
+a generative method
+a geometric constraint
+a gray sofa
+a held-out split
+a large- scale dataset
+a large-scale dataset
+a large-scale synthetic dataset
+a latent space
+a learn- ing rate
+a mirror
+a mirror reflection
+a mug
+a noisy sample
+a novel large-scale synthetic dataset
+a novel pipeline
+a nuanced understanding
+a particu- lar prompt
+a particular metric
+a pipeline
+a plane
+a plug-and-play architecture
+a pre-computed region
+a predefined list
+a range
+a realistic scene
+a resolution
+a robust foundation
+a scene
+a significant challenge
+a significant gap
+a single chair
+a single image
+a strategy
+a stuffed toy bear
+a subset
+a synthetic dataset
+a table
+a third stage training
+a three-stage training curriculum
+a total
+a trained model
+a typical scene
+a unit cube
+a user study
+a vari- ety
+a white sofa
+ablation studies
+ablation studies impact
+able editing
+abo) datasets
+abstract diffusion models
+accessing clean fea- tures
+accurate geometry
+accurate position
+accurate reflections
+action recognition
+additional training
+advanced data augmentation techniques
+ai lab
+ai- ml center
+al- chemist
+all images
+all objects
+all our experiments
+all renderings
+all stages
+all text prompts
+all the selected images
+amazon berkeley objects
+an angle
+an area-light
+an enhanced pipeline incorporat-
+an implausible reflection
+an in- painting task
+an initial clean sam- ple
+an inpainting task
+an input
+an object
+an object-centric synthetic dataset
+another 10, 000 it- erations
+any degradation
+ap- pears
+appendix d.5
+assess- ing textual alignment
+attribute diversity
+authentic mirror reflections
+based generative models
+blended diffu- sion
+both mirrors
+both single and multiple objects
+both the methods
+both the object
+both visibility
+camera poses
+challenging settings
+clip sim ↑
+clip similarity
+cluttered cables
+coher- ence
+color leakage
+color leakage issues
+com- plex scenes
+complex and real-world settings
+complex scenarios
+complex scenes
+complex spatial relationships
+complex, multi-object scenarios
+condi- tioning
+conditional inputs
+cur- riculum training
+current methods
+data generation pipeline fig
+data samples
+dataset generation pipeline
+dataset image generative models
+dataset type size
+de- tails
+depth and occlusion scenarios
+depth estimation
+depth information
+depth map
+depth map conditioning
+depth maps
+depth rgb
+different design choices
+different geometric features
+different kinds
+different object orientations
+diffusion models
+diffusion-based generative models
+diffusion-based methods
+distinct spatial regions
+distorted reflections
+distribution-guided debiasing techniques
+ditional training data
+diverse object configurations
+diverse textures
+draw- ing inspiration
+each layer
+each object’s class
+each scene
+edge maps
+effec- tively handle occlusions
+existing diffusion models
+existing mirror datasets
+extensive training data
+fine-tune it
+fine-tune the generation process
+floor textures
+four seeds
+ftmirrorfusionoursours - ft
+full-wall mirrors
+function sampleobject(c
+further examples
+further, meth- ods
+gaussian noise
+gener- alization
+genera- tions
+generaliza- tion
+generated images
+generating reflections
+generative models
+geometrically accurate reflections
+ground truth depth maps
+gso dataset
+hdri samples
+high-fidelity reflections
+high-quality im- age generation results
+high-quality image generation
+high-quality, real- world images
+however, fig
+im- age diffusion models
+image generation
+image generation tasks
+image zm
+impressive re- sults
+improved scores
+improved speed
+in (b), the baseline yields
+in- stance
+ing dataset generation
+ing shadows
+ing useful augmentations
+inherent limitations
+input 3d model
+instance segmentation
+intricate physical effects
+its ability
+its performance
+k objects
+key augmentations
+known content
+l ← getpairedcategorieslist(c
+later layers
+lobj ←
+lokesh r. boregowda
+longer iterations
+low-quality textures
+lrm based methods
+m ←
+main algorithm
+mask rgb
+mask xm
+masked images
+masks rgb
+method preliminaries diffusion models
+minimal artifacts
+minor artifacts
+mir- rorfusion
+mirror reflection generation
+mirror reflections
+mirrorfusion -with multi- ple
+missing parts
+more complex scenes
+more details
+more ex- amples
+more fine-grained generation control
+more realistic reflections
+more than two objects
+multi- ple objects
+multi-object scenes
+multi-view rgb
+multilingual t2i generation
+multiple mirrors
+multiple ob- jects
+multiple object reflection generation quality
+multiple objects
+multiple objects require
+noisy latents
+notably image-editing
+object 3dit
+object blending
+object detection
+object insertion/removal
+object placement
+object po- sition
+object pose
+object positions
+object sources
+object training
+objectsmultiple objects
+optional additional conditioning c
+other diffusion- based methods
+our approach
+our architec- tural choice
+our augmen- tation strategies
+our contributions
+our current method
+our dataset
+our dataset generation pipeline
+our enhanced dataset synmirrorv2
+our exper- iments
+our method
+our model
+our pro-
+our proposed dataset
+our proposed strategy
+our proposed synmirrorv2
+our qualitative and quantitative evaluations
+our selection
+ours 50k
+overall geometry
+overall quality
+particularly those
+perspective cues
+photorealistic mirror reflections
+physi- cal laws
+physically-based materials
+plausible mir- ror
+plausible mirror reflections
+poor reflection gen- eration
+poorly learned priors
+popular meth- ods
+pose variations
+positionerscenecompositorfloor textureshdris3d
+powerful diffusion models
+previous works
+progressively remov- ing noise
+promising generalization
+pushing diffusion models
+quantitative results
+r venkatesh babu1 1vision
+random object positioning
+random positioning
+randomized rotations
+re- cent work
+re- flections
+real world scenes
+real- ism
+real-world and challenging scenes
+real-world data
+real-world generations
+real-world objects
+real-world performance
+real-world physics
+real-world scanned objects
+real-world scenarios
+real-world scenes
+real-world settings
+realistic interactions
+realistic reflections
+realistic scene representation
+realistic scenes
+recent ap- proaches
+recent methods
+recent work
+recent years
+reflection generation
+reflection generation quality
+reflection quality
+related work
+rishubh parihar
+robust variability
+ror orientation
+sam- ples
+sarkar et al.
+scene composition
+scene realism
+scene resources
+sdi+depth baseline
+segmentation maps
+semantic coherence
+semantic segmentation
+semantically consistent combinations
+several images
+significant artifacts
+significant challenges
+single & multiple objects
+single and multiple objects
+single ob- ject renderings
+single object reflection generation quality
+single, multiple, gso objects
+single-object scenes
+some artifacts
+some methods
+spatial consistency
+spatial integrity
+spatial relationships
+specular re- flections
+specular reflections
+stable diffusion
+stable-diffusion inpainting
+strate synmirrorv2’s efficacy
+sub-par renderings
+subsequent works
+substantial potential
+such scenarios
+superior performance
+sure quality
+synthetic image pairs
+t timesteps
+tall rectangular mirrors
+targeted data augmentations
+tative samples
+text guidance
+text prompts
+textual alignment
+textual prompts
+the *equal contribution
+the 3d world
+the 3d-positioner
+the ability
+the abo dataset
+the adamw optimizer
+the advancements
+the air
+the average value
+the background
+the baseline
+the baseline and mirrorfu- sion
+the baseline method
+the baseline mirrorfusion
+the baseline model
+the bed
+the best results
+the best ssim score
+the camera’s viewing frustum
+the chair
+the chair’s orientation
+the challenge
+the challenging real-world msd dataset
+the changes
+the computing resources
+the concepts
+the condition branch
+the conditioning
+the conditioning information
+the conditioning u-net branch
+the corresponding layer
+the dataset
+the dataset’s utility
+the denois- ing process
+the denoiser
+the diffusion process
+the diver- sity
+the diversity
+the domain gap
+the drawer handles
+the early combination
+the effectiveness
+the evaluation strategy
+the evolution
+the failure
+the filtering pro- cedure
+the first stage
+the first two stages
+the floor
+the forward diffusion process
+the gener- ated image
+the genera- tion quality
+the generalization
+the generalization ability
+the generated images
+the generated outputs
+the generated reflec- tion
+the generated reflection
+the generation
+the generation branch
+the generation quality
+the google scanned objects(gso) dataset
+the green circle
+the ground level
+the help
+the im- pact
+the image
+the importance
+the influence
+the initial convolu- tion layer
+the input depth map
+the input prompt
+the intersection
+the intricacies
+the kotak iisc
+the lack
+the limitations
+the loss
+the mask
+the masked image
+the masked mirror re- gion
+the material properties
+the method’s performance
+the metric
+the metrics
+the mir- rorfusion  model
+the mir- ror’s position
+the mirror
+the mirror reflection
+the mirror’s viewing frustum
+the model
+the models’ reliance
+the msd dataset
+the mug
+the multiple object split
+the multiple objects train split
+the need
+the noisy latent
+the noisy latent features
+the nuanced details
+the object
+the object description
+the object orientation
+the objects
+the object’s geometry
+the object’s rotation
+the object’s x-y position
+the original abo dataset
+the paired category
+the perspective cues
+the pose
+the posi- tion
+the position
+the presence
+the preservation scale
+the primary object k1
+the problem
+the project page
+the prompt
+the proposed data-generation pipeline
+the proposed dataset
+the proposed synthetic dataset
+the quality
+the quantitative results
+the question
+the real images
+the real-world msd dataset
+the reflection
+the reflection generation task
+the results
+the reverse process
+the right
+the same scene
+the sampled object
+the scarcity
+the scene
+the scope
+the second stage
+the shortcomings
+the single object split
+the single object train split
+the sofas
+the spatial relationships
+the stage-wise train- ing approach
+the subtlety
+the success
+the supplementary
+the supplementary material
+the synmirrorv2
+the synthetic data generation process
+the synthetic data pipeline
+the synthetic synmirror dataset
+the synthetic-to-real domain gap
+the table
+the task
+the third stage
+the time
+the timestep t ∈
+the training dynamics
+the training process
+the u-net architecture
+the unipc scheduler
+the unmasked region
+the user
+the variation
+the weights
+the white sofa
+the world ankit dhiman1,2* manan
+the y-axis
+the zoomed-in region
+the zoomed-in region high-
+the “black cable
+the “cycles rendering” parameter
+the “towel
+the “white-yellow mug
+their applicability
+their ca- pacity
+their dataset
+their impressive capabilities
+their reflections
+their relative position
+their semantic categories
+their training data
+their valuable feedback
+their valuable guidance
+these 3d presentations
+these complex scenarios
+these findings
+these limitations
+these methods
+these models
+these results
+these shortcomings
+these steps
+these strategies
+these techniques
+thetic datasets
+this approach
+this challenge
+this complexity
+this dataset
+this denoising process
+this diverse data
+this fine-tuning
+this generalization capa- bility
+this issue
+this limitation
+this modified model
+this pre-computed region
+this process
+this task
+this work
+three camera
+top row
+tr ← samplerandomposition
+training details
+training loss
+transformer-based designs
+two artifacts
+two mirrors
+two objects
+u-net ϵ
+u-net ϵi
+un- masked areas
+unmasked content
+upadhyay et al. pro-
+user study
+users preferred generations
+varied layouts
+various applications
+various image editing tasks
+various methods
+various mirror-related tasks
+various tasks
+video synthesis
+vision transformers
+x ←
+ϵ ∼ n
+‘a perfect plane mirror reflection
+’’stable diffusion flux
+’’‘a perfect plane mirror reflection
+“sdi+depth” generations
+“teddy- bear
+• text alignment
+′ (cid:17
+← getpairedobjectcategory(m1
+← samplecategory(l

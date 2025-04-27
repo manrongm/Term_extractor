@@ -1,0 +1,1217 @@
+From Radiation Dose to Cellular Dynamics: A Discrete Model for Simulating Cancer
+Therapy
+
+Mirko Bagnarol,1, ∗ Gianluca Lattanzi,2, † Jan ˚Astr¨om,3, ‡ and Mikko Karttunen4, 5, §
+1The Racah Institute of Physics, The Hebrew University of Jerusalem, Jerusalem 9190401, Israel
+2Department of Physics, University of Trento and INFN-TIFPA,
+Trento Institute for Fundamental Physics and Applications, Via Sommarive 14, Povo (TN) 38123, Italy
+3CSC Scientific Computing Ltd, K¨agelstranden 14, 02150 Esbo, Finland
+4Department of Physics and Astronomy, Western University,
+1151 Richmond Street, London, Ontario, Canada N6A 3K7
+5Department of Chemistry, Western University, 1151 Richmond Street, London, Ontario, Canada N6A 5B7
+(Dated: April 14, 2025)
+
+Radiation therapy is one of the most common cancer treatments, and dose optimization and
+targeting of radiation are crucial since both cancerous and healthy cells are affected. Different
+mathematical and computational approaches have been developed for this task. The most common
+mathematical approach, dating back to the late 1970’s, is the linear-quadratic (LQ) model for
+the survival probability given the radiation dose. Most simulation models consider tissue as a
+continuum rather than consisting of discrete cells. While reasonable for large scale models, e.g., for
+human organs, any cellular scale effects become, by necessity, neglected. They do, however, influence
+growth, morphology, and metastasis of tumors. Here, we propose a method for modeling the effect of
+radiation on cells based on the mechanobiological CellSim3D simulation model for growth, division,
+and proliferation of cells. To model the effect of a radiation beam, we incorporate a Monte Carlo
+procedure into CellSim3D with the LQ model by introducing a survival probability at each beam
+delivery. Effective removal of dead cells by phagocytosis was also implemented. Systems with two
+types of cells were simulated: stiff slowly proliferating healthy cells and soft rapidly proliferating
+cancer cells. For model verification, the results were compared to prostate cancer (PC-3 cell line)
+data for different doses and we found good agreement.
+In addition, we simulated proliferating
+systems and analyzed the probability density of the contact forces. We determined the state of the
+system with respect to the jamming transition and found very good agreement with experiments.
+
+I.
+
+INTRODUCTION
+
+According to the US Centers for Disease Control and
+Prevention (CDC), cancer was the second most common
+cause of death responsible for 21.9% and 20.7% of deaths
+of males and females, respectively, in 2017 [1, 2]. It has
+been estimated that as many as 70% of cancer patients
+receive radiotherapy either as the main treatment or in
+combination with others [3]. Radiation treatment is par-
+ticularly effective in breast and prostate cancers, and ac-
+cording to Bryant et al. [4], 40% of breast and 23% of
+prostate cancer survivors received radiation treatment.
+
+Radiotherapy can be described as a treatment with
+the aim to dysfunctionalize cancer cell DNA by dam-
+aging it by irradiation of targeted high-energy beam of,
+e.g., x-rays, protons or electrons. Radiation is not se-
+lective and also damages healthy cells and their DNA,
+and thus may, in addition to immediate side effects, have
+side effects that take long times to be manifest. Due to
+the above reasons, optimization of spatial accuracy, dose
+and treatment frequency are critical for success. Reviews
+of the perspectives and history of radiotherapy are pro-
+vided, for example, by Bernier et al. [5], Connell and
+
+∗ mirko.bagnarol@mail.huji.ac.il
+† gianluca.lattanzi@unitn.it
+‡ jan.astrom@csc.fi
+§ mkarttu@uwo.ca
+
+Hellman [6], and Streffer and Herrmann [7]. Different
+approaches to modeling radiotherapy are provided, e.g.,
+Jones and Dale [8].
+
+There are different approaches to treatment planning
+algorithms. They are typically divided into correction-
+based and model-based, the latter being generally more
+accurate [9, 10]. Difficulties include, for example, inho-
+mogeneous tissue, fractonation of dose, over-expression of
+self-repair mechanisms in cancer cells and cell migration.
+One further issue is that most models treat the tissue
+as a continuum rather than consisting of cells of discrete
+sizes and varying mechanical properties. It has recently
+been shown that the local mechanical stress landscape
+has a strong influence on cell migration, and that target-
+ing mechanical properties may provide a new pathway to
+cancer treatment [11].
+
+Some of the current modeling approaches include
+agent-based ones [12] which may offer a new and adapt-
+able way for modeling; although not specific to radiother-
+apy, many of the current models for cancer are discussed
+in the editorial by Enderling and Rejniak [13] and other
+articles in that same special issue. Other reviews dis-
+cussing radiotherapy related matters are provided, e.g.,
+by Marcu and Harriss-Phillips [14], and D’Andrea et
+al. [15] As the reviews show, discreteness of cells is very
+rarely accounted for in radiotherapy modeling. One of
+the models in that direction is the one by Bobadilla et
+al. [16] where cells are differentiated according to whether
+
+5
+2
+0
+2
+
+r
+p
+A
+1
+1
+
+]
+h
+p
+-
+o
+i
+b
+.
+s
+c
+i
+s
+y
+h
+p
+[
+
+1
+v
+9
+9
+4
+8
+0
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+ 
+ 
+ 
+ 
+ 
+ 
+they have received radiation therapy or not. Concep-
+tually, we combine different levels of modeling using a
+mechanobiological cell model together with the contin-
+uum LQ model. This is in the same sprit as the work of
+Liu et al. [17], who combined radiation transport using
+the Geant4 framework, and a cell simulation platform
+called CompuCell3D.
+
+The aim of this paper is to develop a radiotherapy
+model based on discrete cells with heterogeneous prop-
+erties, each capable of responding to changes in its lo-
+cal environment. To this end, we used the CellSim3D
+model [18] as the basis, and integrated features of an
+external radiation beam by combining it with a Monte
+Carlo process simulation and the LQ approach. Using
+CellSim3D as the basis also provides an easily expand-
+able tool beyond LQ. It is important to note that the
+current implementation assumes a spatially uniform or
+photon-based radiation field, which aligns with standard
+clinical photon therapies. Extending this framework to
+account for more complex radiation types, such as high-
+energy protons or heavier ions, remains an open and tech-
+nically challenging problem. Preliminary studies in this
+direction exist [19, 20], particularly for high-energy pro-
+tons where the biological effects tend to resemble those
+of photons under certain conditions. Nonetheless, ac-
+curately modeling the stochastic and spatially heteroge-
+neous energy deposition characteristic of particle thera-
+pies would require significant advancements in both phys-
+ical modeling and biological response integration, and
+represents a promising avenue for future work.
+
+II. METHODS
+
+A. CellSim3D and inclusion of radiation beam
+
+The CellSim3D [18] model and software for cell di-
+vision was used as the starting point. CellSim3D is an
+open source software for mechanobiological simulations
+of cells populations [22]. We omit the model details here
+as they have been described in detail in several prior pub-
+lications and since the code and model are freely avail-
+able [18, 23, 24]; in particular, Supplemental Material
+provided in Ref. [24] has a very detailed description of
+the forces and interactions in the model.
+
+In brief, CellSim3D is GPU accelerated and able
+to routinely handle 100,000’s of cells in 3-dimensions
+on a regular desktop computer equipped with standard
+NVidia graphics cards (a wide range has been tested as
+reported in Ref. [18]). The detailed derivation of the
+model and a description of the software can be found in
+Ref. [18] while the mapping between physical and model
+parameters is provided in Ref. [25]. The parameters used
+in this work are listed in Table 1 of Ref. [18] and will
+not be rewritten here. The model includes cell-cell adhe-
+sion as well as cell-cell and cell-medium friction, cell mi-
+gration, cell division, and easily changeable elastic prop-
+erties. Here, we have amended the original model by
+
+2
+
+adding 1) the effect of a generic therapeutic radiation
+beam, 2) effective phagocytosis, and 3) the capability of
+simulating more than one cell type (here, healthy and
+cancer cells were used).
+
+The effect of the radiation beam is implemented as a
+random process: it acts by picking a random number ξn
+drawn for each cell. This number is then compared with
+the death probability Dn. If ξn < Dn the nth cells dies
+and cannot reproduce anymore. Other properties are left
+unchanged. This is essentially a simple Monte Carlo step.
+
+B. Linear-Quadratic (LQ) model
+
+The death probability (Dn) is taken from the Linear-
+Quadratic (LQ) model that was first introduced in the
+1970’s [26–28]. The LQ model remains the most fre-
+quently used one [8, 29–33], and it is typically considered
+to work for doses in the range of 2-15 Gy. It assumes that
+the survival probability of a cell can be expressed as
+
+S(D) = e−(αD+βD2),
+
+(1)
+
+where D is the dose delivered by the beam, while α
+([α] = Gy−1) and β ([β] = Gy−2), called survival pa-
+rameters, describe the radiosensitivity of the tissue. The
+larger these parameters, the more sensitive the cells are
+to radiation [34]. The parameter α is considered to model
+a single-track process meaning that the cellular DNA is
+damaged in a single radiation event. The parameter β
+describes a situation of a two-track process in which the
+DNA is damaged by two separate radiation hits. Thus,
+the ratio α/β is an important characteristic of the model,
+providing the relative importance of single and double
+events.
+
+The parameters α and β are experimentally accessi-
+ble (albeit there can be important differences between
+in vitro measurements and in vivo outcomes) and they
+both depend on the nature of the beam and the target
+tissue. The rationale for Eq. 1 is that it is a mecha-
+nistic model describing radiation damage to the DNA
+caused by two different types of processes. More com-
+plex approximations for S(D), including those based on
+the above LQ model, Lea-Catcheside factors, or exten-
+sions of the LQ model to low and high dosages are not
+considered here, but they can be easily implemented in
+the code. For generalizations of the LQ model, see, e.g.,
+Refs. [30, 31, 33, 35–37].
+
+C. The action of the radiation beam
+
+The action of the beam during a time step is instan-
+taneous. Once the program determines the set of dying
+cells, their status is switched from alive to dead during
+the same time step. In real treatments, a single dose de-
+livery usually lasts from 10 to 30 minutes, and thus the
+instantaneous action may seem as a harsh approximation.
+
+Simulation
+
+Total # of steps (tend) Write frequency (∆twrite) Box side Beam Dose [Gy] α [Gy−1] β [Gy−2]
+
+3
+
+Prostate
+
+7.25·105
+
+2.5·104
+
+330
+
+Present
+
+Force distribution
+
+5.5·105
+
+2·104
+
+Absent
+
+Present
+
+Absent
+
+Present
+
+47
+
+500
+
+3
+6
+9
+15
+20
+3
+6
+9
+15
+20
+3
+6
+9
+15
+20
+0
+0.2333
+0.4712
+0.7792
+0
+0.2333
+0.4712
+0.7792
+
+0.064
+
+0.0167
+
+0.241
+
+0.067
+
+0.487
+
+0.055
+
+1
+
+1
+
+TABLE I. The main simulation parameters: tend defines the total number of time steps and ∆twrite is the frequency for saving
+data. The box side is given in the natural length scale of the system, which is set by the division volume Vdiv. Considering
+HeLa cells [21], Vdiv of the order of unity corresponds to a length scale of 10 µm. The dose D and the parameters α and β
+describe the action of the beam and the radiation resistance of the tissue according to Eq. (1).
+
+This is, however, not the case due to time scales. In par-
+ticular, the time unit in CellSim3D is determined by
+cellular growth [18]. The program saves the state of the
+system in the output file once every twrite steps, where
+twrite, namely the output frame frequency, is a number
+chosen by the user. Therefore, if the time interval be-
+tween two successive frames reflects a period longer than
+30 minutes, the beam can be considered as instantaneous.
+In our simulations, the life cycle of a cancerous cell
+defined from the newborn state and ending with division,
+lasts less than 1,500 integration steps. In real time scales,
+the cell cycle of a human cancerous cell has a duration of
+about 24-72 hours, mitosis taking about 1 hour, setting
+one single frame to be in that range. Therefore, since one
+frame stands for a period longer than any dose delivery,
+cell death can be thought as instantaneous.
+
+In reality, dead cells undergo phagocytosis [38]. We
+modeled this process as follows: when phagocytosis is
+activated, the program progressively lowers the internal
+pressure of the dead cells, until the threshold defined by
+the user is reached. The rationale is that by decreas-
+ing the volume of the dead cells they become very soft
+and flexible, and free up space for the live cells to pro-
+liferate. The effect of this is essentially the same as the
+full removal of the dead cells but without the compu-
+tational complexity required by restoring the topology
+of the system and neighbor tables. Phagocytosis is, in
+general, much faster than cellular reproduction [38] and
+hence the shrinking rate for the dead cells is set to be ten
+
+times the growth rate of alive cells. The factor of ten is
+arbitrary but crucial (although its value can be changed
+if/when needed): while the unit of time for the simula-
+tion is determined by the cell cycle [25], it is important
+to keep the events that occur within a single simulation
+in the right order.
+
+In the current approach, two different cell types are
+present simultaneously. The first cell type represents
+healthy and the second one cancerous cells; we note that
+the type of cells is not limited to two, but can be var-
+ied as necessary. The two types of cells are identical in
+all parameters but Young’s modulus, which describes the
+cell stiffness; cancer cells are typically considered to be
+softer than healthy cells [39]. Cells with a higher Young’s
+modulus are less prone to deformation and therefore grow
+slowly when compared to softer cells. Slower growth re-
+sults in slower division, which mirrors the well-known fact
+that cancer cells proliferate faster than healthy ones [40].
+In prior studies this approach has been successfully ap-
+plied to study tumor growth in epithelial tissues [41].
+
+III. RESULTS
+
+The CellSim3D[18] model
+
+for mechanobiological
+studies of growth, division and proliferation of cells has
+been successfully validated against experimental data for
+the mitotic index and packing of epithelial cells [42], and
+it has been used to study tissue growth under differ-
+
+4
+
+System a for alive cells a for dead cells x0 for alive cells x0 for dead cells % of alive cells
+
+Packed
+
+Open
+
+−0.215 ± 0.007
+−0.42 ± 0.01
+−0.52 ± 0.03
+−0.81 ± 0.02
+−0.92 ± 0.02
+−1.18 ± 0.03
+−1.21 ± 0.04
+−1.59 ± 0.05
+
+-
+−0.63 ± 0.07
+−0.85 ± 0.06
+−0.88 ± 0.04
+-
+−2.1 ± 0.3
+−2.4 ± 0.1
+−2.5 ± 0.1
+
+−13.1 ± 0.9
+−3.8 ± 0.4
+−2.42 ± 0.4
+−0.07 ± 0.01
+−0.3 ± 0.1
+0.43 ± 0.07
+0.5 ± 0.1
+0.44 ± 0.05
+
+-
+−3.2 ± 0.9
+−1.4 ± 0.4
+−1.2 ± 0.3
+-
+0.0 ± 0.3
+0.5 ± 0.1
+0.44 ± 0.09
+
+100
+78.8
+60
+38.7
+100
+80.3
+60.9
+39.5
+
+TABLE II. Parameters for the exponential fits, a and x0 in Eq. 3. The tails for the probability densities of contact forces were
+fitted by an exponential, Eq. 3. We report here the parameters for each simulation both in the case of fixed volume (Packed )
+and open growth (Open), and for four different dead-alive final ratios. There are no dead cells in the first row of each block
+since the beam was turned off (see the parameters in Table I).
+
+parisons were made with published experimental results
+for radiation (photon) treatment for the human prostate
+cancer PC-3 cell line [46]. The second setup was aimed at
+the investigation of the force distribution in the system
+for a broad range of final states, varying the percentage
+of alive cells and the size of the box. We found good
+agreement despite the varying experimental setups. The
+main parameters of the simulations described in the next
+sections are summed up in Table I. We will discuss these
+validations in the next two sections.
+
+A. Contact force probability density
+
+Eight different simulations were executed using differ-
+ent sizes of the simulation box, and percentage of dead
+cells at the final step. The spatial configurations are la-
+beled as open in the case of an infinite box with open
+boundaries and packed in the case of a rigid box filled
+at the level of more than 80% at the final step of the
+simulation (confluence or close to confluence). The per-
+centages of alive cells at the end of the simulation were,
+respectively, 100% (beam absent), 80%, 60% and 40%.
+We reserved, in each simulation, 6% of the time steps for
+the system to relax after radiation delivery. Up to 60,000
+cells were simulated in each case.
+
+It has been shown that near the jamming transition the
+probability density of the inter-particle forces P (f ) de-
+cays nearly exponentially at large forces; the exponential
+tail is a signature of disorder and mechanical frustration.
+We observed that, as the packing density is increased,
+the tail of the distribution crosses over to a Gaussian in-
+dicating a more uniform force distribution. This is in line
+with previous experimental and simulation studies [44].
+We extracted the probability density of the contact
+forces P (f ). The force f is normalized by the mode of
+the distribution, such that the peak is at f = 1. The
+probability densities are renormalized after cutting off
+the last 1% of the distribution, since the points in that
+range have a very low statistics and represent, in the
+case of alive cells, newborns which have anomalously high
+values caused by the conformation after the division al-
+
+FIG. 1. Comparison of the normalized probability density of
+dead cells in the simulations with a beam delivery. Fitting
+parameters for the Gaussian (Eq. 2) and exponential (Eq. 3)
+distribution are shown in Tables II and III. D1, D2 and D3 are
+the fractions of dead cells in the final frame of the simulation,
+and have the values D1 ≈ 20%, D2 ≈ 40% and D3 ≈ 60%.
+
+ent conditions [24, 43]. The addition of new features in
+CellSim3D requires two different types of validations.
+First, we compared the packing properties of cells to
+those obtained from experiments [44] for elastic spheres
+and found very good agreement. We compared also the
+contact forces and their distributions, in particular with
+respect to the jamming transition. The distribution of
+forces displays an exponential tail, in agreement with
+experimental data from elastic shells [44]. There are
+only very few force measurements in cellular systems, but
+Trepat et al. [45] measured traction distributions using
+Madin-Darby canine kidney cells, finding that the peak
+of the distribution can be well approximated by a Gaus-
+sian, while the tail is an exponential, in excellent agree-
+ment with our model predictions. This will be discussed
+in detail in Section III A 1.
+
+A second validation was performed with respect to
+radiation treatment, with two simulation setups. The
+first setup was aimed at testing the radiation beam in a
+common pathology such as prostate tumor: direct com-
+
+gorithm. We fitted the peak of the distribution with a
+Gaussian function
+
+g(A, x0, σ; x) = Ae− (x−x0 )2
+
+2σ2
+
+and the tail with an exponential function
+
+f (x; a, x0) = ea(x−x0)
+
+(2)
+
+(3)
+
+in order to to determine the stress transfer and the state
+of the system with respect to the point of the jamming
+transition. In Eqs. 2 and 3 above, A and a are the re-
+spective amplitudes, x0 the position of the peak and σ
+the width of the Gaussian.
+
+1. Analysis of the fit
+
+The parameter values from fitting to an exponential,
+Eq. 3, and the survival percentages are shown in Ta-
+ble II, and the probability densities of the dead cells in
+the six simulations with the beam active are shown in
+Fig. 1. Table II shows interesting features: First, the
+steepness of the tails of the distributions is higher in the
+open systems than in the packed ones. This is expected,
+since the packed system is characterized by less space
+per particle, thus causing a more abundant population
+of stronger forces. The same steepness pattern is found
+when comparing dead and alive cells, in both spatial con-
+figurations. There are two interpretations:
+
+• The shrinking of the dead cells,
+
+i.e., mimicking
+phagocytosis, was not complete. Therefore, the
+majority of the dead cells have some free space
+around them and are not completely packed with
+their neighbors, resulting in softer contact and
+lower peak forces.
+
+• Implementation of cell shrinking: As a cell gains in-
+ternal pressure when growing, it loses internal pres-
+sure when shrinking. Cells whose internal pressure
+is close to Pdead, the lower threshold, have a weaker
+pressure force ⃗F P , which points from the center of
+mass outward, and, in principle, prevents the cell
+from folding. Cells with lower pressure are more
+prone to becoming concave in some areas, decreas-
+ing the contact area with the neighbors, and hence
+the total contact force on the cell.
+
+We also observed that the relative errors of the dead
+cells are higher than those of alive cells. Moreover, the
+relative errors of the open space simulations are higher
+than those in the packed ones. These facts reflect the
+abundance of statistics at higher forces.
+In fact, the
+shorter the sample in the tail, the higher the probability
+for some bins of the histogram to contain only one or
+two points. The latter ones flatten the tail and augment
+the spread. This feature does not depend on the binning
+of the histogram and can be explained exactly as in the
+previous paragraph.
+
+5
+
+Parameter Packed dead Open dead
+0.107 ± 0.005
+0.26 ± 0.02
+3.12 ± 0.07
+1.39 ± 0.06
+1.011 ± 0.004
+0.98 ± 0.02
+
+σ
+A
+x0
+
+TABLE III. Parameters for the Gaussian fit (Eq. 2) for dead
+cells both in the case of fixed volume (Packed ) and open
+growth (Open), in the simulation with a final percentage of
+40% dead cells. σ, representing the width of the Gaussian, is
+related to the stress transfer and describes the status of our
+system with respect to the jamming transition. x0 is forced
+to be ≈ 1 since the distributions are normalized to have the
+peak at f = 1. We report the set of parameters fitted only for
+one dose (0.4712 Gy, determining a final dead to total cells
+ratio of 40%) since variations in the fit for other simulations
+with different final ratios are negligible and well within the
+statistics.
+
+The parameter values from fitting to a Gaussian, Eq. 2,
+are shown in Table III. We notice that in the case of fixed
+volume (packed) spatial configuration, the peak is more
+than twice wider than in the case of free growth (open
+boundary) having σpacked = 0.26 ± 0.02 and σopen =
+0.107 ± 0.005, respectively. This is easily explained by
+the fact that in a free growth environment only few cells
+at the very core feel strong forces from their neighbors,
+while cells at the border proliferate freely and tend to
+expand the system and reduce contacts with their neigh-
+bors rather than compress the system. This is not pos-
+sible when the system has filled all the available volume,
+and higher forces are experienced throughout the system.
+This fact is also expressed in the statistical error of σ.
+
+The exponential tails and the widths of the Gaussians
+provide insight on the state of the system with respect
+to the jamming transition. When the system has little to
+no volume available, cell mobility decreases dramatically,
+and the cells stick together forming a compact granular
+tissue. In this case, the force distribution has a long ex-
+ponential tail with a very marked slope difference from
+the initial, Gaussian peak. This is evident in the force
+distribution of dead cells in the packed configuration in
+Fig. 1. A similar result can be found in Fig. 7b of [41],
+where the authors showed the force distribution of a sys-
+tem of bidimensional cells with high friction and no free
+volume available. On the other hand, when the system
+has room to expand at its borders and little free space
+in its core due to the deflation of dead cells, the expo-
+nential tail is still present but way steeper and almost
+contiguous to the Gaussian peak. This is the case of the
+dead cells in the open space configuration in Fig. 1. The
+system is still dense in its core, but cell mobility is still
+considerable and clusters of cells can move. This is again
+in agreement with [41], where the authors show in their
+Fig. 7a the same system but with null friction. Even
+if the volume available is still zero, the absence of fric-
+tion facilitates independent cell movement and keeps the
+system at the jamming threshold.
+
+Label α [Gy]−1 β [Gy]−2
+0.064
+αβ-1
+0.241
+αβ-2
+0.487
+αβ-3
+
+0.0167 Deweese et al. [47]
+0.067
+0.055
+
+Algan et al. [48]
+Leith et al. [49]
+
+Data from
+
+TABLE IV. Survival parameters from other studies, and used
+in the current simulations. The parameters α and β describe
+the survival probability of a cell hit by a beam of dose D
+according to Eq. 1.
+
+2. Shape of the distributions
+
+Figure 1 shows that the peaks of the probability dis-
+tributions for the packed configuration are, in general,
+lower than the ones of the free distribution. This is sim-
+ply caused by the longer tail, and the normalization of the
+distributions. Since the domain is longer and the area is
+fixed to unity, the peak at the mode ¯f must be lower. We
+notice that both tails have an exponential shape, but the
+cells that are in open space exhibit a steeper decay. Due
+to the normalization of the probability density, the cells
+in with the open boundary conditions are more peaked
+around the maximum. The difference in peak height is
+also found when comparing the force probability distri-
+butions of alive and dead cells in the packed vs. open
+graphs, as shown in Fig. 1. The shapes of the curves of
+cells from the same spatial configuration are basically the
+same.
+
+3. Comparison with experimental data
+
+We now compare our results with the experimental
+data of Jose et al. [44]. They prepared thousands of
+micron-sized elastic shells suspended in a solvent, ap-
+plied different loads to the samples, and extracted the
+force distribution. They found an initial peak and a long
+exponential tail. The most impressive similarities are
+found between our distributions in the packed configura-
+tion in Fig. 1, and their curves at low fractions of volume
+occupied by grain. This is expected, since the system in
+our simulation does not fill completely the volume at its
+disposal, but it is still compressed in five out of six sides
+of the cubic box.
+
+There are, however, two notable differences. The first
+is that in our work, the gradient between the peak and
+the initial value, at f ≈ 0, is high, ranging from two to
+three orders of magnitude. In their case, the difference
+is small and, in some curves, displays a plateau. Their
+abundance of low forces is explained by the fact that,
+in the small force domain, they compute the forces with
+a linear equation, starting from the deformation of the
+grain. They observe a plateau when the fraction of space
+occupied by the grains is lower than 0.7. The hard sphere
+packing theorem [50] states that the maximum volume
+occupied by hard spheres packed in space is π
+≈ 0.74,
+√
+2
+3
+while the limit for random packing is 0.637 [51].
+
+6
+
+Therefore, since the density of soft grains in Ref. [44]
+is even smaller than the limit density of hard grains, and
+it is comparable with the threshold of randomly packed
+hard spheres, multiple soft grains in their experiment
+must have no deformation at all, giving abundance of
+points at low force. On the other hand, in our case, cells
+proliferate from an initial core, and any cell at the border
+of the system has at least one neighbor with which it is
+in contact, thus yielding a force contribution close to the
+mean and far from zero.
+
+The second difference to the distributions in Ref. [44] is
+the fact that they measured forces up to 4 times the mean
+force, while we detected values that were 7 times higher
+than our peak value ¯f (which is proximal to the mean and
+set to unity in Fig. 1). This fact, however, is explained
+by how the forces act In a packed configuration, neighbor
+cells are constantly pushed one against the other, and a
+linear repulsion ⃗F R arises. Since the force has no upper
+bound, the repulsion force can become arbitrarily large,
+and in close packing it can easily reach high values.
+
+They also observed a Gaussian behavior away from the
+jamming point by augmenting the load, and therefore the
+fraction of space occupied by the grains. Although our
+open boundary simulations also show a behavior similar
+to a Gaussian right after the peak, the setup is too dif-
+ferent to be reliable for a comparison, since there is no
+load on our system, and the packing in the core of the
+system is only due to cell-cell adhesion.
+
+Trepat et al. [45] measured traction distributions in ca-
+nine kidney cells. Although we cannot compare their re-
+sults quantitatively – we have force distributions – quali-
+tative features can be compared. The data and fits shown
+in Fig. 1 are in excellent agreement with the traction data
+of Trepat et al. [45] which also shows Gaussian peaks and
+exponential tails.
+
+B. Cell survival: the comparison with prostate
+cancer data
+
+Three data sets of survival parameters (α, β) were
+extracted from the α/β ratios present in literature [55]
+along with three data sets [52–54] on the dead-to-alive
+ratios for the PC-3 cell line. In all cases radiation was
+delivered by a photon beam with no fractionation. We
+list the survival parameters in Table IV.
+
+The survival parameters α and β do not depend on
+the dose D, but only on the nature of the beam and the
+structure of the tissue. However, these experimental val-
+ues come from studies with different aims, namely the
+impact of the over-expression of a specific gene or a spe-
+cific protein on the radiosensitivity of the tissue. Hence,
+these experimental data are influenced by external fac-
+tors and the cell culture samples may also meet varying
+experimental conditions due to specific preparations, as
+listed below:
+
+• In Kiprianou et al. [52] the influence of an over-
+expression of a specific gene on radiosensitivity
+
+7
+
+FIG. 2. Percentage of surviving cells in our simulations
+(dashed lines), labeled with their α and β parameters (Ta-
+ble IV), and experimental data (solid lines) taken from Kipri-
+anou et al. [52] (orange), Russell et al. [53] (magenta) and
+Yun et al. [54] (olive green).
+
+was carefully analyzed and compared with refer-
+ence measurements performed on a pure PC-3 cul-
+ture. Here, we used these unbiased reference data.
+
+• Russell et al. [53] investigated the radiosensitivity
+enhancement caused by the expression of a specific
+protein. The study presents a control, in which the
+sample was mixed with a specific concentration of
+dimethyl sulfoxide (DMSO) before irradiation. In
+this work, we used these unbiased data.
+
+• In the case of Yun et al. [54] the radiosensitivity
+enhancement was caused by the lack of a protein.
+Also in this case, we used the reference control,
+where the irradiated sample presents an endoge-
+nous level of the protein.
+
+It is important to notice that, especially for improve-
+ments and accuracy, although we have chosen unbiased
+(or less biased) published data sets, differences in sam-
+ple preparation, vector substance, and cell counting may
+complicate any quantitative comparison.
+
+The simulation results and the experimental data ex-
+tracted from references are plotted in Fig. 2. As ex-
+pected, quantitative agreement is mixed: our results are
+mainly qualitative, since we collected parameters and val-
+ues from previous studies having quite different experi-
+mental conditions. Quantitative agreement is restored at
+the tails of the distributions.
+
+More specifically, we notice that the first set of pa-
+rameters (blue curve in Fig. 2) slightly overestimates the
+experimental set taken from Ref. [52] (orange curve) by a
+maximum 11% at D = 6 Gy, while the difference becomes
+lower than 8% in all other cases. The disagreement fur-
+ther decreases toward the tail, as expected, since more
+
+FIG. 3. Mass density projected along all the directions (zy-,
+zx- and yx-planes) both at the beam hit (left panels) and at
+the end (right panels)of the open boundary simulation with
+60.9% of alive cells at the final step. Blue: alive cells, and red:
+the dead cells. Proliferation tends to push the dead cells into
+clusters. The units in the axis are expressed in the natural
+units of the system (see Table I).
+
+cells are killed by the increased dose. The second set
+(cyan) and the experimental data taken from Ref. [53]
+(magenta), on the other hand, display a very good agree-
+ment, meaning that the measurements from Ref. [53] are
+well described by the parameters fitted in [48]. This is
+impressive, since the radiation is from a different source
+(respectively, X- and γ-ray) and a vector substance was
+added to the sample in the experimental setup, poten-
+tially slightly altering its radiosensitivity. The last set
+(black) describes a very sensitive tissue and the simula-
+tion systematically underestimates the experimental data
+taken from Ref. [54] (green).
+
+In each simulation the final number of cells n0 was be-
+tween 43, 000 and 45, 000, thus providing sufficient statis-
+tics with 0.1% standard deviation for all points. The
+experimental data were published without error bars, al-
+though the authors reported that all points represented
+mean values of at least three samples.
+
+Figure 3 shows three spatial projections of the final
+two frames of the force distribution with open boundary
+configuration and with a 0.4712 Gy dose (see Table I).
+
+The mass densities of alive cells are shown in blue and
+those of the dead cells in red. Clusters, or islands, of
+dead cells are clearly visible across the tumor after 2,000
+steps of proliferation. The dead cells are pushed together
+by the division of the alive cells, which occurs even in the
+core of the system due to the free space releases by the
+dead cells.
+
+IV. CONCLUSIONS
+
+We have proposed and analyzed a new tool for ra-
+diation oncology simulations by representing the tissue
+as a set of cells, rather than a continuum material, us-
+ing the recently proposed CellSim3D mechanobiological
+cell model. We implemented the effects of radiation beam
+with a customizable dose, tissue sensitivity and fraction-
+ation as a stochastic Monte Carlo process. In a first set
+of runs, we measured the probability density P (f ) of the
+inter-cellular forces, finding an excellent agreement with
+experiments in many aspects, and some minor differences
+due to the celluylar nature of the system. With these
+measurements, we were able to determine the state of
+the system with respect to the jamming transition, gives
+information on how far the cells can move inside the tu-
+
+[1] Leading causes of death in females, United States 2017
+
+(2019), accessed: April 5, 2020.
+
+[2] Leading causes of death in males, United States 2017
+
+(2019), accessed: April 5, 2020.
+
+[3] O. Blyuss,
+
+L. Koriashkina,
+
+and
+R. Molchanov, Optimal placement
+irradiation
+sources in the planning of radiotherapy: Mathematical
+models and methods of solving, Comput. Math. Methods
+Med. 2015, 1 (2015).
+
+E. Kiseleva,
+of
+
+[4] A. K. Bryant, M. P. Banegas, M. E. Martinez, L. K. Mell,
+and J. D. Murphy, Trends in radiation therapy among
+cancer survivors in the united states, 2000-2030, Cancer
+Epidemiol. Biomarkers Prev. 26, 963 (2017).
+
+[5] J. Bernier, E. J. Hall, and A. Giaccia, Radiation oncol-
+ogy: a century of achievements, Nat. Rev. Cancer 4, 737
+(2004).
+
+[6] P. P. Connell and S. Hellman, Advances in radiotherapy
+and implications for the next century: A historical per-
+spective, Cancer Res. 69, 383 (2009).
+
+[7] C. Streffer and T. Herrmannn, A century of development
+in radiation biology. basic principles of targeted and ef-
+ficient radiotherapy, Strahlenther. Onkol. 188 Suppl 3,
+231 (2012).
+
+[8] B. Jones and R. G. Dale, The evolution of practical radio-
+biological modelling, Br. J. Radiol. 92, 20180097 (2019).
+[9] W.-Z. Chen, Impact of dose calculation algorithm on ra-
+
+diation therapy, World J. Radiol. 6, 874 (2014).
+
+[10] Y. L. Woon, S. P. Heng, J. H. D. Wong, and N. M. Ung,
+Comparison of selected dose calculation algorithms in ra-
+diotherapy treatment planning for tissues with inhomo-
+geneities, J. Phys. Conf. Ser. 694, 012024 (2016).
+
+8
+
+mor. As a further proof of concept, we investigated the
+effect of radiation on prostate tumor model, finding good
+qualitative, but mixed quantitative agreement with ex-
+perimental data. This is likely due to the varying ex-
+perimental conditions present in literature. For further
+development, the software can be made to include spa-
+tial and temporal inhomogeneities for the dose and tis-
+sue radiosensitivity as well as time dependence for, e.g.,
+the dose rate. In addition, a more elaborated version of
+the survival probability can be used in place of Eq. (1),
+and cell migration can be used to simulate further dy-
+namic effects of cancers, such as metastasis. Such exten-
+sions would allow for more quantitative simulations of
+fractionated dose, inhomogeneous irradiation protocols,
+or even an inhomogeneous radiosensitivity of the tissue,
+and provide useful comparisons with experiments or even
+predictions for actual treatments.
+
+ACKNOWLEDGMENTS
+
+We thank Francesco Cordoni for a critical reading of
+the manuscript. MK thanks the Discovery and Canada
+Research Chairs Programs of the Natural Sciences and
+Engineering Research Council of Canada (NSERC) for
+financial support.
+
+[11] D. T. Tambe, C. C. Hardin, T. E. Angelini, K. Rajen-
+dran, C. Y. Park, X. Serra-Picamal, E. H. Zhou, M. H.
+Zaman, J. P. Butler, D. A. Weitz, J. J. Fredberg, and
+X. Trepat, Collective cell guidance by cooperative inter-
+cellular forces, Nat. Mat. 10, 469 (2011).
+
+[12] A. Jalalimanesh, H. S. Haghighi, A. Ahmadi, and
+M. Soltani, Simulation-based optimization of radiother-
+apy: Agent-based modeling and reinforcement learning,
+Math. Comput. Simul. 133, 235 (2017).
+
+[13] H. Enderling and K. A. Rejniak, Simulating cancer:
+Computational models in oncology, Front. Oncol. 3, 233
+(2013).
+
+[14] L. G. Marcu and W. M. Harriss-Phillips, In silico mod-
+elling of treatment-induced tumour cell kill: develop-
+ments and advances, Comput. Math. Methods Med.
+2012, 960256 (2012).
+
+[15] M. D’Andrea, M. Benassi, and L. Strigari, Model-
+ing radiotherapy induced normal tissue complications:
+An overview beyond phenomenological models, Comput.
+Math. Methods Med. 2016, 2796186 (2016).
+
+[16] A. V. P. Bobadilla, P. K. Maini, and H. Byrne, A stochas-
+tic model for tumour control probability that accounts for
+repair from sublethal damage, Math. Med. Biol. 35, 181
+(2017).
+
+[17] R. Liu, K. A. Higley, M. H. Swat, M. A. J. Chaplain,
+G. G. Powathil, and J. A. Glazier, Development of a
+coupled simulation toolkit for computational radiation
+biology based on Geant4 and CompuCell3D, Phys. Med.
+Biol. 66, 045026 (2021).
+
+[18] P. Madhikar, J. ˚Astr¨om, J. Westerholm, and M. Kart-
+tunen, CellSim3D: GPU accelerated software for simula-
+
+tions of cellular growth and division in three dimensions,
+Comp. Phys. Comm. 232, 206 (2018).
+
+[19] N. Cogno, R. Bauer, and M. Durante, Mechanistic model
+of radiotherapy-induced lung fibrosis using coupled 3d
+agent-based and monte carlo simulations, Commun. Med.
+4, 023129 (2024).
+
+[20] O. R. Garc`ıa Garc`ıa, R. Ortiz, E. Moreno-Barbosa, N. D-
+Kondo, B. Faddegon, and J. Ramos-M´endez, TOPAS-
+Tissue: A framework for the simulation of the biological
+response to ionizing radiation at the multi-cellular level,
+Int. J. Mol. Sci. 25, 10061 (2024).
+
+[21] H. W. Jones, Record of the first physician to see Henri-
+etta Lacks at the Johns Hopkins Hospital: history of the
+beginning of the HeLa cell line, Am. J. Obstet. Gynecol.
+176, s227 (1997).
+
+[22] Open source: https://github.com/softsimu/cellsim3d.
+[23] P. Madhikar, J. ˚Astr¨om, B. Baumeier, and M. Karttunen,
+Jamming and force distribution in growing epithelial tis-
+sue, Phys. Rev. Res. 3, 023129 (2021).
+
+[24] M. Mazarei, J. ˚Astr¨om, J. Westerholm, and M. Kart-
+tunen, In silico testing of the universality of epithelial
+tissue growth, Phys. Rev. E 106, L062402 (2022).
+[25] A. Mkrtchyan, J. A. ˚Astr¨om, and M. Karttunen, A new
+model for cell division and migration with spontaneous
+topology changes, Soft Matter 10, 4332 (2014).
+
+[26] A. M. Kellerer and H. D. Rossi, Theory of dual radiation
+action, Curr. Top. Radiat. Res. Quart. 8, 85 (1972).
+[27] K. H. Chadwick and H. P. Leenhouts, A molecular theory
+
+of cell survival, Phys. Med. Biol. 18, 78 (1973).
+
+[28] A. M. Kellerer and H. H. Rossi, A generalized formulation
+of dual radiation action, Radiat. Res. 75, 471 (1978).
+[29] R. G. Dale, The application of the linear-quadratic dose-
+effect equation to fractionated and protracted radiother-
+apy, Br. J. Radiol. 58, 515 (1985).
+
+[30] S. F. C. O’Rourke, H. McAneney, and T. Hillen, Lin-
+ear quadratic and tumour control probability modelling
+in external beam radiotherapy, J. Math. Biol. 58, 799
+(2008).
+
+[31] D. J. Brenner, The linear-quadratic model is an appro-
+priate methodology for determining isoeffective doses at
+large doses per fraction, Sem. Radiat. Oncol. 18, 234
+(2008).
+
+[32] A. Santiago, S. Barczyk, U. Jelen, R. Engenhart-Cabillic,
+and A. Wittig, Challenges in radiobiological modeling:
+can we decide between LQ and LQ-l models based on
+reviewed clinical NSCLC treatment outcome data?, Ra-
+diat. Oncol. 11, 67 (2016).
+
+[33] C. M. van Leeuwen, A. L. Oei, J. Crezee, A. Bel, N. A. P.
+Franken, L. J. A. Stalpers, and H. P. Kok, The alfa and
+beta of tumours: a review of parameters of the linear-
+quadratic model, derived from clinical radiotherapy stud-
+ies, Radiat. Oncol. 13, 96 (2018).
+
+[34] S. J. McMahon, The linear quadratic model: usage, inter-
+pretation and challenges, Phys. Med. Biol. 64, 01TR01
+(2018).
+
+[35] F. Cordoni, M. Missiaggia, A. Attili, S. M. Welford,
+E. Scifoni, and C. La Tessa, Generalized stochastic mi-
+crodosimetric model: The main formulation, Phys. Rev.
+E 103, 012412 (2021).
+
+[36] F. G. Cordoni, M. Missiaggia, E. Scifoni, and C. La Tessa,
+Cell survival computation via the generalized stochastic
+microdosimetric model (GSM2); Part I: The theoretical
+framework, Radiat. Res. 197, 218 (2022).
+
+9
+
+[37] M. Missiaggia, F. G. Cordoni, E. Scifoni, and C. L. Tessa,
+Cell survival computation via the generalized stochastic
+microdosimetric model (GSM2); Part II: Numerical re-
+sults, Radiat. Res. 201, 104 (2024).
+
+[38] A. Aderem and D. M. Underhill, Mechanism of phago-
+cytosis in macrophages, Annu. Rev. Immunol. 17, 593
+(1999).
+
+[39] C. Alibert, B. Goud, and J.-B. Manneville, Are Cancer
+Cells Really Softer than Normal Cells?, Biol. Cell 109,
+167 (2017).
+
+[40] D. Hanahan and R. A. Weinberg, Hallmarks of cancer:
+
+The next generation, Cell 144, 646 (2011).
+
+[41] P. Madhikar, J. ˚Astr¨om, B. Baumeier, and M. Karttunen,
+Jamming and force distribution in growing epithelial tis-
+sue, Phys. Rev. Res. 3, 023129 (2021).
+
+[42] P. Madhikar, J. ˚Astr¨om, J. Westerholm, B. Baumeier,
+and M. Karttunen, Coarse-grained modeling of cell di-
+vision in 3d: influence of density, medium viscosity, and
+inter-membrane friction on cell growth and nearest neigh-
+bor distribution, Soft Mat. 18, 150 (2020).
+
+[43] M. Mazarei, J. ˚Astr¨om, J. Westerholm, and M. Kart-
+tunen, Effect of substrate heterogeneity and topology on
+epithelial tissue growth dynamics, Phys. Rev. E 108,
+054405 (2023).
+
+[44] J. Jose, A. van Blaaderen, and A. Imhof, Random three-
+dimensional jammed packings of elastic shells acting as
+force sensors, Phys. Rev. E 93, 062901 (2016).
+
+[45] X. Trepat, M. R. Wasserman, T. E. Angelini, E. Millet,
+D. A. Weitz, J. P. Butler, and J. J. Fredberg, Physical
+forces during collective cell migration, Nat. Phys. 5, 426
+(2009).
+
+[46] M. E. Kaighn, K. S. Narayan, Y. Ohnuki, J. F. Lechner,
+and L. W. Jones, Establishment and characterization of a
+human prostatic carcinoma cell line (PC-3), Invest. Urol.
+17, 16 (1979).
+
+[47] T. L. Deweese, J. M. Shipman, L. E. Dillehay, and W. G.
+Nelson, Sensitivity of human prostatic carcinoma cell
+lines to low dose rate radiation exposure, J. Urol. 159,
+591 (1998).
+
+[48] O. Algan, C. C. Stobbe, A. M. Helt, G. E. Hanks,
+and J. D. Chapman, Radiation inactivation of human
+prostate cancer cells: the role of apoptosis, Radiat. Res.
+146, 267 (1996).
+
+[49] J. T. Leith, L. Quaranto, G. Padfield, S. Michelson, and
+A. Hercbergs, Radiobiological studies of pc-3 and du-145
+human prostate cancer cells: x-ray sensitivity in vitro
+and hypoxic fractions of xenografted tumors in vivo, Int.
+J. Radiat. Oncol. Biol. Phys. 25, 283 (1993).
+
+[50] C. Cadart, E. Zlotek-Zlotkiewicz, M. Le Berre, M. Piel,
+and H. K. Matthews, Exploring the function of cell shape
+and size during mitosis, Dev. Cell 29, 159 (2014).
+[51] G. D. Scott and D. M. Kilgour, The density of random
+close packing of spheres, J. Phys. D 2, 863 (1969).
+[52] D. B. N. Kiprianou, E. D. King and J. G. Rhee, bcl-2
+over-expression delays radiation-indeuces apoptosis with-
+out affecting the clonogenic survival of human prostate
+cancer cells, Int. J. Cancer 70, 341–348 (1997).
+
+[53] J. S. Russell, W. Burgan, K. A. Oswald, K. Camphausen,
+and P. J. Tofilon, Enhanced cell killing induced by the
+combination of radiation and the heat shock protein 90
+inhibitor 17-allylamino-17- demethoxygeldanamycin: a
+multitarget approach to radiosensitization, Clin. Cancer
+Res. 9, 3749 (2003).
+
+[54] E.-J. Yun, C.-J. Lin, A. Dang, E. Hernandez, J. Guo,
+W.-M. Chen, J. Allison, N. Kim, P. Kapur, J. Brugaro-
+las, K. Wu, D. He, C.-H. Lai, H. Lin, D. Saha, S. T.
+Baek, B. P. Chen, and J.-T. Hsieh, Downregulation of
+human dab2ip gene expression in prostate cancer cells
+results in resistance to ionizing radiation, Cancer Res.
+
+70, 2829–2839 (2003).
+
+[55] D. J. Carlson, R. D. Stewart, X. A. Li, K. Jennings, J. Z.
+Wang, and M. Guerrero, Comparison of in vitro and in
+vivo α/β ratios for prostate cancer, Phys. Med. Biol. 49,
+4477–4491 (2004).
+
+10
+
+

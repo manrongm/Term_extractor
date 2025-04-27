@@ -1,0 +1,2328 @@
+Dynamic Camera Poses and Where to Find Them
+
+Chris Rockwell1,2
+
+Joseph Tung3
+
+Ming-Yu Liu1
+
+David F. Fouhey3
+University of Michigan2
+
+NVIDIA1
+
+Tsung-Yi Lin1
+Chen-Hsuan Lin1
+New York University3
+
+5
+2
+0
+2
+
+r
+p
+A
+4
+2
+
+]
+
+V
+C
+.
+s
+c
+[
+
+1
+v
+8
+8
+7
+7
+1
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+https://research.nvidia.com/labs/dir/dynpose-100k
+
+Figure 1. We introduce DynPose-100K, a large-scale video dataset of dynamic content with camera annotations. DynPose-100K consists
+of 100,131 Internet videos that span diverse settings. We curate DynPose-100K such that videos contain dynamic content while ensuring the
+cameras are able to be estimated (including intrinsics and poses). Towards this end, we address two challenging problems: (a) identifying
+the videos suitable for camera estimation, and (b) improving the camera estimation algorithm for dynamic videos.
+
+Abstract
+
+Annotating camera poses on dynamic Internet videos
+at scale is critical for advancing fields like realistic video
+generation and simulation. However, collecting such a
+dataset is difficult, as most Internet videos are unsuitable for
+pose estimation. Furthermore, annotating dynamic Internet
+videos present significant challenges even for state-of-the-
+art methods.
+In this paper, we introduce DynPose-100K,
+a large-scale dataset of dynamic Internet videos annotated
+
+with camera poses. Our collection pipeline addresses fil-
+tering using a carefully combined set of task-specific and
+generalist models. For pose estimation, we combine the
+latest techniques of point tracking, dynamic masking, and
+structure-from-motion to achieve improvements over the
+state-of-the-art approaches. Our analysis and experiments
+demonstrate that DynPose-100K is both large-scale and di-
+verse across several key attributes, opening up avenues for
+advancements in various downstream applications.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+1. Introduction
+
+Our contributions are summarized as:
+
+Annotating large-scale dynamic Internet video with cam-
+era information has the potential to advance many prob-
+lems in computer vision and robotics. Such a dataset could
+power generative models [5, 8, 25, 34, 55, 55, 70, 95] to
+create camera-controlled dynamic videos [14, 32, 42, 56,
+65, 90, 93, 102] and 4D scenes [2, 71, 104].
+It could
+also enable large-scale training of view synthesis mod-
+els [10, 17, 24, 49, 83, 91, 99] for extended reality appli-
+cations. Additionally, this data could be transformational
+in robotics for tasks like imitation learning [1, 23, 58] or
+training in realistic simulation environments [6, 35, 89].
+
+However, constructing a dataset of dynamic videos with
+camera annotations is challenging. First, most Internet
+videos are not suitable for camera pose estimation. They
+may be cartoons, contain substantial post-processing, or
+lack a clear frame of reference. Next, estimable videos are
+often low quality or do not contain scene dynamics. Fur-
+thermore, even if suitable target videos can be identified,
+the process of estimating dynamic camera poses remains
+challenging. Techniques that work well in static settings,
+such as structure-from-motion, struggle with moving ob-
+jects, varying appearances, and other complex dynamics
+common in Internet videos.
+
+Given the challenges, most existing datasets take a dif-
+ferent approach. One line of work uses synthetic data [9, 28,
+51, 52, 62, 105] where ground-truth camera data can be ob-
+tained. However, this often results in smaller-scale datasets
+(typically <500 videos) due to the high cost of 3D assets,
+and methods face a sim2real gap. Recent work finds cam-
+era data from real videos in restricted domains, such as ego-
+centric videos [81], self-driving videos [75], hand-collected
+videos of pets [72] or specific actions [27]. These setups
+make SfM easier via dense viewpoints [81], LiDAR sen-
+sory data [75], multiple cameras [27, 37] and turntable-style
+videos [72]. However, such setups also impose significant
+constraints on the collected data.
+
+We introduce DynPose-100K, a large collection of dy-
+namic Internet videos with camera annotations. Sample
+videos and annotations appear in Figure 1. The dataset
+contains diverse content, a variety of dynamic object ap-
+parent sizes and targeted video length; and is analyzed in
+§ 4. We address the central challenges of filtering for suit-
+able dynamic video and annotating the corresponding cam-
+era poses with a carefully designed pipeline (§ 3). Our fil-
+tering pipeline combines a mix of specialized experts that
+handle common reasons videos are unsuitable, as well as a
+generalist VLM that can detect and remove a variety of is-
+sues. We produce accurate poses using a new method that
+merges the state-of-the-art in motion masking, correspon-
+dence tracking, and SfM. We apply this approach to Panda-
+70M [12, 94], filtering 3.2M videos to produce 100K with
+high-quality camera information.
+
+1. We introduce DynPose-100K, a large-scale dynamic In-
+ternet video dataset annotated with camera information.
+Analysis shows the dataset is diverse in content and dy-
+namics, and has targeted video length.
+
+2. We propose a filtering pipeline using specialist models
+
+and a VLM, motivated by Internet video analysis.
+
+3. We propose a dynamic pose estimation pipeline integrat-
+ing state-of-the-art components in tracking and masking.
+
+4. Experiments show filtering selects videos with far higher
+precision than alternatives and pose estimation reduces
+error across metrics and settings by as much as 90%.
+
+2. Related Work
+
+This work aims to collect and annotate dynamic Internet
+video with camera pose. To do so, we face challenges in
+data curation and pose estimation.
+
+Dynamic camera pose datasets. Due to challenges in
+predicting dynamic camera pose, datasets typically adopt
+strategies to replace or aid standard SfM. Synthetic datasets
+are appealing as ground truth pose can be obtained [9, 28,
+51, 52, 62, 105, 105]. However, the requirement for en-
+gineered dynamic assets means the datasets are of small
+size and often contain limited dynamics e.g. objects fly-
+ing [51] or falling [28]. In real-world video, SfM is made
+easier with e.g. turntable-style captures [72], dense view-
+points [81], multiple cameras [27], fisheye captures [37],
+and LiDAR [75]. We leverage the diverse Internet video
+dataset from Panda-70M [12] and show our method can
+annotate high quality poses without relying on the con-
+straints of prior work. Concurrent works CamCo [93] and
+B-Timer [45] collect 12K and 40K diverse videos [3], re-
+spectively; we collect 100K and publicly release data.
+
+Camera pose estimation. Given many overlapping views
+of a static scene [4, 11, 40, 48, 67, 106], classical SfM [66,
+74, 76] and SLAM [54] are gold standards for preci-
+sion, while learned methods recently are becoming com-
+petitive [21, 41, 73, 77, 80, 82, 85, 88, 98, 101] given
+large datasets [64, 87, 97, 106]. Dynamic Internet video
+is more challenging as dynamic correspondences cannot be
+used for bundle adjustment and also limit static correspon-
+dence. Recent works [26, 43, 50, 103] mask dynamics us-
+ing learned prediction [13, 69, 103] or motion and seman-
+tic cues [31, 33, 78]. We upgrade masking using state-of-
+the-art methods in semantics, interaction, motion and track-
+ing [15, 31, 36, 63, 78].
+
+Correspondence estimation in Internet video is also chal-
+lenging due to varying lighting and appearance [43]. As
+a result, we show masking+classical SfM [66] fails on di-
+verse Internet video. ParticleSfM [103] improves by induc-
+ing dense correspondences via propagated optical flow [78]
+
+2
+
+Figure 2. Panda-Test dataset statistics. Statistics reflect human labels on held-out 1K video Panda-Test set, detailed in § 4.1. Only 9% are
+target dynamic camera pose estimation videos due to various issues, e.g. static scene, low-quality or non-real content, and ambiguous or
+blurry frame of reference. We focus on moving cameras to facilitate downstream tasks e.g. camera-controlled video generation and learned
+pose estimation. We remove unsuitable videos using a combination of specialist models and a generalist VLM.
+
+and uses more robust Global Bundle Adjustment, Theia-
+SfM [76]. We adopt Theia-SfM and upgrade correspon-
+dence estimation by utilizing advances in long-term track-
+ing [19, 30, 68, 84] via BootsTAP [20]. Concurrent work
+TracksTo4D [39] predicts pose and dynamic masks given
+2D tracks [38] but focuses on small dynamics and circu-
+lar camera motion [72]; we build off stronger 2D tracking
+BootsTAP and tackle diverse Internet video. Concurrent
+work DATAP-SfM [96] trains joint tracking and motion pre-
+diction on synthetic FlyingThings3D [51], we instead lever-
+age tracking and masking methods trained on large amounts
+of real data [16, 20, 46, 63] and collect a large-scale dataset.
+Concurrent works MonST3R [100] and MegaSaM [44] gen-
+eralize learned DUSt3R [86] and DROID-SLAM [79], re-
+spectively, to dynamic scenes; we build around classical
+SfM for pose annotation given its precision in longer video.
+
+3. DynPose-100K: Dataset Curation
+
+DynPose-100K is a large-scale video dataset comprising di-
+verse dynamic Internet content with camera annotations.
+Assembling such a dataset is challenging due to two pri-
+mary issues related to camera pose estimation: (a) the vast
+majority of Internet videos are unsuitable for successful
+camera pose estimation, and (b) camera pose estimation on
+dynamic videos is inherently a challenging problem. We
+address these challenges in this section.
+
+3.1. Candidate Selection Criteria
+
+Most videos in representative Internet video datasets such
+as Panda-70M [12] are unsuitable for estimating camera
+pose: Figure 2 shows only 9% of videos from a randomly
+selected test set of 1,000 videos from Panda-70M dataset
+satisfy the criteria for camera pose estimation in dynamic
+settings. We start by defining specific criteria to identify
+videos suitable for camera pose estimation, which we detect
+via subsequently defined data filtering steps.
+
+We argue that videos should satisfy three criteria:
+
+C1. Real-world and quality video. Videos must be
+from the real world i.e. not cartoons, computer screen
+
+recordings, side-by-side/composited videos, and heav-
+ily edited processed content. The videos should also be
+of sufficient quality, resolution, frame rate and should
+not have non-perspective distortion.
+
+C2. Feasibility for pose prediction. Videos should not
+contain severe zoom-in or zoom-out effects, abrupt shot
+changes, or ambiguous reference frames (e.g. scenes
+filmed inside a moving car). Videos without static corre-
+spondences, e.g., when the background is fully blurred
+or occluded should be excluded.
+
+C3. Dynamic camera and scene. Non-static camera al-
+lows non-trivial pose for e.g. training pose estimation
+or camera-controlled video generation methods. Videos
+with moving cameras and dynamic scenes typically also
+provide richer data, e.g., interactions involving people,
+supporting a wider range of downstream applications.
+
+3.2. Candidate Video Selection
+
+The filtering process aims to automatically select videos
+matching these three criteria. Our filtering pipeline iden-
+tifies common reasons for unsuitability using specialized
+models (e.g. trained to detect distortion or estimate the cam-
+era focal length). On the other hand, a variety of other
+problems, e.g., post-edited text are not effectively handled
+by these specialized models. To this end, we use the re-
+cent vision-language models (VLM) [60] and prompt them
+to detect a variety of issues. As will be shown in § 4.1,
+while individual filters (including the VLM) are insufficient
+on their own, their combined use is effective.
+
+Filtering using task-specific models. Specialized models
+are designed to address specific, frequently occurring rea-
+sons for video rejection. These models are operated on tem-
+porally subsampled frames to enable efficient processing.
+
+1. Cartoons and presenting. This uses a classifier [16] to
+remove criteria in (C1) e.g. cartoon or screen recording;
+and (C3) e.g. static scenes of person sitting in front of
+camera or unlikely to interact.
+
+3
+
+Not realQuality/ethicalNot estimableStatic cameraStatic sceneTarget videos25.4%11.1%23.1%27%4.4%9%2. Non-perspective distortion. Videos with high predicted
+distortion are removed. Distortion complicates applica-
+tions that require reliable correspondences, so we con-
+sider them low quality (C1).
+
+3. Focal length. Videos with high predicted focal length
+variance are removed, as they often contain zoom effects
+or shot changes (C2). We also exclude videos with long
+focal lengths, which typically include backgrounds that
+are too blurred for reliable pose estimation (C2) or are
+sporting shots with static cameras (C3).
+
+4. Dynamic object masking. Videos with excessively large
+predicted mask sizes are considered unsuitable for pose
+estimation (C2) and are removed, as reliable pose esti-
+mation requires sufficient static correspondences.
+
+5. Optical flow. High peak sequential optical flow is typi-
+cally due to shot change (C2); such videos are removed
+using predicted flow. Low mean sequential flow typi-
+cally indicates static videos (C3); these are also removed.
+
+6. Point tracking. Abrupt disappearance of predicted point
+tracks can indicate shot change, blurred background, or
+severe zoom-in/zoom-out, making the video unsuitable
+for pose estimation (C2). Conversely, extremely sta-
+ble tracks suggest neither the camera nor the scene has
+moved significantly (C3). Both cases are removed.
+
+Filtering using general VLM. The generalist VLM ad-
+dresses a variety of possibilities for video rejection. We
+prompt GPT-4o mini [59, 60] a series of eight questions ad-
+dressing all three classes of criteria. They cover: if the video
+is taken from an ambiguous reference, if the background is
+too blurry to match correspondence, if frames are distorted
+or have very long focal length, if the scene is static, if the
+video is a cartoon, has been post-processed, and if children
+are present. We find having overlap with specialist filters,
+e.g. identifying long focal length, is helpful, since the VLM
+can be prompted to consider diverse cues for removal.
+
+Collection details. Beginning from 3.2M Panda-70M [12]
+videos, we apply filtering (§ 3.2) leaving 137K dynamic
+videos. We estimate pose on 107K and drop trajecto-
+ries with less than 80% of frames registered, leaving 100k
+videos. We apply filters sequentially for efficiency. First are
+lightweight Hands23, optical flow and focal length filters on
+the full set. We remove low scoring videos, leaving 1.63M
+videos. We next run the distort filter and remove low scores,
+leaving 1.53M; then tracking, leaving 679K; then masking,
+leaving 462K; and finally the VLM, after which we apply a
+strict final filter to get 137K for pose estimation.
+
+3.3. Dynamic Camera Pose Estimation
+
+Figure 3. Pose estimation approach. We apply the state-of-the-
+art point tracking method at a sliding window to produce dense,
+long-term correspondences. Complementary dynamic masks are
+used to remove non-static tracks. The remaining static tracks are
+provided as input to global bundle adjustment.
+
+occlude the underlying static scene, the static scene can
+change appearance making correspondence estimation dif-
+ficult. Our approach addresses both challenges (Figure 3).
+For masking, we use state-of-the-art methods in semantics,
+interaction, motion, and tracking, with each component im-
+proving overall performance. For correspondences, we use
+the latest point tracking method [20] applied within a slid-
+ing window on the video. Finally, we apply global bundle
+adjustment [76], which has shown to be effective in han-
+dling the challenges posed by Internet videos [103].
+
+Dynamic masking. We first aim to segment dynamic re-
+gions in an input video. Our approach uses advances in
+several communities to produce accurate masks.
+
+1. Semantic segmentation. We segment common dynamic
+classes (e.g. humans, vehicles, animals, and sports
+equipment) using OneFormer [36].
+
+2. Object interaction segmentation. This masks held ob-
+jects which may dynamic yet outside semantic classes
+e.g. silverware. We use the Hands23 [16] hand-object
+interaction segmentation model.
+
+3. Motion segmentation. This handles dynamic objects that
+are not common classes or involve human manipulation,
+e.g. rustling leaves or flowing water. We use motion
+masking of RoDynRF [50], which removes regions with
+high Sampson error [31] based on optical flow [78].
+
+Having collected suitable videos, our objective is to obtain
+high-quality camera poses. Pose estimation on dynamic In-
+ternet video is challenging: not only do dynamic objects
+
+4. Mask propagation. Propagation provides smooth masks
+across frames and precise object boundaries. We use
+SAM2 [63] to propagate masks.
+
+4
+
+Input video…Point trackingDynamic maskingGlobal bundle adjustmentOutput camera posesPoint tracking. We estimate correspondences using point
+tracking, which uses temporal information in videos to
+improve estimation. Unlike pairwise estimation, tracking
+takes advantage of the fact that points generally move only
+small amounts between sequential frames. Additionally,
+tracking the same point over multiple frames yields rapidly
+increasing paired correspondences across each frame com-
+bination. For this purpose, we use BootsTAP [20] to track
+a grid of points forward several frames, move forward, and
+repeat in sliding window fashion. Grid-based point track-
+ing facilitates denser correspondences, while the extended
+tracking duration supports long-term correspondences, re-
+ducing drift and aiding in loop closure. Sliding window
+tracking of point grids ensures that each frame maintains a
+sufficient number of correspondences in the case previous
+windows have become occluded or faced drift.
+
+Global bundle adjustment. We use global bundle adjust-
+ment method Theia-SfM [76], using correspondences from
+tracklets as input. From a single tracklet, we extract corre-
+spondences for all pairs, excluding pairs containing a frame
+in which the tracklet is contained within a dynamic mask.
+
+4. DynPose-100K: Dataset Analysis
+
+In this work, we focus on dynamic Internet videos due to
+their large scale and diversity. We evaluate the effectiveness
+of our filtering pipeline in identifying videos suitable for
+pose estimation (§ 4.1) and provide a statistical analysis of
+the resulting dataset (§ 4.2).
+
+4.1. Filtering Evaluation on Panda-Test
+
+Our goal for filtering is to identify suitable videos for pose
+estimation given diverse Internet video.
+
+Dataset. We evaluate filtering performance on 1,000 ran-
+domly selected held-out videos from Panda-70M, which we
+refer to as Panda-Test. Each video is manually classified as
+suitable or unsuitable for pose estimation, yielding 90 (9%)
+suitable videos. These 90 videos exhibit similar diversity to
+DynPose-100K, e.g. content, lengths, and dynamic sizes.
+
+Metrics. Our primary evaluation metrics are precision and
+recall. We prioritize precision, aiming to minimize the num-
+ber of inaccurate videos included in DynPose-100K. How-
+ever, recall is also important, as a low recall would mean a
+larger number of necessary videos to process to achieve a
+dataset of the same size.
+
+Baselines and ablations. We compare our method with
+existing and alternative filtering methods. We filter using
+Our SfM reconstructed points (CamCo [93]) and reprojec-
+tion error (inspired by B-Timer [45]), along with video suit-
+ability and interaction classifier Hands23 [16]. In addition,
+we prompt GPT-4o mini [60] in a manner similar to our fil-
+tering pipeline (§ 3.2). We implement two versions of this
+
+Figure 5. Dynamic video filtering on Panda-Test. We show PR
+curves for baselines and ablations. Our filtering surpasses all base-
+lines and ablations by a considerable margin. The
+represents
+DynPose-100K’s operating thresholds. For baselines, we show: ■
+Reconstructed points (CamCo [93]), ■ Reprojection error, (solid
+■) GPT-4o mini [60]: binary, (dashed ■) GPT-4o mini [60]: score,
+■ Hands23 [16], and ■ Ours. For ablations, we begin from ■
+Hands23 and add components until we recover ■ Ours. Specifi-
+cally, we depict: ■ Hands23, ■ +Flow, ■ +Tracking, ■ +Mask-
+ing, ■ +Focal, ■ +Distort, ■ +VLM (Ours).
+
+comparison: one producing binary outputs and another as-
+signing scores to each example. Finally, we conduct abla-
+tion studies on each step of our filtering method from § 3.2.
+
+Results. Figure 5 shows our filtering selects videos with
+high precision and recall, outperforming baseline methods.
+In fact, filtering has test precision of 0.78 at the threshold
+used for collecting DynPose-100K, a level that no baseline
+achieves at any recall, except for reprojection error at 0.02
+recall. Each component in our method improves perfor-
+mance, with the VLM providing a large boost, even though
+it is relatively weak as a standalone approach.
+
+4.2. Dataset statistics
+
+Having collected a substantial number of target videos, we
+assess the characteristics of the resulting dataset. In addition
+to evaluating the dataset size, we examine whether resulting
+videos exhibit desirable attributes, e.g. diverse content, ap-
+propriate video length and diverse dynamic object size.
+
+Dataset size. Table 1 shows that DynPose-100K con-
+tains many more videos than existing diverse datasets. The
+largest alternatives are typically limited to specific set-
+tings, such as kitchens, driving, walking, or pet turntable
+videos [27, 37, 72, 75, 81]. Concurrent works CamCo [93]
+and B-Timer [45] also feature diverse content but have
+fewer videos and are private.
+
+Video content. Figure 4 shows frequent nouns and verbs
+that appear in Panda-70M’s [12] captions associated with
+DynPose-100K videos. Common nouns cover a wide range
+of subjects, objects and settings; while verbs reflect a va-
+riety of actions. This linguistic variety provides evidence
+DynPose-100K contains videos with diverse content.
+
+5
+
+0.00.20.40.60.81.0Recall0.00.20.40.60.81.0PrecisionPR Curves: Baselines0.00.20.40.60.81.0Recall0.00.20.40.60.81.0PR Curves: AblationsDataset
+
+Real/Syn. Num. vids. Num. frames
+
+Domain
+
+Access
+
+T.Air Shibuya [62]
+MPI Sintel [9]
+PointOdyssey [105]
+FlyingThings3D [51]
+Kubric Movi-E [28]
+EpicFields [81]
+Waymo [75]
+CoP3D [72]
+Ego-Exo4D [27]
+Stereo4D [37]
+CamCo [93]
+B-Timer [45]
+DynPose-100K
+
+Syn.
+Syn.
+Syn.
+Syn.
+Syn.
+Real
+Real
+Real
+Real
+Real
+Real
+Real
+Real
+
+7
+14
+131
+220
+400
+671
+1,150
+4,200
+5,035
+110,000
+12,000
+40,000
+100,131
+
+0.7K
+0.7K
+200K
+2K
+10K
+19,000K
+200K
+600K
+23,000K
+10,000K
+385K
+19,000K
+6,806K
+
+Street
+Scripted
+Walking
+Objects
+Objects
+Kitchens
+Driving
+Pets
+Set tasks
+S. fisheye
+Diverse
+Diverse
+Diverse
+
+Public
+Public
+Public
+Public
+Public
+Public
+Public
+Public
+Public
+Public
+Private
+Private
+Public
+
+Table 1. Dynamic camera pose datasets. DynPose-100K has the most videos
+of diverse Internet video datasets. Datasets with more frames are private or more
+uniform; e.g. stereo fisheye is typically outdoor PoV walking. We use short
+videos, yielding fewer frames but high dynamics (Figure 6).
+
+Figure 4. Diverse content. Frequent nouns cover var-
+ied subjects: person, hand, car; objects: shirt, table,
+food; and settings: room, kitchen, street. Verbs span
+diverse actions: using, working, playing.
+
+use a photorealistic synthetic rendering dataset, Lightspeed,
+which provides ground truth poses for direct comparison;
+(2) we evaluate directly on Internet videos by annotating
+10K precise correspondences on Panda-Test, enabling pose
+evaluation using Sampson error [31].
+
+Baselines and ablations. Our primary point of comparison
+throughout is ParticleSfM [103], which shares our general
+pipeline involving static tracking, dynamic masking, and
+global SfM. We also compare against standard SfM method
+COLMAP [66], both in its original form and with corre-
+spondences filtered using dynamic masking. Finally, we
+evaluate our method against state-of-the-art learning-based
+static methods DROID-SLAM [79] and DUSt3R [86], and
+dynamic methods LEAP-VO [13] and MonST3R [100].
+
+5.1. Pose Evaluation on Lightspeed
+
+We introduce Lightspeed, a challenging, photorealistic
+benchmark for dynamic pose estimation containing ground
+truth camera pose. This dataset is a good benchmark for
+pose estimation because it is shares several important char-
+acteristics of DynPose-100K: diverse environments, large
+dynamic objects and varied clip lengths of several seconds.
+
+Dataset. We use NVIDIA Racer RTX [57], shown in
+Figure 7, which follows several RC cars moving quickly
+through challenging indoor and outdoor scenes, featuring
+day and night lighting and first and third person views.
+We split the video into clips, removing ones with non-
+perspective distortion, blurry background, static scenes, or
+cameras with static or have trivial linear trajectory (follow-
+ing [92]), resulting in 36 sequences. We extract ground truth
+camera pose from corresponding 3D Assets.
+
+Metrics. We follow prior work [50, 69, 103] in reporting
+Average Trajectory Error (ATE) as well as Relative Pose
+Error (RPE) for rotation and translation. For full details
+
+Figure 6. Left: Targeted video length. DynPose-100K videos are
+primarily 4-10s, ideal for dynamic pose: shorter videos contain lit-
+tle ego-motion, longer videos have less dense dynamics and ego-
+motion. Right: Diverse dynamic apparent size. Mean size in
+% across video. Large dynamic objects occlude static correspon-
+dences, making pose estimation challenging. Videos may average
+small size in the case of only a few dynamic frames.
+
+Video length. Figure 6, left shows the distribution of video
+lengths in DynPose-100K. The majority of videos span 4 to
+10 seconds. These short clips are typically rich in dynamics,
+while being long enough for substantial camera motion.
+
+Dynamic object size. Figure 6, right shows the distribution
+of apparent dynamic object sizes in DynPose-100K, rang-
+ing from small to large. Large dynamic objects occlude
+static correspondences, making pose estimation challeng-
+ing. Smaller apparent dynamic objects typically correspond
+to objects further away, which can move quickly, making
+precise masking challenging. Videos where dynamic ob-
+jects occupy nearly the entire frame are filtered out as they
+make pose estimation infeasible.
+
+5. Evaluation on Camera Pose Estimation
+
+We proceed to evaluate the pose estimation efficacy of the
+curated dataset DynPose-100K through controlled exper-
+iments. Direct evaluation on dynamic Internet videos is
+challenging due to the lack of ground truth camera pose
+data. Our evaluation approach is therefore two-fold: (1) we
+
+6
+
+Frequency: Common NounsmanpersonwomanfrontcamerapeopleroomshirttablegroupfoodhandkitchencarstreetFrequency: Verbsstandingholdingtalkingwalkingwearingsittinglookingpointingusingworkingplayingsmilingparkedtakingcooking46810Length (seconds)DensityVideo length020406080Size (% of frame)Dynamic apparent sizeMethod
+
+% Vids. reg.↑ ATE (m)↓ RPE Tr. (m)↓ RPE Rot. (◦)↓ ATE (m)↓ RPE Tr. (m)↓ RPE Rot. (◦)↓
+
+All 36 videos (Iden. Rot. + Rand. Tr. if fail)
+
+8 videos: all succeed only
+
+Iden. Rot. + Rand. Tr.
+DROID-SLAM [79]
+DUSt3R [86]
+MonST3R [100]
+LEAP-VO [13]
+COLMAP [66]
+COLMAP+Mask [66]
+ParticleSfM [103]
+Ours
+
+100.
+100.
+97.2
+100.
+100.
+44.4
+38.9
+97.2
+100.
+
+0.652
+0.198
+0.412
+0.149
+0.206
+0.388
+0.323
+0.185
+0.072
+
+0.139
+0.046
+0.177
+0.046
+0.049
+0.082
+0.085
+0.075
+0.033
+
+1.60
+1.75
+20.1
+1.21
+1.70
+2.03
+1.64
+2.99
+1.31
+
+0.390
+0.048
+0.256
+0.036
+0.037
+0.122
+0.089
+0.051
+0.003
+
+0.080
+0.017
+0.124
+0.011
+0.011
+0.026
+0.017
+0.047
+0.002
+
+1.00
+0.82
+18.5
+0.46
+0.73
+1.91
+1.36
+2.91
+0.30
+
+Table 2. Camera pose estimation on Lightspeed. Our pose estimation algorithm registers all sequences and cuts trajectory error by 50%
+across all sequences (left) and 90% on easy sequences (right) vs. all other methods.
+
+Figure 7. Predicted trajectories on Lightspeed. Pose sequence over time: ROYGBV. We visualize photorealistic renderings of Light-
+speed left. Static methods DROID-SLAM, COLMAP and DUSt3R struggle in this dynamic setting, failing to register a consistent se-
+quence or putting too much or too little curvature. Top: dynamic methods MonST3R, LEAP-VO and ParticleSfM do not produce smooth
+sequences. Bottom: MonST3R, LEAP-VO and COLMAP+Mask add curvature. Ours produces smooth and accurate trajectories.
+
+see prior work. To summarize, metrics are computed after
+trajectory alignment and scaling, and relative error is com-
+puted on sequential frames. To compute scores across all
+videos, we replace predicted trajectories that do not con-
+verge with random uniform translations and identity rota-
+tions. We also separately report scores on the subset of
+videos upon which all methods converge.
+
+Results. Table 2 shows COLMAP and COLMAP+Mask
+struggle to register many challenging sequences in Light-
+speed. DROID-SLAM, DUSt3R, LEAP-VO and Parti-
+cleSfM provide registration, but are inaccurate. MonST3R
+offers better trajectory error, though Ours is clearly supe-
+rior, cutting trajectory error by 50% (all videos) and 90%
+(succeed only). All alternatives struggle in at least one se-
+quence in Figure 7, while Ours handles both.
+
+5.2. Pose Evaluation on Panda-Test
+
+Next, we evaluate on dynamic Internet videos. We use the
+90-video subset from Panda-Test (§ 4.1), featuring various
+challenging objects with estimable camera poses.
+
+Metrics. Ground truth camera poses are unavailable in
+unlabeled dynamic Internet videos, so we opt to anno-
+tate correspondences and compute Sampson error from the
+predicted poses. We curate 10K correspondences across
+
+unique image pairs spanning the 90 videos to use for evalu-
+ation. Pairs are manually annotated by expert annotators to
+achieve coarse accuracy. These matches are refined using
+SuperPoint [18] and LightGlue [47] by selecting the Light-
+Glue match found within 10 pixels of the human-labeled
+points on 720p images. If no such match is found, the corre-
+spondence is discarded. Frame pairs are selected randomly
+from within 2.5 seconds of each other.
+
+Reprojection error for each pair is the square root of
+Sampson error. Sampson error computes the squared dis-
+tance from an annotated correspondence to the epipolar line
+computed using the fundamental matrix based on predicted
+relative camera pose and intrinsics. Metrics are averaged
+for all pairs in each video, enabling per-video analysis. Our
+main metrics are mean error across videos, and percent of
+videos with mean reprojection error within a threshold; we
+use 5, 10 and 30 pixels at normalized 720p resolution. Non-
+registered frames are filled with nearest neighbor poses. If
+an entire sequence is not registered, the identity is used.
+
+Results. Table 3 shows similar trends to Lightspeed: static
+methods DROID-SLAM and DUSt3R are inaccurate while
+COLMAP, even with dynamic masking, struggles to reg-
+ister many videos. ParticleSfM improves, but contains
+high mean error. MonST3R and LEAP-VO register all
+frames, but Ours reduces error across metrics. This in-
+
+7
+
+OursParticleSfMCM + MaskDUSt3RDROID-SLAMMonST3RGround TruthCOLMAPLEAP-VOAll 90 estimable videos (Identity if fail)
+
+% Vids.
+
+Mean per-video reprojection error, 720p
+
+52 videos: all succeed only
+Mean per-video reprojection error, 720p
+
+Baselines
+
+registered↑ % < 5Pix↑ % < 10 Pix↑ % < 30 Pix↑ Mean↓ % < 5 Pix↑ % < 10 Pix↑ % < 30 Pix↑ Mean↓
+
+Identity
+DROID-SLAM [79]
+DUSt3R [86]
+MonST3R [100]
+LEAP-VO [13]
+COLMAP [66]
+COLMAP+Mask [66]
+ParticleSfM [103]
+Ours
+
+100.
+100.
+96.7
+100.
+100.
+82.2
+67.8
+92.2
+95.6
+
+0.0
+57.8
+0.0
+55.6
+64.4
+51.1
+47.8
+70.0
+72.2
+
+0.0
+77.8
+6.7
+78.9
+76.7
+62.2
+58.9
+76.7
+84.4
+
+2.2
+94.4
+48.9
+90.0
+96.7
+73.3
+75.6
+88.9
+98.9
+
+151
+11.0
+43.0
+9.86
+7.59
+27.5
+30.1
+12.5
+5.76
+
+0.0
+59.6
+0.0
+63.5
+75.0
+71.2
+69.2
+80.8
+82.7
+
+0.0
+84.6
+9.6
+84.6
+84.6
+82.7
+82.7
+86.5
+94.2
+
+0.0
+96.2
+57.7
+90.4
+98.1
+92.3
+96.2
+96.2
+100.
+
+133
+6.78
+30.3
+9.71
+6.03
+9.03
+6.10
+6.77
+3.75
+
+Table 3. Camera pose estimation on Panda-Test. Reprojection error on 10K image pairs, by video, normalized to 720p. Static methods
+DUSt3R and COLMAP struggle faced with dynamics while DROID-SLAM lacks precision. ParticleSfM registers more videos than
+COLMAP+Mask but both fall short of Ours in registration and accuracy. MonST3R and LEAP-VO register all frames leading to moderate
+errors, but Ours outperforms across metrics.
+
+Figure 8. Predicted trajectories on Panda-Test. Pose sequence over time: ROYGBV. Static methods like DROID-SLAM, DUSt3R
+and COLMAP struggle faced with dynamics. MonST3R, LEAP-VO, COLMAP+Mask and ParticleSfM can struggle with large dynamic
+regions (top) and tracking across varied appearance and lighting (bottom); while Ours handles these cases.
+
+Method
+
+All 90 estimable videos (Identity if fail)
+
+% Vids.
+reg.↑
+
+Mean per-video reprojection error, 720p
+% < 5Px↑ % < 10 Px↑ % < 30 Px↑ Mean↓
+
+DUSt3R
++ Synthetic (MonST3R [100])
++ DynPose-100K (Ours)
+
+96.7
+100.
+100.
+
+0.0
+55.6
+54.4
+
+6.7
+78.9
+82.2
+
+48.9
+90.0
+92.2
+
+43.0
+9.86
+8.78
+
+varied appearance. Evidently, the combined state-of-the-art
+components used for masking and tracking (§ 3.3) yield a
+pipeline effective at each corresponding task.
+
+6. Conclusion
+
+In this paper, we introduce DynPose-100K, a large-scale
+dataset of dynamic Internet video annotated with camera
+poses.
+It is curated using carefully designed video filter-
+ing and camera pose estimation pipelines, validated through
+experiments. We hope DynPose-100K will enable exciting
+new possibilities. For instance, Table 4 shows the dataset
+can fine-tune DUSt3R [86] to produce lower mean error
+than the synthetic data of MonST3R [100]. To supplement
+DynPose-100K, we collect high-quality synthetic dataset
+Lightspeed, enabling ground truth pose benchmarking.
+
+Acknowledgments.
+DF was supported by NSF IIS
+2437330. We thank Gabriele Leone and the NVIDIA Light-
+speed Content Tech team for sharing the original 3D as-
+sets and scene data for creating the Lightspeed benchmark.
+We thank Yunhao Ge, Zekun Hao, Yin Cui, Xiaohui Zeng,
+Zhaoshuo Li, Hanzi Mao, Jiahui Huang, Justin Johnson, JJ
+Park and Andrew Owens for invaluable inspirations, discus-
+sions and feedback on this project.
+
+Table 4. Camera estimation on Panda-Test. DynPose-100K
+fine-tuning of DUSt3R has lower mean error and similar to or bet-
+ter than accuracy compared to synthetic data (MonST3R). We train
+with only 2K videos / 140K frames, smaller than the 1.3M frames
+used to train MonST3R; demonstrating efficient supervision.
+
+cludes more than 35% reduction in mean error vs. all meth-
+ods on the 52 sequences all methods succeed. Figure 8
+shows qualitative results from two challenging sequences.
+Qualitative results agree with quantitative: DROID-SLAM,
+DUSt3R and COLMAP struggle, while MonST3R, LEAP-
+VO, COLMAP+Mask and ParticleSfM face failure cases.
+Ours better handles difficult cases e.g. large dynamics or
+
+8
+
+ParticleSfMCM + MaskDUSt3RDROID-SLAMCOLMAPOursMonST3RLEAP-VOMonST3RDUSt3RDynPose-100KReferences
+
+[1] Shikhar Bahl, Abhinav Gupta, and Deepak Pathak. Human-
+
+to-robot imitation in the wild. In RSS, 2022. 2
+[2] Sherwin Bahmani, Xian Liu, Yifan Wang,
+
+Ivan Sko-
+rokhodov, Victor Rong, Ziwei Liu, Xihui Liu, Jeong Joon
+Park, Sergey Tulyakov, Gordon Wetzstein, et al. Tc4d:
+In ECCV,
+Trajectory-conditioned text-to-4d generation.
+2024. 2
+
+[3] Max Bain, Arsha Nagrani, Gül Varol, and Andrew Zisser-
+man. Frozen in time: A joint video and image encoder for
+end-to-end retrieval. In ICCV, 2021. 2
+
+[4] Gilad Baruch, Zhuoyuan Chen, Afshin Dehghan, Yuri Fei-
+gin, Peter Fu, Thomas Gebauer, Daniel Kurz, Tal Dimry,
+Brandon Joffe, Arik Schwartz, et al. Arkitscenes: A di-
+verse real-world dataset for 3d indoor scene understanding
+using mobile rgb-d data. In NeurIPS, 2021. 2
+
+[5] Andreas Blattmann, Tim Dockhorn, Sumith Kulal, Daniel
+Mendelevitch, Maciej Kilian, Dominik Lorenz, Yam Levi,
+Zion English, Vikram Voleti, Adam Letts, et al. Stable
+video diffusion: Scaling latent video diffusion models to
+large datasets. arXiv, 2023. 2
+
+[6] Andreas Blattmann, Robin Rombach, Huan Ling, Tim
+Dockhorn, Seung Wook Kim, Sanja Fidler, and Karsten
+Kreis. Align your latents: High-resolution video synthesis
+with latent diffusion models. In CVPR, 2023. 2
+
+[7] Aleksei Bochkovskii, Amaël Delaunoy, Hugo Germain,
+Marcel Santos, Yichao Zhou, Stephan R. Richter, and
+Vladlen Koltun. Depth pro: Sharp monocular metric depth
+in less than a second. In ICLR, 2025. 18
+
+[8] Tim Brooks, Bill Peebles, Connor Holmes, Will DePue,
+Yufei Guo, Li Jing, David Schnurr, Joe Taylor, Troy Luh-
+man, Eric Luhman, Clarence Ng, Ricky Wang, and Aditya
+Ramesh. Video generation models as world simulators,
+2024. 2
+
+[9] Daniel J Butler, Jonas Wulff, Garrett B Stanley, and
+Michael J Black. A naturalistic open source movie for op-
+tical flow evaluation. In ECCV, 2012. 2, 6, 15, 16
+
+[10] Eric R Chan, Connor Z Lin, Matthew A Chan, Koki
+Nagano, Boxiao Pan, Shalini De Mello, Orazio Gallo,
+Leonidas J Guibas, Jonathan Tremblay, Sameh Khamis,
+et al. Efficient geometry-aware 3d generative adversarial
+networks. In CVPR, 2022. 2
+
+[11] Angel Chang, Angela Dai, Thomas Funkhouser, Maciej
+Halber, Matthias Niessner, Manolis Savva, Shuran Song,
+Andy Zeng, and Yinda Zhang. Matterport3d: Learning
+from rgb-d data in indoor environments. In 3DV, 2017. 2
+
+[12] Tsai-Shien Chen, Aliaksandr Siarohin, Willi Menapace,
+Ekaterina Deyneka, Hsiang-wei Chao, Byung Eun Jeon,
+Yuwei Fang, Hsin-Ying Lee, Jian Ren, Ming-Hsuan Yang,
+et al. Panda-70m: Captioning 70m videos with multiple
+cross-modality teachers. In CVPR, 2024. 2, 3, 4, 5, 13
+[13] Weirong Chen, Le Chen, Rui Wang, and Marc Pollefeys.
+Leap-vo: Long-term effective any point tracking for visual
+odometry. In CVPR, 2024. 2, 6, 7, 8
+
+[14] Zilong Chen, Yikai Wang, Feng Wang, Zhengyi Wang, and
+Huaping Liu. V3d: Video diffusion models are effective 3d
+generators. arXiv, 2024. 2
+
+9
+
+[15] Ho Kei Cheng, Seoung Wug Oh, Brian Price, Joon-Young
+Lee, and Alexander Schwing. Putting the object back into
+video object segmentation. In CVPR, 2024. 2
+
+[16] Tianyi Cheng, Dandan Shan, Ayda Hassen, Richard Hig-
+gins, and David Fouhey. Towards a richer 2d understanding
+of hands at scale. NeurIPS, 2023. 3, 4, 5, 13, 15, 17
+[17] Matt Deitke, Ruoshi Liu, Matthew Wallingford, Huong
+Ngo, Oscar Michel, Aditya Kusupati, Alan Fan, Chris-
+tian Laforte, Vikram Voleti, Samir Yitzhak Gadre, et al.
+Objaverse-xl: A universe of 10m+ 3d objects. In NeurIPS,
+2024. 2
+
+[18] Daniel DeTone, Tomasz Malisiewicz, and Andrew Rabi-
+novich. Superpoint: Self-supervised interest point detection
+and description. In CVPRW, 2018. 7, 17, 19
+
+[19] Carl Doersch, Yi Yang, Mel Vecerik, Dilara Gokay, Ankush
+Gupta, Yusuf Aytar, Joao Carreira, and Andrew Zisserman.
+Tapir: Tracking any point with per-frame initialization and
+temporal refinement. In ICCV, 2023. 3
+
+[20] Carl Doersch, Yi Yang, Dilara Gokay, Pauline Luc, Skanda
+Koppula, Ankush Gupta, Joseph Heyward, Ross Goroshin,
+João Carreira, and Andrew Zisserman. Bootstap: Boot-
+In ACCV, 2024.
+strapped training for tracking-any-point.
+3, 4, 5, 15
+
+[21] Bardienus Duisterhof, Lojze Zust, Philippe Weinzaepfel,
+Vincent Leroy, Yohann Cabon, and Jérôme Revaud.
+Mast3r-sfm: a fully-integrated solution for unconstrained
+structure-from-motion. arXiv, 2024. 2
+
+[22] Mark Everingham, Luc Gool, Christopher K. Williams,
+John Winn, and Andrew Zisserman. The pascal visual ob-
+ject classes (voc) challenge. IJCV, 2010. 16
+
+[23] Zipeng Fu, Tony Z Zhao, and Chelsea Finn. Mobile
+aloha: Learning bimanual mobile manipulation with low-
+cost whole-body teleoperation. In CoRL, 2024. 2
+
+[24] Jun Gao, Tianchang Shen, Zian Wang, Wenzheng Chen,
+Kangxue Yin, Daiqing Li, Or Litany, Zan Gojcic, and Sanja
+Fidler. Get3d: A generative model of high quality 3d tex-
+tured shapes learned from images. In NeurIPS, 2022. 2
+[25] Michal Geyer, Omer Bar-Tal, Shai Bagon, and Tali Dekel.
+Tokenflow: Consistent diffusion features for consistent
+video editing. In ICLR, 2024. 2
+
+[26] Lily Goli, Sara Sabour, Mark Matthews, Marcus Brubaker,
+Dmitry Lagun, Alec Jacobson, David J Fleet, Saurabh Sax-
+ena, and Andrea Tagliasacchi. Romo: Robust motion seg-
+mentation improves structure from motion. arXiv, 2024. 2
+[27] Kristen Grauman, Andrew Westbury, Lorenzo Torresani,
+Kris Kitani, Jitendra Malik, Triantafyllos Afouras, Kumar
+Ashutosh, Vijay Baiyya, Siddhant Bansal, Bikram Boote,
+et al. Ego-exo4d: Understanding skilled human activity
+from first-and third-person perspectives. In CVPR, 2024. 2,
+5, 6
+
+[28] Klaus Greff, Francois Belletti, Lucas Beyer, Carl Doersch,
+Yilun Du, Daniel Duckworth, David J Fleet, Dan Gnanapra-
+gasam, Florian Golemo, Charles Herrmann, et al. Kubric:
+A scalable dataset generator. In CVPR, 2022. 2, 6
+
+[29] Annika Hagemann, Moritz Knorr, and Christoph Stiller.
+Deep geometry-aware camera self-calibration from video.
+In ICCV, 2023. 13
+
+[30] Adam W Harley, Zhaoyuan Fang, and Katerina Fragki-
+adaki. Particle video revisited: Tracking through occlusions
+using point trajectories. In ECCV, 2022. 3
+
+[31] Richard Hartley and Andrew Zisserman. Multiple view ge-
+ometry in computer vision. Cambridge university press,
+2003. 2, 4, 6, 15
+
+[32] Hao He, Yinghao Xu, Yuwei Guo, Gordon Wetzstein, Bo
+Dai, Hongsheng Li, and Ceyuan Yang. Cameractrl: En-
+abling camera control for text-to-video generation. arXiv,
+2024. 2
+
+[33] Kaiming He, Georgia Gkioxari, Piotr Dollár, and Ross Gir-
+
+shick. Mask r-cnn. In ICCV, 2017. 2
+
+[34] Jonathan Ho, William Chan, Chitwan Saharia, Jay Whang,
+Ruiqi Gao, Alexey Gritsenko, Diederik P Kingma, Ben
+Ima-
+Poole, Mohammad Norouzi, David J Fleet, et al.
+gen video: High definition video generation with diffusion
+models. arXiv, 2022. 2
+
+[35] Anthony Hu, Lloyd Russell, Hudson Yeo, Zak Murez,
+George Fedoseev, Alex Kendall, Jamie Shotton, and Gian-
+luca Corrado. Gaia-1: A generative world model for au-
+tonomous driving. arXiv, 2023. 2
+
+[36] Jitesh Jain, Jiachen Li, Mang Tik Chiu, Ali Hassani, Nikita
+Orlov, and Humphrey Shi. Oneformer: One transformer to
+rule universal image segmentation. In CVPR, 2023. 2, 4,
+15
+
+[37] Linyi Jin, Richard Tucker, Zhengqi Li, David Fouhey, Noah
+Snavely, and Aleksander Holynski. Stereo4d: Learning
+In
+how things move in 3d from internet stereo videos.
+CVPR, 2025. 2, 5, 6
+
+[38] Nikita Karaev, Ignacio Rocco, Benjamin Graham, Natalia
+Neverova, Andrea Vedaldi, and Christian Rupprecht. Co-
+tracker: It is better to track together. In ECCV, 2024. 3,
+22
+
+[39] Yoni Kasten, Wuyue Lu, and Haggai Maron. Fast encoder-
+based 3d from casual videos via point track processing. In
+NeurIPS, 2024. 3
+
+[40] Arno Knapitsch, Jaesik Park, Qian-Yi Zhou, and Vladlen
+Koltun. Tanks and temples: Benchmarking large-scale
+scene reconstruction. In SIGGRAPH, 2017. 2
+
+[41] Johannes Kopf, Xuejian Rong, and Jia-Bin Huang. Robust
+consistent video depth estimation. In CVPR, 2021. 2
+[42] Zhengfei Kuang, Shengqu Cai, Hao He, Yinghao Xu,
+Hongsheng Li, Leonidas Guibas, and Gordon Wetzstein.
+Collaborative video diffusion: Consistent multi-video gen-
+eration with camera control. In NeurIPS, 2024. 2
+
+[43] Zhengqi Li, Simon Niklaus, Noah Snavely, and Oliver
+Wang. Neural scene flow fields for space-time view syn-
+thesis of dynamic scenes. In CVPR, 2021. 2
+
+[44] Zhengqi Li, Richard Tucker, Forrester Cole, Qianqian
+Wang, Linyi Jin, Vickie Ye, Angjoo Kanazawa, Aleksander
+Holynski, and Noah Snavely. MegaSaM: Accurate, fast and
+robust structure and motion from casual dynamic videos. In
+CVPR, 2025. 3
+
+[45] Hanxue Liang, Jiawei Ren, Ashkan Mirzaei, Antonio Tor-
+ralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz
+Oztireli, Huan Ling, Zan Gojcic, and Jiahui Huang. Feed-
+forward bullet-time reconstruction of dynamic scenes from
+monocular videos. arXiv, 2024. 2, 5, 6
+
+[46] Tsung-Yi Lin, Michael Maire, Serge Belongie, James
+Hays, Pietro Perona, Deva Ramanan, Piotr Dollár, and
+C Lawrence Zitnick. Microsoft coco: Common objects in
+context. In ECCV, 2014. 3, 15
+
+[47] Philipp Lindenberger, Paul-Edouard Sarlin, and Marc
+Pollefeys. LightGlue: Local Feature Matching at Light
+Speed. In ICCV, 2023. 7, 17, 19
+
+[48] Lu Ling, Yichen Sheng, Zhi Tu, Wentian Zhao, Cheng Xin,
+Kun Wan, Lantao Yu, Qianyu Guo, Zixun Yu, Yawen Lu,
+et al. Dl3dv-10k: A large-scale scene dataset for deep
+learning-based 3d vision. In CVPR, 2024. 2
+
+[49] Ruoshi Liu, Rundi Wu, Basile Van Hoorick, Pavel Tok-
+makov, Sergey Zakharov, and Carl Vondrick. Zero-1-to-3:
+Zero-shot one image to 3d object. In ICCV, 2023. 2
+[50] Yu-Lun Liu, Chen Gao, Andreas Meuleman, Hung-Yu
+Tseng, Ayush Saraf, Changil Kim, Yung-Yu Chuang, Jo-
+hannes Kopf, and Jia-Bin Huang. Robust dynamic radiance
+fields. In CVPR, 2023. 2, 4, 6, 15, 16
+
+[51] Nikolaus Mayer, Eddy Ilg, Philip Hausser, Philipp Fischer,
+Daniel Cremers, Alexey Dosovitskiy, and Thomas Brox. A
+large dataset to train convolutional networks for disparity,
+optical flow, and scene flow estimation. In CVPR, 2016. 2,
+3, 6
+
+[52] Lukas Mehl, Jenny Schmalfuss, Azin Jahedi, Yaroslava
+Nalivayko, and Andrés Bruhn. Spring: A high-resolution
+high-detail dataset and benchmark for scene flow, optical
+flow and stereo. In CVPR, 2023. 2
+
+[53] Christopher Mei and Patrick Rives. Single view point omni-
+directional camera calibration from planar grids. In ICRA,
+2007. 13
+
+[54] Raul Mur-Artal, Jose Maria Martinez Montiel, and Juan D
+Tardos. ORB-SLAM: a versatile and accurate monocular
+SLAM system. T-RO, 2015. 2
+
+[55] Haomiao Ni, Changhao Shi, Kai Li, Sharon X Huang, and
+Martin Renqiang Min. Conditional image-to-video gener-
+In CVPR, 2023.
+ation with latent flow diffusion models.
+2
+
+[56] NVIDIA. Cosmos world foundation model platform for
+
+physical ai. arXiv, 2025. 2
+
+[57] NVIDIA GeForce. NVIDIA Racer RTX | The future of
+graphics powered by GeForce RTX 40 Series, 2022. [On-
+line; accessed Access Date: 2024-11-9]. 6
+
+[58] Abby O’Neill, Abdul Rehman, Abhinav Gupta, Abhiram
+Maddukuri, Abhishek Gupta, Abhishek Padalkar, Abraham
+Lee, Acorn Pooley, Agrim Gupta, Ajay Mandlekar, et al.
+Open x-embodiment: Robotic learning datasets and rt-x
+models. In CoRL, 2023. 2
+
+[59] OpenAI. Gpt-4 technical report, 2023. 4
+[60] OpenAI. Gpt-4o mini: advancing cost-efficient intelli-
+
+gence, 2024. 3, 4, 5, 15, 17
+
+[61] Linfei Pan, Dániel Baráth, Marc Pollefeys, and Johannes L
+Schönberger. Global structure-from-motion revisited.
+In
+ECCV, 2024. 22
+
+[62] Yuheng Qiu, Chen Wang, Wenshan Wang, Mina Henein,
+and Sebastian Scherer. Airdos: Dynamic slam benefits from
+articulated objects. In ICRA, 2022. 2, 6
+
+10
+
+[63] Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang
+Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman
+Rädle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junt-
+ing Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-
+Yuan Wu, Ross Girshick, Piotr Dollár, and Christoph Fe-
+ichtenhofer. Sam 2: Segment anything in images and
+videos. arXiv, 2024. 2, 3, 4, 15
+
+[64] Jeremy Reizenstein, Roman Shapovalov, Philipp Henzler,
+Luca Sbordone, Patrick Labatut, and David Novotny. Com-
+mon objects in 3d: Large-scale learning and evaluation of
+real-life 3d category reconstruction. In ICCV, 2021. 2
+[65] Xuanchi Ren, Tianchang Shen, Jiahui Huang, Huan Ling,
+Yifan Lu, Merlin Nimier-David, Thomas MÃ¼ller, Alexan-
+der Keller, Sanja Fidler, and Jun Gao. Gen3c: 3d-informed
+world-consistent video generation with precise camera con-
+trol. In CVPR, 2025. 2
+[66] Johannes L Schonberger
+
+Jan-Michael Frahm.
+In CVPR, 2016.
+2,
+
+and
+Structure-from-motion revisited.
+6, 7, 8
+
+[67] Thomas Schops, Johannes L Schonberger, Silvano Gal-
+liani, Torsten Sattler, Konrad Schindler, Marc Pollefeys,
+and Andreas Geiger. A multi-view stereo benchmark with
+high-resolution images and multi-camera videos. In CVPR,
+2017. 2
+
+[68] Jenny Seidenschwarz, Qunjie Zhou, Bardienus Duisterhof,
+Deva Ramanan, and Laura Leal-Taixé. Dynomo: Online
+point tracking by dynamic online monocular gaussian re-
+construction. arXiv, 2024. 3
+
+[69] Shihao Shen, Yilin Cai, Wenshan Wang, and Sebastian
+Scherer. Dytanvo: Joint refinement of visual odometry and
+motion segmentation in dynamic environments. In ICRA,
+2023. 2, 6
+
+[70] Uriel Singer, Adam Polyak, Thomas Hayes, Xi Yin, Jie An,
+Songyang Zhang, Qiyuan Hu, Harry Yang, Oron Ashual,
+Oran Gafni, et al. Make-a-video: Text-to-video generation
+without text-video data. arXiv, 2022. 2
+
+[71] Uriel Singer, Shelly Sheynin, Adam Polyak, Oron Ashual,
+Iurii Makarov, Filippos Kokkinos, Naman Goyal, Andrea
+Vedaldi, Devi Parikh, Justin Johnson, et al. Text-to-4d dy-
+namic scene generation. arXiv, 2023. 2
+
+[72] Samarth Sinha, Roman Shapovalov, Jeremy Reizenstein,
+Ignacio Rocco, Natalia Neverova, Andrea Vedaldi, and
+David Novotny. Common pets in 3d: Dynamic new-view
+In CVPR,
+synthesis of real-life deformable categories.
+2023. 2, 3, 5, 6
+
+[73] Cameron Smith, David Charatan, Ayush Tewari, and Vin-
+cent Sitzmann. Flowmap: High-quality camera poses, in-
+trinsics, and depth via gradient descent. In 3DV, 2025. 2
+
+[74] Noah Snavely. Scene reconstruction and visualization from
+
+internet photo collections. PhD Thesis, 2008. 2
+
+[75] Pei Sun, Henrik Kretzschmar, Xerxes Dotiwalla, Aure-
+lien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, Yin
+Zhou, Yuning Chai, Benjamin Caine, et al. Scalability in
+perception for autonomous driving: Waymo open dataset.
+In CVPR, 2020. 2, 5, 6
+
+[76] Chris Sweeney. Theia multiview geometry library: Tutorial
+
+& reference. http://theia-sfm.org. 2, 3, 4, 5, 15, 22
+
+11
+
+[77] Zachary Teed and Jia Deng. Deepv2d: Video to depth with
+differentiable structure from motion. arXiv, 2018. 2
+[78] Zachary Teed and Jia Deng. Raft: Recurrent all-pairs field
+
+transforms for optical flow. In ECCV, 2020. 2, 4, 13, 15
+
+[79] Zachary Teed and Jia Deng. DROID-SLAM: Deep vi-
+sual SLAM for monocular, stereo, and RGB-D cameras.
+NeurIPS, 2021. 3, 6, 7, 8
+
+[80] Zachary Teed, Lahav Lipson, and Jia Deng. Deep patch
+
+visual odometry. In NeurIPS, 2023. 2
+
+[81] Vadim Tschernezki, Ahmad Darkhalil, Zhifan Zhu, David
+Fouhey, Iro Laina, Diane Larlus, Dima Damen, and Andrea
+Vedaldi. Epic fields: Marrying 3d geometry and video un-
+derstanding. NeurIPS, 2024. 2, 5, 6
+
+[82] Jianyuan Wang, Nikita Karaev, Christian Rupprecht, and
+David Novotny. Vggsfm: Visual geometry grounded deep
+structure from motion. In CVPR, 2024. 2
+
+[83] Qianqian Wang, Zhicheng Wang, Kyle Genova, Pratul P
+Srinivasan, Howard Zhou, Jonathan T Barron, Ricardo
+Martin-Brualla, Noah Snavely, and Thomas Funkhouser.
+Ibrnet: Learning multi-view image-based rendering.
+In
+CVPR, 2021. 2
+
+[84] Qianqian Wang, Yen-Yu Chang, Ruojin Cai, Zhengqi
+Li, Bharath Hariharan, Aleksander Holynski, and Noah
+Snavely. Tracking everything everywhere all at once.
+In
+ICCV, 2023. 3
+
+[85] Qianqian Wang, Yifei Zhang, Aleksander Holynski,
+Alexei A. Efros, and Angjoo Kanazawa. Continuous 3d
+perception model with persistent state. In CVPR, 2025. 2
+
+[86] Shuzhe Wang, Vincent Leroy, Yohann Cabon, Boris
+Chidlovskii, and Jerome Revaud. Dust3r: Geometric 3d
+vision made easy. In CVPR, 2024. 3, 6, 7, 8, 18
+
+[87] Wenshan Wang, Delong Zhu, Xiangwei Wang, Yaoyu Hu,
+Yuheng Qiu, Chen Wang, Yafei Hu, Ashish Kapoor, and
+Sebastian Scherer. Tartanair: A dataset to push the limits of
+visual slam. In IROS, 2020. 2
+
+[88] Wenshan Wang, Yaoyu Hu, and Sebastian Scherer. Tar-
+tanVO: A generalizable learning-based VO. In CoRL, 2021.
+2
+
+[89] Xiaofeng Wang, Zheng Zhu, Guan Huang, Xinze Chen, and
+Jiwen Lu. Drivedreamer: Towards real-world-driven world
+models for autonomous driving. In ECCV, 2024. 2
+[90] Zhouxia Wang, Ziyang Yuan, Xintao Wang, Tianshui Chen,
+Menghan Xia, Ping Luo, and Ying Shan. Motionctrl: A
+unified and flexible motion controller for video generation.
+In SIGGRAPH, 2024. 2
+
+[91] Olivia Wiles, Georgia Gkioxari, Richard Szeliski, and
+Justin Johnson. Synsin: End-to-end view synthesis from
+a single image. In CVPR, 2020. 2
+
+[92] J. Wulff, D. J. Butler, G. B. Stanley, and M. J. Black.
+Lessons and insights from creating a synthetic optical flow
+benchmark. In ECCVW, 2012. 6
+
+[93] Dejia Xu, Weili Nie, Chao Liu, Sifei Liu,
+
+Jan
+Kautz, Zhangyang Wang, and Arash Vahdat. Camco:
+Camera-controllable 3d-consistent image-to-video genera-
+tion. arXiv, 2024. 2, 5, 6, 17
+
+[94] Hongwei Xue, Tiankai Hang, Yanhong Zeng, Yuchong Sun,
+Bei Liu, Huan Yang, Jianlong Fu, and Baining Guo. Ad-
+
+vancing high-resolution video-language representation with
+large-scale video transcriptions. In CVPR, 2022. 2, 13
+[95] Shuai Yang, Yifan Zhou, Ziwei Liu, and Chen Change
+Loy. Rerender a video: Zero-shot text-guided video-to-
+video translation. In SIGGRAPH Asia, 2023. 2
+
+[96] Weicai Ye, Xinyu Chen, Ruohao Zhan, Di Huang, Xiaoshui
+Huang, Haoyi Zhu, Hujun Bao, Wanli Ouyang, Tong He,
+and Guofeng Zhang. Datap-sfm: Dynamic-aware tracking
+any point for robust dense structure from motion in the wild.
+arxiv, 2024. 3
+
+[97] Chandan Yeshwanth, Yueh-Cheng Liu, Matthias Nießner,
+and Angela Dai. Scannet++: A high-fidelity dataset of 3d
+indoor scenes. In ICCV, 2023. 2
+
+[98] Zhichao Yin and Jianping Shi. Geonet: Unsupervised learn-
+ing of dense depth, optical flow and camera pose. In CVPR,
+2018. 2
+
+[99] Alex Yu, Vickie Ye, Matthew Tancik, and Angjoo
+Kanazawa. pixelnerf: Neural radiance fields from one or
+few images. In CVPR, 2021. 2
+
+[100] Junyi Zhang, Charles Herrmann, Junhwa Hur, Varun Jam-
+pani, Trevor Darrell, Forrester Cole, Deqing Sun, and
+Ming-Hsuan Yang. Monst3r: A simple approach for esti-
+mating geometry in the presence of motion. In ICLR, 2025.
+3, 6, 7, 8, 18
+
+[101] Zhoutong Zhang, Forrester Cole, Zhengqi Li, Michael Ru-
+binstein, Noah Snavely, and William T Freeman. Structure
+and motion from casual videos. In ECCV, 2022. 2
+[102] Zhenghao Zhang, Junchao Liao, Menghao Li, Zuozhuo
+Dai, Bingxue Qiu, Siyu Zhu, Long Qin, and Weizhi Wang.
+Tora: Trajectory-oriented diffusion transformer for video
+generation. arXiv, 2024. 2
+
+[103] Wang Zhao, Shaohui Liu, Hengkai Guo, Wenping Wang,
+and Yong-Jin Liu. Particlesfm: Exploiting dense point tra-
+jectories for localizing moving cameras in the wild.
+In
+ECCV, 2022. 2, 4, 6, 7, 8, 15, 16, 17
+
+[104] Yuyang Zhao, Chung-Ching Lin, Kevin Lin, Zhiwen Yan,
+Linjie Li, Zhengyuan Yang, Jianfeng Wang, Gim Hee Lee,
+and Lijuan Wang. Genxd: Generating any 3d and 4d scenes.
+In ICLR, 2025. 2
+
+[105] Yang Zheng, Adam W Harley, Bokui Shen, Gordon Wet-
+zstein, and Leonidas J Guibas. Pointodyssey: A large-scale
+In ICCV,
+synthetic dataset for long-term point tracking.
+2023. 2, 6
+
+[106] Tinghui Zhou, Richard Tucker, John Flynn, Graham Fyffe,
+and Noah Snavely. Stereo magnification: Learning view
+synthesis using multiplane images. In SIGGRAPH, 2018. 2
+[107] Shengjie Zhu, Abhinav Kumar, Masa Hu, and Xiaoming
+Liu. Tame a wild camera: In-the-wild monocular camera
+calibration. In NeurIPS, 2023. 13
+
+12
+
+The appendix contains additional experiments and detail.
+DynPose-100K results are best viewed through video on the
+project webpage. Videos use 12 fps to correspond to camera
+poses, which are annotated at 12 fps.
+
+Appendix A. DynPose-100K: Dataset Curation
+Additional Details
+
+We expand upon the method of § 3.
+
+A.1. Candidate Selection Criteria
+
+Candidate selection criteria fit into three broad categories,
+which can be broken down into sub-categories. These are
+visualized in Figure 2 and are broken down further in Fig-
+ure 9. We detail below:
+
+C1. Real-world and quality video. Videos removed for
+this reason are titled in Figure 9 not real and quality
+/ ethical. Not real videos are described in § 3.1 and
+include cartoons and animated videos, video games,
+computer screen recordings, post-processing resulting
+in large logos or text appearing on screen or other video
+appearing side-by-side. Quality reasons include poor
+lighting and blocked or blurred lens. We select Panda-
+70M videos [12] with 720p resolution, but in rare cases
+a lower-resolution video has been up-sampled to 720p.
+Ethical reasons include children, NSFW and violence.
+
+C2. Feasibility for pose prediction. Videos removed for
+this reason are labeled not estimable. Subcategories in-
+clude long focal length, zoom in or out, non-existent or
+out-of-focus static region, shot change, and ambiguous
+frame of reference.
+
+C3. Dynamic camera and scene. These correspond to
+
+static camera and static scene in Figure 9.
+
+A.2. Candidate Video Selection
+
+We include videos based on scores coming from the follow-
+ing filters. Each filter produces a score between 0 and 1 as to
+whether the video should be included. The average of these
+is used as the final score, from which we threshold and take
+all videos with scores higher. Thresholds for each filter are
+tuned on a 1K validation set Panda-Val, collected in a sim-
+ilar manner to the 1K Panda-Test. Validation videos have
+no overlap with test videos. Also, long videos containing
+val videos have no overlap with the long videos containing
+test videos. This is a necessary precaution since Panda-70M
+videos are clips from long videos in HD-VILA-100M [94].
+
+1. Cartoons and presenting. We use the classifiers of
+Hands23 [16], which predict whether a video is likely
+to have interaction; and whether a video contains chil-
+dren, cartoons or screen recordings, or person sitting in
+front of a camera. This uses 4 evenly spaced frames in
+
+thumbnail size as input to two classifiers, one for if a
+video is acceptable, e.g. no cartoons, etc.; and one for if
+interaction is likely to occur, e.g. not a static scene. Each
+predicts a confidence score between 0 and 1. We use a
+minimum threshold for 0.55 for acceptable and 0.20 for
+interaction, meaning scores are 1 if greater than a thresh-
+old and 0 otherwise. Final score is the average of both.
+
+2. Non-perspective distortion. We use DroidCalib [29] to
+predict radial distortion at an interval of 6 fps for ef-
+ficiency. DroidCalib predicts α from the unified cam-
+era model [53]. A maximum threshold of 1.00 is used;
+higher outputs receive score 0 as they are likely distorted.
+
+3. Focal length. We use WildCamera [107] to compute the
+frame-wise focal length of videos, applying on frames at
+6 fps for efficiency. Focal lengths are predicted on 720p
+frames. We apply two variance thresholds. First, we
+check the difference between 90th and 10th percentile
+focal lengths.
+If this is greater than 40% of the mean
+focal length, it receives sub-score 0; 1 otherwise. This
+is a good check to see if focal length changes over the
+course of the video, sometimes due to shot change. Sec-
+ond, we check variance over a sliding window of 1 sec-
+ond. If focal length changes by more than 20% over 1
+second, it receives sub-score 0 as there is likely zoom
+or shot change; 1 otherwise. Finally, we apply a mean
+threshold, giving sub-score 0 if the 80th percentile focal
+length is greater than 1400; 1 otherwise. This is because
+extremely long focal lengths are often too focused to
+clearly see a background, and further have such a small
+field of view that localization is challenging, even for a
+human. The final scores is the equally weighted average
+of the three sub-scores.
+
+4. Dynamic object masking. We apply our masking method
+(§ 3.3) to compute the dynamic mask size. For efficiency,
+instead of applying masking every 0.5 seconds and prop-
+agating forward 0.5 seconds, we apply masking every 1
+second and propagate forward 1 second. This is useful
+since propagation is much faster than the other compo-
+nents of masking. Dynamic mask size is computed for
+each frame, the 90th percentile mask size is then com-
+pared to 80% of the frame size. In other words, if the
+10% of frames with biggest masks have a mask greater
+than 80% of frame size, the video receives masking score
+of 0; 1 otherwise.
+
+5. Optical flow. We compute the average magnitude of se-
+quential optical flow using RAFT [78], this is applied
+at 6 fps. Flow bigger than 2.127% of frame size aver-
+age distance is given sub-score 1. This threshold is cho-
+sen to correspond to the 80th percentile of optical flow
+in the dataset. Low optical flow is removed as it tends
+to correspond to static scenes and cameras. Next, two
+sub-components handle shot change. First, maximum
+
+13
+
+Figure 9. Panda-Test breakdown. We add more examples for each category, including further breakdown statistics for non estimable.
+Stats reflect human labels on the 1K Panda-Test set, detailed in § B.1.
+
+sequential-frame flow must be less than the mean plus
+4 standard deviations for 1 on the sub-score; else 0. Sec-
+ond, sustained flow must not be too high; maximum av-
+erage flow over 1 second sliding windows must be less
+than a threshold of 15% of frame size to receive 1 on the
+sub-score; else 0. The average of all three components is
+the final score.
+
+large disappearance of tracks indicating shot change, and
+two measuring lack of movement indicating static cam-
+era or scene. Each respective formula is more complex,
+but at a high-level, a video scores 0 on shot change if
+more than 50% of tracks are lost across a single frame,
+while dynamics scores 0 if median tracks move less than
+about 5% of frame size.
+
+6. Point tracking. We apply an abbreviated version of our
+tracking method over the full video. Instead of repeat-
+ing tracking, we apply tracking only once for efficiency.
+Tracking is done at 3 fps and tracked for 30 frames,
+meaning entire videos of 10 seconds or less are tracked
+fully. From Figure 6, over 99% of sequences are less
+than 10 seconds. In the case of longer videos, the first
+10 seconds still provides a good estimate of the tracking
+metrics. Tracking has three components, one measuring
+
+Component smoothing. A sigmoid is applied to compo-
+nent scores for smoothing. While this doesn’t impact clear
+positives or negatives in each case, it gives a more informa-
+tive ranking of borderline scores. For example, an exam-
+ple with average optical flow of 2.126% is marginally less
+likely to be included than one with average flow of 2.128%.
+Smoothed scoring is more reflective of this rather than the
+former scoring 0 and the latter scoring 1.
+
+14
+
+Not realQuality/ethicalNot estimableStatic cameraStatic sceneTarget videos25.4%11.1%23.1%27%4.4%9%Long focal3.0%Zoom in/out2.9%Shot change8.4%Frame of ref.3.3%Static region5.5%5.5%Generalist VLM. The VLM answers eight questions
+overviewed in § 3.2. Each question indicates a reason a
+video would not be included, so if any answer is yes, a score
+of 0 is given. Otherwise, the score is 1.
+
+Filtering efficiency. We find we can often reduce compu-
+tation of filtering methods compared to pose estimation, as
+not as much precision is required to get an aggregate fil-
+tering score. For example, precisely tracking each frame
+is important for accurate pose estimation, but to determine
+whether the camera is static, we need only check if tracks
+sufficiently moved at a few fps. This efficiency is impor-
+tant considering filtering is run on many more videos (about
+3.2M) than pose estimation (about 100K).
+
+Collection details. During filtering, we remove videos
+with average score below a threshold. Final filter scores
+are between 0 and 1; the final threshold we use is 0.910,
+resulting in 137K videos, corresponding to about 4.3% of
+the full 3.2M videos.
+
+Filtering is applied in several stages to reduce compute
+cost, as reported in § 3.2. After completing a stage, only a
+subset of all filters are available to attempt to remove un-
+suitable videos. Experiments indicate this is not as effective
+as using all filters (Table 5). Nevertheless, this subset is still
+a good proxy for whether to filter the video. We therefore
+use an average of these filters, but apply a less strict thresh-
+old than the final filter to avoid removing suitable videos.
+Subset thresholds are chosen empirically based on the eval-
+uation set to avoid removing good candidates.
+
+then tracking;
+
+Filters are applied in the following order for efficiency:
+then
+Hands23, flow, focal;
+then distort;
+masking; and finally VLM. Hands23, flow and focal are
+lightweight operations, distort is nearly as lightweight, then
+tracking, then masking. VLM (GPT-4o [60]) is applied last
+to minimize OpenAI API costs. Hands23, flow and focal
+were run jointly early in the project to experiment with fil-
+tering on a large set.
+
+After running SfM, we drop trajectories with less than
+80% of frames registered. This is a typical threshold for a
+succeeded trajectory used in evaluation [9, 50]. Early ex-
+periments found this to be a good proxy for quality.
+
+A.3. Dynamic Camera Pose Estimation
+
+Dynamic camera pose estimation builds upon Parti-
+cleSfM [103]’s calls to TheiaSfM [76] for global bundle
+adjustment given masks and tracks as input. More detail
+for dynamic masking and point tracking follow.
+
+Dynamic masking. Dynamic masking combines four
+complimentary approaches to motion detection:
+seman-
+tics, for common dynamic classes; object interaction, for
+sometimes-dynamic objects that move when interacted
+with; motion, for sometimes-dynamic objects that move
+even when not in contact with humans; and tracking, to
+
+smoothly and efficiently propagate detected masks. We ap-
+ply the former three masks once every six frames and in-
+put them into tracking. Tracking then outputs the tracked
+masks for the current frame and next five frames, before the
+process is repeated at the sixth new frame. Using frames
+extracted at 12fps for DynPose-100K, this results in masks
+produced and propagated forward for 0.5 seconds. An ex-
+ample of dynamic masking in practice can be found in more
+detail in Figure 10.
+
+Semantic segmentation. We apply OneFormer [36] to mask
+common dynamic classes such as humans and sports equip-
+ment. We use the same classes for dynamic masking as Ro-
+DynRF [50]: MS-COCO [46] classes 1 (person), 2-9 (vehi-
+cle), 16-25 (animal), 26-33 (accessory), 34-43 (sports), and
+88 (teddy bear).
+
+Object interaction segmentation. We use Hands23 [16]
+hand-object interaction with default parameters. We con-
+sider only masks associated with hand-held objects. This
+corresponds to touch classes 1, 2, 4 and 6. We found mask-
+ing objects being touched but not held (3, 5) resulted in
+masking too many objects that were not moving. Move-
+ment was highly correlated with the held class.
+
+Motion segmentation. Sampson error [31] is computed both
+forward and backward on each sequential frame pair based
+on flow [78]. The maximum of forward and backward is
+computed for each pixel, after which we normalize and
+threshold. Like [50], we mask pixels with errors greater
+than (f rameheight ∗ f ramewidth)/8100.
+
+Mask propagation. We use SAM2 [63] video predictor
+with sam2-hiera-large checkpoint and config to propagate
+the combination of the three former masks. For efficiency,
+we perform segmentation every six frames and use SAM2
+to propagate the mask forward for six frames. Since prop-
+agation is several times faster than masking, the result is a
+substantial overall speedup.
+
+Point tracking. To collect DynPose-100K, we predict
+tracks using input resolution (256, 256), the default for
+BootsTAP [20]. We track a grid of (42, 42) = 1764 points.
+We apply tracks every 5/12 second and track for 2.5 sec-
+onds. Using frames extracted at 12fps, this corresponds
+to a stride of 5 frames and tracking length of 30 frames.
+Early experiments indicated higher resolution did not mean-
+ingfully improve results while reducing efficiency. We
+therefore selected these parameters, considering our goal of
+large-scale collection.
+
+Repeating tracking later in videos results in sequences
+where video is shorter than the number of frames to track.
+We find BootsTAP [20] runs far faster when repeating the
+same sequence length, as opposed to shortening sequence
+length. We therefore pad sequences with empty frames as
+needed to keep same sequence length, finding in early ex-
+
+15
+
+periments this has negligible impact on results while mean-
+ingfully speeding up tracking.
+
+Appendix B. DynPose-100K: Dataset Analysis
+Additional Details
+
+This section adds detail for § 4.2.
+
+B.1. Filtering Evaluation on Panda-Test
+
+Dataset. Panda-Test consists of 1K randomly selected
+videos manually categorized into suitable or one of several
+non-suitable categories. These are visualized in Figure 2
+and detailed in Figure 9. Manual filtering goes as follows:
+a video is first checked to see if it is not real. If it passes
+this check, it is checked for quality / ethics, then if pose is
+estimable, then if pose is dynamic, then scene dynamic. If it
+passes these checks it is considered a target video. 90 (9%)
+are considered suitable.
+
+Results. Table 5 shows filtering evaluation in more detail
+than Figure 5. Following the Pascal Visual Object Classes
+challenge [22], Table 5, left shows a smoothened precision-
+recall curve for increased visual clarity. For each data point,
+we use the maximum precision of all data points whose
+recall is greater than or equal to the current recall. This
+smooths the curve such that precision is non-increasing as
+recall increases. Table 5, right reports precision values of
+the non-smoothened curves. Precision at Recall of 0.40 cor-
+responds to the operating threshold for DynPose-100K.
+
+Appendix C. Experimental Details
+
+We expand upon experimental details from § 5.
+
+C.1. Pose Evaluation on Lightspeed
+
+We run all methods on Lightspeed dataset extracted at full
+24 fps due to the short nature of clips, following prior pro-
+tocol on synthetic data evaluation [9, 50, 103].
+
+Dataset. Additional sequences of Lightspeed are displayed
+in Figure 12. They have resolution (2560, 1440).
+
+Metrics. We follow [9, 50, 103] in defining failing to reg-
+ister a sequence as registering less than 80% of frames. We
+fill failed trajectories with random translations so they can
+be aligned with ground truth trajectories to compute ATE;
+i.e. the identity sequence cannot be transformed to align
+with another sequence. Unlike Panda-Test, we did not find
+it necessary to repeat SfM: our method succeeded on all se-
+quences, while repeating SfM on failed sequences for other
+methods e.g. COLMAP made minimal or no difference.
+
+Implementation details. Our pose estimation method pre-
+dicts tracks using input resolution (480, 854) and a grid of
+(56, 32) = 1792 points, and tracks for 40 frames. This com-
+bination is the maximum fitting in 40G memory, and is cho-
+
+16
+
+Figure 10. Masking composition. Each component of masking
+contributes to final masks. Unique contributions for semantics, in-
+teraction and motion are circled in red. Semantic segmentation
+handles common dynamic objects such as humans (all examples).
+Object interaction handles things humans are manipulating such as
+paper (top) or accessories (bottom). Motion handles things mov-
+ing not by human hands such as swiveling chairs (second from
+top) or flying snowballs (third from top). Sometimes objects are
+partially segmented by one component but complementary com-
+ponents can still give a more complete mask. E.g. in the third
+example, flying snowballs are segmented by semantics but motion
+helps complete the dynamic mask. All components are combined
+and tracked smoothly by propagation (right).
+
+SemanticInteractionMotionPropagation (Output)……………………Method
+
+Prec. @
+
+Avg.
+Prec. Rec. >0.40↑
+
+Recon. points (CamCo [93]) 0.17
+0.26
+Reprojection error
+0.18
+GPT-4o mini [60]: binary
+0.13
+GPT-4o mini [60]: score
+0.19
+Hands23 [16]
+0.58
+Ours
+
+Hands23
++ Flow
++ Tracking
++ Masking
++ Focal
++ Distort
++ VLM (Ours)
+
+0.19
+0.27
+0.34
+0.39
+0.45
+0.46
+0.58
+
+0.19
+0.24
+0.24
+0.13
+0.18
+0.78
+
+0.18
+0.28
+0.36
+0.47
+0.52
+0.53
+0.78
+
+Figure 11. The
+represents DynPose-100K’s operating thresholds. For baselines,
+we show: ■ Reconstructed points (CamCo [93]), ■ Reprojection error, (solid ■)
+GPT-4o mini [60]: binary, (dashed ■) GPT-4o mini [60]: score, ■ Hands23 [16],
+and ■ Ours. For ablations, we begin from ■ Hands23 and add components until
+we recover ■ Ours. Specifically, we depict: ■ Hands23, ■ +Flow, ■ +Tracking, ■
++Masking, ■ +Focal, ■ +Distort, ■ +VLM (Ours).
+
+Table 5. Expanded detail on video filtering on Panda-Test. Left is Figure 5 showing PR curves for baselines and ablations. Right
+displays average precision for these curves; along with precision at the threshold of 0.40 recall, corresponding to the operating threshold
+of DynPose-100K.
+
+sen as a balance of local precision via high-resolution and
+robustness via long-term tracking. The 24 fps frame-rate
+means 40 frames is 1.67 seconds, shorter than the 2.5 sec-
+onds on DynPose-100K and Panda-Test (detailed in § A.3).
+Nevertheless, we find this tracking has competitive final re-
+sults (Table 2, Figure 7, Figure 16). We use tracking applied
+both forward and backward, though found this had minimal
+impact on results compared to tracking only forward.
+
+C.2. Pose Evaluation on Panda-Test
+
+We use the same settings as DynPose-100K and apply
+masking and tracking upon video frames extracted at 12fps.
+
+Metrics. We select correspondences with small depth
+(closer to the camera) if possible to make correct pose re-
+projection error more discernible from incorrect pose es-
+timates. Sample correspondences used for evaluation are
+plotted in Figure 13. Both human correspondences and cor-
+responding SuperPoint [18]+LightGlue [47] (SP+LG) cor-
+respondences are displayed. While human correspondences
+are annotated by two expert annotators and are reliable at a
+coarse level, SP+LG allows more precise correspondence.
+In addition, we require a SP+LG correspondence to exist
+within 10 pixels (on 720p images) of both human points
+in correspondence. This is a fail-safe against a missed an-
+notation from the human.
+In practice, we collect 11,866
+pairs, about 86.0% (10,210) of which have agreeing cor-
+respondence. We note SP+LG alone would be difficult to
+annotate correspondence, since correspondences could po-
+
+tentially belong to a dynamic object or be incorrect.
+
+Non-registered predicted frames are replaced by nearby
+frames, while non-registered sequences are replaced by the
+identity matrix. Both can result in identity relative pose
+across image pairs. Identity relative pose results in a singu-
+lar fundamental matrix, used to compute reprojection error.
+In this case, instead of reprojection error measuring distance
+to an epipolar line, distance is computed to the location of
+the ground truth corresponding point in the opposite image.
+This can be thought of transforming the correspondence by
+the identity. We experimented alternatively adding small
+random perturbations to enable computation of the funda-
+mental matrix, but this resulted in larger error.
+
+Baselines and ablations. We find across methods, SfM oc-
+casionally fails on challenging Internet video on the same
+sequence on which it may succeed. To better analyze per-
+formance difference between methods, we therefore repeat
+failed SfM; defined as registering less than 80% of frames.
+
+Results. In addition to superior pose estimates, we observe
+our pose estimation method is faster than ParticleSfM [103].
+On an A40 GPU, it averages 11 minutes, while ParticleSfM
+averages 44 minutes, using the same 10 video samples be-
+tween 48 and 93 frames, with mean length 62.6 (all at
+12fps). The speed difference is a result of ParticleSfM’s re-
+liance on propagated dense optical flow for tracking, requir-
+ing expensive flow matching to create point tracks. These
+dense points also result in more correspondences, slowing
+SfM. Ours takes about 3.3 minutes for tracking, 4.2 minutes
+
+17
+
+0.00.20.40.60.81.0Recall0.00.20.40.60.81.0PrecisionPR Curves: Baselines0.00.20.40.60.81.0Recall0.00.20.40.60.81.0PR Curves: AblationsFigure 12. Additional Lightspeed videos. High resolution (2560, 1440) sequences span indoor and outdoor; light and dark; close-up
+dynamic object and far-away dynamic object; forward and backward movement.
+
+for masking and 3.5 minutes for SfM. ParticleSfM takes 26
+minutes for tracking, 2 for masking and 16 for SfM. Our
+quality pose estimates show such dense correspondence is
+not necessary. A different setup can provide faster speed
+across methods. On an A100 40G GPU in a different infra,
+we saw our inference in as fast as 4 minutes for a video.
+
+On an A100 40G GPU, filtering one video takes about
+0.2min for each of Hands23, flow, focal, VLM, and distort;
+tracking takes 0.8min and masking takes 1.4min. Filtering
+is performed sequentially to reduce compute and cost.
+
+Fine-tuning experiment.
+We compare fine-tuning
+DUSt3R [86] on DynPose-100K against MonST3R [100].
+To do so, we follow a similar experimental setup to
+MonST3R, replacing synthetic data used with DynPose-
+
+100K. For depth supervision, we use pixelwise predictions
+from Depth-Pro [7]. We use median depth values to rescale
+DynPose-100K translations to meters. We use only 2K
+of the 100K videos from DynPose-100K for this experi-
+ment, finding it produced sufficient performance and high-
+lighted supervision efficiency. We hypothesize using the
+full dataset could improve performance. We remove videos
+not containing all registered frames. We also remove those
+with high reprojection error to improve pose accuracy, in-
+spired by Table 6. We use a reprojection threshold of 1.37,
+chosen to provide a balance of quantity and quality at about
+1.2K videos for training. We train for 250K iterations with
+batch size 8, which takes about 4 days on 2 A40 GPUs.
+
+18
+
+012003800420054006500270020004000490057007700310Panda-Test correspondence annotation. Human matches (pink points) provide coarse accuracy while Super-
+Figure 13.
+Point+LightGlue [18, 47] correspondences (green points and line) provide precision. We search for SP+LG matches within 10 pixels
+of human correspondences on 720p frames (pink circle). If no match exists, we do not include the match in testing.
+
+Appendix D. DynPose-100K: Dataset Analysis
+Additional Results
+
+We visualize DynPose-100K filtering process and output.
+
+D.1. Filtering Evaluation on Panda-Test
+
+Figure 14 breaks down scores for high and low scoring ex-
+amples on Panda-Test. The minimum average score for
+DynPose-100K is 0.91, meaning to be included, each fil-
+ter score must be high. The figure shows individual filters
+can be incomplete, while their combination is typically, but
+not always, effective: R1C6 shows the VLM may not catch
+zoom-in, R2C2 shows Hands will not handle shot change,
+R2C5 shows masking will not detect static cameras.
+
+D.2. Dataset Overview
+
+Figure 15 displays sample videos and pose annotations on
+DynPose-100K. These videos are diverse and face chal-
+lenges for pose annotation, including varied lighting, move-
+ment and apparent dynamic object sizes. Despite this chal-
+lenge, pose annotations are of high quality.
+
+D.3. Reprojection Error Analysis
+
+Reprojection error is produced during SfM and is saved for
+each video in DynPose-100K. It can be used to filter high-
+
+Reprojection error %Data ↑ % < 5 ↑ % < 10 ↑ M ean ↓
+
+Full test set
+Reproj. err.< 1.37
+Reproj. err.< 1.18
+Reproj. err.< 1.00
+
+100.
+71.1
+41.1
+24.4
+
+72.2
+78.1
+81.1
+81.8
+
+84.4
+84.4
+83.8
+86.4
+
+5.76
+5.04
+4.49
+3.85
+
+Table 6. Identifying high-quality poses. Reprojection error is
+effective in identifying low error videos in Panda-Test. It is use-
+ful to produce high-quality subsets of DynPose-100K e.g. we use
+reprojection error to help filter data to fine-tune DUSt3R (§ C.2).
+
+quality poses. Table 6 reports pose accuracy results of the
+proposed method before and after filtering by videos with
+low reprojection error. Retaining only videos with low re-
+projection error reduces error significantly. Future users of
+DynPose-100K may consider filtering by reprojection error.
+
+D.4. Dataset Rotation Analysis
+
+Figure 17 shows video trajectory rotation statistics. Hori-
+zontal rotations are particularly diverse, often ending over
+30 degrees from the initial rotation with over 75 degrees of
+total horizontal rotation, measured sequentially.
+
+19
+
+Figure 14. Panda-Test filtering score samples. High scoring (top), moderate scoring (middle) and low scoring (bottom) examples from
+Panda-Test. Ground Truth 1 indicates suitable video, 0 is unsuitable. The minimum average score in DynPose-100K is 0.91, meaning all
+filters must produce a relatively high score. G indicates correct classification based on 0.91 threshold; R are sample failure cases. Reasons
+for exclusion: R1C6: zoom-in, R2C1: static camera, R2C2: shot change, R2C4: not real, R2C5: static camera, R2C6: distortion, R3C1:
+ambiguous frame of ref, R3C2-C3: not real, R3C4-C5: insufficient clear static region, R2C6: long focal.
+
+20
+
+Ground Truth: 1Avg. Score: 0.96Hands: 0.93Flow: 0.86Track: 1.00Mask: 0.97Focal: 0.95Distort: 1.00VLM: 1.00Ground Truth: 1 Avg. Score: 0.95Hands: 0.98Flow: 0.85Track: 1.00Mask: 0.99Focal: 0.87Distort: 0.98VLM: 1.00Ground Truth: 1 Avg. Score: 0.95Hands: 0.92Flow: 0.80Track: 1.00Mask: 1.00Focal: 0.95Distort: 0.98VLM: 1.00Ground Truth: 1 Avg. Score: 0.95Hands: 0.97Flow: 0.99Track: 0.76Mask: 0.98Focal: 0.94Distort: 0.98VLM: 1.00Ground Truth: 1 Avg. Score: 0.94Hands: 0.81Flow: 0.87Track: 0.99Mask: 0.97Focal: 0.93Distort: 1.00VLM: 1.00Ground Truth: 0 Avg. Score: 0.91Hands: 0.75Flow: 0.72Track: 0.98Mask: 1.00Focal: 0.94Distort: 1.00VLM: 1.00Ground Truth: 0Avg. Score: 0.45Hands: 0.13Flow: 0.66Track: 0.42Mask: 1.00Focal: 0.00Distort: 0.98VLM: 0.00Ground Truth: 0 Avg. Score: 0.48Hands: 0.62Flow: 0.67Track: 0.33Mask: 0.76Focal: 0.74Distort: 0.21VLM: 0.00Ground Truth: 0 Avg. Score: 0.48Hands: 0.24Flow: 0.67Track: 0.33Mask: 1.00Focal: 0.66Distort: 0.43VLM: 0.00Ground Truth: 0 Avg. Score: 0.48Hands: 0.27Flow: 0.67Track: 0.33Mask: 1.00Focal: 0.09Distort: 1.00VLM: 0.00Ground Truth: 0 Avg. Score: 0.51Hands: 0.51Flow: 0.67Track: 0.06Mask: 1.00Focal: 0.35Distort: 1.00VLM: 0.00Ground Truth: 0 Avg. Score: 0.52Hands: 0.98Flow: 0.70Track: 0.35Mask: 0.17Focal: 0.97Distort: 0.50VLM: 0.00Ground Truth: 1 Avg. Score: 0.83Hands: 0.96Flow: 0.94Track: 0.99Mask: 0.98Focal: 0.92Distort: 1.00VLM: 0.00Ground Truth: 0 Avg. Score: 0.88Hands: 0.75Flow: 0.76Track: 0.98Mask: 0.85Focal: 0.86Distort: 1.00VLM: 1.00Ground Truth: 0 Avg. Score: 0.86Hands: 0.99Flow: 0.50Track: 0.66Mask: 0.97Focal: 0.93Distort: 0.96VLM: 1.00Ground Truth: 0 Avg. Score: 0.80Hands: 0.56Flow: 0.69Track: 0.97Mask: 1.00Focal: 0.38Distort: 1.00VLM: 1.00Ground Truth: 0 Avg. Score: 0.75Hands: 0.30Flow: 0.67Track: 0.34Mask: 1.00Focal: 0.97Distort: 0.97VLM: 0.99Ground Truth: 0 Avg. Score: 0.66Hands: 0.67Flow: 0.87Track: 0.99Mask: 0.96Focal: 0.92Distort: 0.24VLM: 0.00Figure 15. Sample videos on DynPose-100K. DynPose-100K collects a diverse set of videos with challenging trajectories and dynamics.
+It pairs these videos with high-quality pose annotations. The dataset is best viewed via the Supplemental video.
+
+Figure 16. Additional comparison on Lightspeed. Ours has more accurate poses than baselines in challenging settings. Top: a dynamic
+object is static relative to the camera and of similar color to the background. Bottom: dynamic object quickly moves by at night while
+camera moves and turns. In both cases, baselines are either incorrect or do not have continuous, smooth trajectories. Top: MonST3R
+curves upward towards the end, while COLMAP+Mask has a large turn.
+
+21
+
+OursParticleSfMCM + MaskDUSt3RDROID-SLAMCOLMAPFailGround TruthMonST3RLEAP-VOReprojection error
+
+% < 5 ↑ % < 10 ↑ % < 30 ↑ M ean ↓
+
+Ours
+- Semantic
+- Object Interaction
+- Motion
+- Propagation
+
+72.2
+65.6
+72.2
+67.8
+68.9
+
+84.4
+86.7
+85.6
+81.1
+86.7
+
+98.9
+97.8
+97.8
+94.4
+94.4
+
+5.76
+8.14
+5.79
+7.95
+6.93
+
+Table 8. Masking ablations on Panda-Test. Each component is
+important to final performance: any component removed reduces
+results on average.
+
+Reprojection error % < 5 ↑ % < 10 ↑ % < 30 ↑ M ean ↓
+
+Ours
++ GLOMAP [61]
+
+72.2
+81.1
+
+84.4
+90.0
+
+98.9
+95.6
+
+5.76
+8.86
+
+Table 9. Bundle adjustment ablation on Panda-Test. GLOMAP
+offers competitive precision, but Ours has lower mean error.
+
+SFM [76], has better mean error. We note in the GLOMAP
+paper the method does not outperform Theia-SfM across
+all scenes. Further, the paper measures percentage accu-
+racy within a threshold; our finding on Internet video is
+GLOMAP failures tend to be more severe than Theia-SfM,
+which is most clearly reflected in mean error.
+
+Figure 17. Dataset statistics. Top left: distribution of final hor-
+izontal rotation. Top right: distribution of final vertical rotation.
+Bottom left: distribution of sequential sum of absolute value of
+horizontal rotation. Bottom right: distribution of sequential sum
+of absolute value of vertical rotation.
+
+Reprojection error % < 5 ↑ % < 10 ↑ % < 30 ↑ M ean ↓
+
+Ours
++ CoTracker [38]
+
+72.2
+66.7
+
+84.4
+78.9
+
+98.9
+97.8
+
+5.76
+7.11
+
+Table 7. Tracking ablation on Panda-Test. CoTracker produces
+overall worse camera pose estimates than BootsTAP.
+
+Appendix E. Additional Pose Results
+
+We show additional results on Lightspeed and Panda-Test.
+
+E.1. Pose Evaluation on Lightspeed
+
+Figure 16 displays additional comparisons on Lightspeed.
+Both examples show all alternatives struggle, while Ours
+can handle challenges in a large dynamic object that is static
+relative to the camera (top) and of a dynamic object spin-
+ning and kicking up dust (bottom).
+
+E.2. Pose Evaluation on Panda-Test
+
+Figure 19 shows additional comparisons to baselines on
+Panda-Test. Ours best handles challenges in large dynamic
+objects and large variations in appearance and lighting. Fig-
+ure 18 shows additional pose results on Panda-Test. Ours
+produces reasonable trajectories on a wide variety of videos,
+agreeing with quantitative results.
+
+Tracking ablation. Table 7 compares our tracking to alter-
+native method CoTracker [38]. We find our tracking pro-
+duces better pose accuracy.
+
+Masking ablation. Table 8 displays each of the four com-
+ponents to masking. Each component is important to final
+performance: any component removed reduces results on
+average. This is also apparent in Figure 10.
+
+Bundle adjustment ablation. Table 9 compares Ours to
+alternative bundle adjustment method GLOMAP [61]. We
+find GLOMAP improves precision, but Ours, using Theia-
+
+22
+
+50050Horizontal rotation, final frame (°)DensityDynPose-100K rotation distribution50050Vertical rotation, final frame (°)DensityDynPose-100K rotation distribution075150225Horizontal rotation, sequential sum (°)DensityDynPose-100K sum of rotation050100150Vertical rotation, sequential sum (°)DensityDynPose-100K sum of rotationFigure 18. Additional poses on Panda-Test. Ours produces sensible poses on a variety of videos, further validating quantitative results.
+
+Figure 19. Additional comparison on Panda-Test. Ours best handles challenging lighting and large dynamic objects (top), and handling
+scale variation resulting from moving very close to objects (bottom). In the top sequence, Our trajectory is accurate, while alternatives do
+not reflect the consistent, fast and mostly straight backward movement of the camera. COLMAP and COLMAP+Mask register most of the
+bottom sequence, but miss the movement at the end of the trajectory (down and to the left).
+
+23
+
+OursParticleSfMCM + MaskDUSt3RDROID-SLAMCOLMAPMonST3RLEAP-VO

@@ -1,0 +1,284 @@
+MirrorVerse: Pushing Diffusion Models to Realistically Reflect the World Ankit Dhiman1,2* Manan Shah1* R Venkatesh Babu1 1Vision and AI Lab, IISc Bangalore 2Samsung R & D Institute India - Bangalore 5 2 0 2 r p A 1 2 ] V C .
+s
+c [ 1 v 7 9 3 5 1 . 4 0 5 2 : v i X r a .
+Our model MirrorFusion , trained on our enhanced dataset SynMirrorV2 surpasses previous state-of-the-art diffusion-based inpainting models at the task of generating mirror reflections.
+All images were created by appending the prompt: “A perfect plane mirror reflection of ” to the object description.
+All text prompts can be found in the supplementary.
+Abstract Diffusion models have become central to various image editing tasks, yet they often fail to fully adhere to physi- cal laws, particularly with effects like shadows, reflections, and occlusions.
+In this work, we address the challenge of generating photorealistic mirror reflections using diffusion- based generative models.
+Despite extensive training data, existing diffusion models frequently overlook the nuanced details crucial to authentic mirror reflections.
+Recent ap- proaches have attempted to resolve this by creating syn- thetic datasets and framing reflection generation as an in- painting task; however, they struggle to generalize across different object orientations and positions relative to the *Equal Contribution.
+mirror.
+Our method overcomes these limitations by intro- ducing key augmentations into the synthetic data pipeline: random object positioning, randomized rotations, and grounding of objects, significantly enhancing gener- alization across poses and placements.
+To further address spatial relationships and occlusions in scenes with multi- ple objects, we implement a strategy to pair objects dur-
+ing dataset generation, resulting in a dataset robust enough to handle these complex scenarios.
+Achieving generaliza- tion to real-world scenes remains a challenge, so we intro- duce a three-stage training curriculum to develop the Mir- rorFusion  model to improve real-world performance.
+We provide extensive qualitative and quantitative evalua- tions to support our approach.
+The project page is available at: https://mirror-verse.github.io/. 1 a) SD generations b) HD-Painterc) MirrorFusiond) OursMaska)Input .
+Our proposed dataset, SynMirrorV2, surpasses existing mirror datasets in terms of attribute diversity and variability.
+While recent work introduced the synthetic SynMirror dataset, it lacks key augmentations and scenario, limiting its performance in complex and real-world settings (See Fig. 1).
+Dataset Type Size (#Images) Attributes MSD Mirror-NeRF DLSU-OMRS TROSD PMD RGBD-Mirror Mirror3D Real Real & Synthetic Real
+Real Real Real Real SynMirror Synthetic SynMirrorV2 (Ours) Synthetic with Single & Multiple Objects 4,018 9 scenes 454 11,060 6,461 3,049 7,011 198,204 207,610 RGB, Masks RGB, Masks, Multi-View RGB, Mask RGB, Mask RGB, Masks RGB, Depth RGB, Masks, Depth Single Fixed Objects: RGB, Depth, Masks, Normals, Multi-View Single + Multiple Objects: RGB, Depth, Masks, Normals, Multi-View, Augmentations
+This limitation stems from the models’ reliance on poorly learned priors, a consequence of the quality and quantity of their training data.
+The scarcity of high-quality, real- world images featuring mirrors and their reflections, as ev- idenced in Tab. 1, poses a significant challenge.
+While re- cent work has attempted to address this issue by train- ing on a synthetic dataset, the results, as illustrated in Fig. 1, suggest that the method’s performance suffers in complex scenes and real-world settings.
+We hypothesize that this is due to inherent limitations in the synthetic data generation process and the training dynamics of the model.
+To address the shortcomings in the synthetic data gener- ation pipeline, we create an enhanced pipeline incorporat- ing useful augmentations such as randomizing object po- sition and rotation.
+We also ensure that the objects are anchored to the ground level in the 3D world.
+We ob- serve that this diverse data improves the generalization of a trained model across the pose and position of objects in the scene.
+However, it does not generalize to more complex scenes with multiple objects.
+To address this, we propose a novel pipeline that places multiple objects in the scene based on their semantic categories, further enhancing the quality and utility of the proposed synthetic dataset.
+Draw- ing inspiration from previous works, such as those that have improved the generation quality on various tasks, notably image-editing , multilingual T2I generation
+[23, 50, 53] and several others, we aim to leverage the stage-wise train- ing approach that enhanced the results in these methods.
+We briefly sum up our contributions as follows: • We propose SynMirrorV2, a large-scale synthetic dataset with diversity in objects and their relative position and orientation in the scene.
+•
+Further, we create a pipeline to add multiple objects to a scene in SynMirrorV2.
+•
+We show that with a curriculum strategy of training on SynMirrorV2, a generative method can also generalize to real-world scenes.
+We show this generalization capa- bility on the challenging real-world MSD dataset. .
+We observe that current state-of-the-art T2I models, SD (top row) and Flux (bottom row), face significant challenges in producing consistent and geometrically accurate re- flections when prompted to generate reflections in the scene.
+1.
+Introduction In recent years, diffusion-based generative models have re- defined what is possible in fields spanning from image generation to video synthesis, producing impressive re- sults across various applications
+[14, 17, 18, 22, 35, 38].
+The evolution of these models has been accompanied by a range of methods designed to fine-tune the generation process through conditional inputs, such as edge maps, sketches, depth maps, and segmentation maps [30, 54, 56, 58].
+However, there remains a significant gap in their ca- pacity to replicate intricate physical effects—particularly those rooted in the subtlety of real-world physics, includ- ing shadows , specular reflections , and perspective cues .
+More challenging still, these techniques struggle to authentically generate mirror reflections, a task requir-
+ing a nuanced understanding of light, geometry, and real- ism that current methods do not adequately address.
+In this work, we address the question: “Can current methods be fine-tuned to generate plausible mirror reflections?”
+We motivate the problem further by providing genera- tions from current text-to-image (T2I) generation models.
+We prompt Stable Diffusion  and FLUX with prompts to generate a scene with a mirror reflection.
+Fig.
+2 shows that these methods fail to generate plausible mir- ror reflections.
+Specifically, check the reflection of “teddy- bear” in the generated outputs from both the methods.
+Fur- ther, inpainting methods like HD-Painter also fail for this task, as shown in Fig.
+1.
+A contemporary method called MirrorFusion , claiming to generate mirror reflections, falls short on real-world and challenging scenes as apparent in Fig.
+1.
+Despite their impressive capabilities, powerful diffusion models struggle to generate mirror reflections accurately.
+2
+‘A perfect plane mirror reflection of a mug which is placed in front of the mirror.
+’’‘A perfect plane mirror reflection of a stuffed toy bear which is placed in front of the mirror.
+’’‘A perfect plane mirror reflection of a chair model which is placed in front of the mirror.
+’’Stable Diffusion Flux 2.
+Related Work 3.
+Dataset Image Generative models.
+Diffusion models have be- come quite popular for image generation tasks.
+Diffusion models work by gradually adding noise to data and then learning to reverse this process to generate data from a vari- ety of distributions
+[8, 11, 17].
+Subsequent works have ex- panded the scope of image generation by incorporating text guidance
+[37, 40] into the diffusion process, simplifying the reverse process , and reformulating diffusion to occur in a latent space for improved speed.
+explore ad- vancements in diffusion models by addressing bias through distribution-guided debiasing techniques.
+Further, meth- ods [32, 33] are developed to provide more fine-grained generation control to these models.
+Building on the success of vision transformers , recent approaches [7, 34, 60] have replaced the U-Net architecture in diffusion models with transformer-based designs, leading to high-quality im- age generation results.
+Further, there are popular meth- ods
+[2, 22] for high-quality image generation.
+However, these methods also fail for the task of generating reflections on the mirror as shown in Fig.
+2 Image Inpainting.
+Building on the advancements in im- age diffusion models, methods like Palette and Re- paint leverage known regions through the denois- ing process to reconstruct missing parts.
+Blended Diffu- sion
+[3, 4] refines this approach by replacing noise in un- masked areas with known content but struggles with com- plex scenes and shapes.
+Stable-Diffusion Inpainting (SDI) enhances results by fine-tuning the denoiser with noisy latents, masks, and masked images.
+Recent methods, such as HD-Painter , PowerPaint , SmartBrush build on SDI with additional training.
+Recently, Brush-
+Net introduces a plug-and-play architecture that pre- serves unmasked content while improving coherence with textual prompts.
+However, Fig.
+1 highlights the limitations of these methods in generating reflections on the mirror.
+Diffusion Models and 3D concepts.
+Recently, LRM based methods predict 3D model from a single image.
+Some methods utilize diffusion-based methods to en- able editing of these 3D presentations.
+Other diffusion- based methods use synthetic image pairs for 3D-aware image editing.
+However, the synthetic-to-real domain gap can limit their applicability.
+Further, ObjectDrop trains a diffusion model for object insertion/removal using a coun- terfactual dataset that can handle shadows and specular re- flections.
+Sarkar et al. shows that generated images have different geometric features such as shadows and re- flections from the real images.
+Upadhyay et al. pro- posed a geometric constraint in the training process to im- prove the perspective cues in the generated images.
+Al- chemist provides control over the material properties of an object by proposing an object-centric synthetic dataset with physically-based materials. .
+Data Generation Pipeline Fig.
+2 highlights the failure of state-of-the-art models in handling the reflection generation task.
+MirrorFusion addresses this challenge by proposing a synthetic dataset but struggles in complex scenarios involving multiple ob- jects and real-world scenes ( Fig. 1).
+We attribute this limi- tation to the lack of diversity in their dataset.
+To mitigate these shortcomings, we introduce SynMirrorV2, a large- scale dataset which significantly expands diversity with var- ied backgrounds, floor textures, objects, camera poses, mir- ror orientation, object positions, and rotations.
+Tab. 1 com- pares existing mirror datasets, while Fig.
+3 showcases sam- ples from SynMirrorV2.
+Object Sources.
+We source objects from Objaverse and Amazon Berkeley Objects (ABO) datasets.
+Objaverse, a large-scale dataset, contains 800K diverse 3D assets, while ABO contributes 7, 953 common household objects.
+To en- sure quality, we refine our selection using a curated list of 64K objects from OBJECT 3DIT and the filtering pro- cedure discussed in , eliminating low-quality textures and sub-par renderings.
+After filtering, we get 58, 109 ob- jects from Objaverse.
+In total, we utilize 66, 062 objects.
+Scene Resources.
+To create a realistic scene, we require assets such as a mirror, floor and background.
+We cre- ate a plane for the floor and apply diverse textures sourced from CC-textures .
+We use HDRI samples provided by PolyHaven to represent the background.
+In our exper- iments, we use different kinds of mirrors: full-wall mirrors and tall rectangular mirrors.
+For lighting, we position an area-light slightly above and behind the object at a 45◦ an- gle, directing it towards both the object and the mirror.
+Object Placement in the scene.
+To begin, we fix the mir- ror’s position within the scene as a fixed reference point.
+The sampled object is then scaled to fit within a unit cube, ensuring uniformity in size across all objects.
+We proceed by sampling the object’s x-y position from a pre-computed region that guarantees both visibility of the object in the mirror and camera.
+This pre-computed region is determined by identifying the intersection between the mirror’s viewing frustum and the camera’s viewing frustum.
+Once the posi- tion is set, we randomly sample an angle for the object’s rotation around the y-axis to introduce variability.
+How- ever, even with these steps, there may be instances where the object appears to float in the air, which can undermine the dataset’s utility.
+To address this, we apply a straightfor- ward grounding technique, detailed in the supplementary material.
+Together, these strategies contribute to the diver- sity and overall quality of the proposed dataset.
+Multiple Objects.
+A typical scene includes multiple ob- jects arranged in varied layouts, producing a range of depth and occlusion scenarios that enhance scene realism.
+To 3 .
+Dataset Generation Pipeline.
+Our dataset generation pipeline introduces key augmentations such as random positioning, rotation, and grounding of objects within the scene using the 3D-Positioner.
+Additionally, we pair objects in semantically consistent combinations to simulate complex spatial relationships and occlusions, capturing realistic interactions for multi-object scenes.
+Algorithm 1 Procedure to Render Multiple Objects Require: Input 3D model M1 1: Function GETPAIREDOBJECTCATEGORY(M ) 2: c ← GetSemanticCategory(M )
+3: L ← GetPairedCategoriesList(c) 4: cpaired ← SampleCategory(L) 5: return cpaired 6: Function SAMPLEOBJECT(c) 7: Lobj ← GetListObjects(c) 8: M ← Sample3DObject(Lobj) 9: return M 10: Main Algorithm 11: cpaired ← GETPAIREDOBJECTCATEGORY(M1) 12: M2 ← SAMPLEOBJECT(cpaired) 13:
+Initialize position of M2 at X 14: while M2 collides with M1 do 15: 16: X ← Tr 17: end while Tr ← SampleRandomPosition() capture this complexity, our dataset incorporates scenes with multiple objects, as described in Algorithm 1.
+We start by sampling K objects from the original ABO dataset and identifying each object’s class from .
+Categories are manually paired to ensure semantic coherence—for in- stance, pairing a chair with a table.
+During rendering, af- ter positioning and rotating the primary object K1, an addi- tional object K2 from the paired category is sampled and ar- ranged to prevent overlap, ensuring distinct spatial regions within the scene.
+This process yields 3,140 scenes featuring diverse object configurations and spatial relationships, pro- viding a robust foundation for realistic scene representation.
+4 Rendering.
+Following scene composition, we randomly sample three camera poses from a predefined list of 19 cam- era positions and render each scene using BlenderProc to obtain RGB, depth, normal, and semantic label outputs.
+All renderings are produced at a resolution of 512×512 pix- els.
+We set the “cycles rendering” parameter to 1024, which is necessary for accurately capturing reflections.
+Represen-
+tative samples are provided in Fig.
+3 and additional exam- ples are available in the supplementary material.
+4.
+Method Preliminaries Diffusion models are generative models that can construct data samples by progressively remov- ing noise.
+In the forward diffusion process, Gaussian noise ϵ ∼ N (0, 1) is incrementally added to an initial clean sam- ple x0 over T timesteps to create a noisy sample xT .
+In the reverse process, a clean image x0 is reconstructed by iteratively denoising xT .
+This denoising process is carried out by a denoising network ϵθ which is conditioned on the timestep t ∈ {1, T } and optional additional conditioning c (e.g. text prompts, inpainting masks).
+Training loss of the denoiser is as follows: LDM = Ex0,ϵ∼N (0,I),t||ϵ − ϵθ (zt, t, c) ||2 Model Architecture.
+Building upon MirrorFusion , we also formulate this task as an inpainting task.
+Our model employs a base dual branch network similar to Brush-
+Net and additionally uses depth map conditioning for the condition branch of BrushNet.
+In particular, we con- catenate the noisy latent zt, masked image zm, inpainting mask xm and depth map xd, and provide this as an input to Cycles Renderer3D-PositionerSceneCompositorFloor TexturesHDRIs3D ObjectsSampled Camera Posea)b)Mirrors .
+Comparison on MirrorBenchV2.
+The baseline fails to maintain accurate reflections and spatial consistency, showing (a) incorrect chair orientation and (b) distorted reflections of multiple objects.
+In contrast, our method correctly renders (a) the chair and (b) the sofas with accurate position, orientation, and structure, demonstrating superior performance. .
+Comparison on GSO dataset.
+In (a), the base- line method misrepresents object structure, while our method pre- serves spatial integrity and produces realistic reflections.
+In (b), the baseline yields incomplete and distorted reflections of the mug, whereas our approach generates accurate geometry, color, and de- tail, showing superior performance on out-of-distribution objects.
+the conditioning U-Net branch.
+Each layer of the generation U-Net ϵi is conditioned with the corresponding layer of the conditioning U-Net ϵ with the help of zero-convolutions (Z) as follows: ′ (cid:16)
+′ (cid:17) ϵ ϵθ (zt, t, c)i = ϵθ (zt, t, c)i+w·Z θ ([zt, zm, xm, xd] , t)i w is the preservation scale to adjust the influence of condi- tioning.
+We set w to be  for all our experiments.
+We, train the model with the loss in Eq. .
+Training details.
+We follow a 3 stage training curriculum to improve the generalization of the model on real-world scenes.
+We utilize the AdamW optimizer with a learn- ing rate of 1e−5 and a batch size of 4 per GPU.
+We train on 4 NVIDIA A100 GPUs in all stages.
+•
+Stage 1.
+In the first stage, we initialize the weights of both the conditioning and generation branch with the Sta- ble Diffusion v checkpoint and finetune the model on the single object train split of our proposed SynMirrorV2.
+In contrast to , we do not keep the generation branch frozen and train the model till 40, 000 iterations.
+The variation in the position and rotation in the SynMirrorV2 compared to SynMirror allows us to train the model for longer iterations without any degradation in the genera- tion quality compared to .
+•
+Stage 2.
+In the second stage, we finetune the model for 10, 000 iterations on the multiple objects train split of SynMirrorV2 to incorporate the concepts of occlusions as present in realistic scenes.
+•
+Stage 3.
+We propose a third stage training on real-world data from the MSD dataset for another 10, 000 it- erations to bridge the domain gap between synthetic and real-world image inpainting.
+In the first two stages, we use ground truth depth maps and for the third stage, we generate depth maps using a 5 monocular depth estimator .
+To enhance learning and reduce reliance on text prompts, we randomly drop them 20% of the time during training, enabling the model to uti- lize depth information better.
+Inference.
+During inference, we use a CFG value of  and utilize the UniPC scheduler for 50 time steps.
+During inference, we allow the user to provide the mask depicting the mirror and estimate the input depth map using Depth-
+Pro by passing the masked image as input.
+5. Experiments & Results We discuss the evaluation strategy and compare our current method with the previous state-of-the-art method, Mirror- Fusion , referring to this as the baseline.
+Additionally, we also provide ablation studies on different design choices in Sec. .
+Dataset.
+Compared to MirrorBench, MirrorBenchV2 con-
+sists of renderings of single and multiple objects in a scene.
+Additionally, we qualitatively test our method on several images from the MSD dataset and renderings from the Google Scanned Objects(GSO) dataset.
+For single ob- ject renderings, we have a total of 2, 991 images, which come from categories that are both seen and unseen dur- ing training.
+We create 300 images that contain two objects from the ABO dataset in the same scene to test the model on generating reflections for multiple objects.
+Metrics.
+We benchmark various methods on the quality of the generated reflection and textual alignment of the gener- ated image with the input prompt.
+•
+Reflection Generation Quality.
+We evaluate reflection quality using Peak-Signal-to-Noise ratio (PSNR), Struc- tural Similarity (SSIM) and Learned Perceptual Image Patch Similarity (LPIPS) on the masked mirror re- gion.
+(a)(b)MirrorFusionOursMirrorFusionOurs(a)(b)MirrorFusionOursMirrorFusionOurs .
+Results on MirrorBenchV2.
+We compare our method with the baseline MirrorFusion on MirrorBenchV2.
+The baseline method shown struggles with pose variations, even in single-object scenes, and fails to produce accurate reflections for multiple objects.
+In contrast, our method handles variations in the object orientation effectively and generates geometrically accurate reflections, even in complex, multi-object scenarios.
+• Text Alignment.
+We use CLIP Similarity for assess- ing textual alignment.
+Qualitative results on MirrorBenchV2.
+In Fig. 4 (a), a single chair that is slightly rotated is placed in front of a mirror.
+We observe that the baseline method completely misrepresents the chair’s orientation in the generated reflec- tion as seen in the mirror.
+Notice the zoomed-in region where the reflection appears as if the object was cut and pasted onto the mirror.
+In contrast, MirrorFusion  trained on SynMirrorV2 accurately captures the chair’s orientation in the reflection, as shown in the zoomed-in region high- lighted by the green circle.
+Fig. 4 (b), shows a scene with a white sofa rotated and placed to the right of a gray sofa.
+The baseline method pro- duces two artifacts in the reflection: 1) the gray sofa ap- pears to be floating in the air, and 2) the generated reflec- tion of the white sofa is completely incorrect.
+In contrast, our method accurately generates the scene in the reflection.
+These results demonstrate the effectiveness of our augmen- tation strategies, as described in Sec. 3.
+We show more ex- amples with both single and multiple objects in Fig.
+6.
+Qualitative results on GSO .
+We further evaluate the generalization ability of MirrorFusion  on real-world scanned objects from GSO, shown in Fig.
+5. MirrorFusion  generates significantly more accurate and realistic re- flections.
+For instance, in Fig. 5 (a), MirrorFusion  cor- rectly reflects the drawer handles (highlighted in green), while the baseline model produces an implausible reflection (highlighted in red).
+Likewise, for the “White-Yellow mug” in Fig. 5 (b), MirrorFusion  delivers a convincing geom- etry with minimal artifacts, unlike the baseline, which fails to accurately capture the object’s geometry and appearance.
+Qualitative results on the Real-World MSD dataset.
+MirrorFusion  performs well on MirrorBenchV2 and real-world objects from GSO but struggles with complex scenes, such as cluttered cables on a table and reflections across multiple mirrors (see Fig. 7).
+To improve coher- ence, we fine-tune it on a subset of the MSD dataset and 6 InputInputMirrorFusionOursMirrorFusionOursSingle ObjectsMultiple Objects .
+Real World Scenes.
+We show results for MirrorFusion , our method and our method fine-tuned on the MSD dataset.
+We observe that our method can generate reflections capturing the intricacies of complex scenes, such as a cluttered cable on the table and the presence of two mirrors in a 3D scene.
+test it on a held-out split, enhancing its ability to handle real-world scenarios.
+As shown in Fig. 7, this fine-tuning enables high-fidelity reflections, accurately capturing de- tails like the “black cable” on the table and the “towel” in both mirrors.
+These results demonstrate how our dataset im- proves diffusion models, enabling more realistic reflections in challenging settings.
+Fig. 7 illustrates further examples on the real-world MSD dataset.
+Quantitative results with baselines.
+For evaluating the metrics, we generate images using four seeds for a particu- lar prompt and select the image that has the best SSIM score on the unmasked region.
+For a particular metric, we report the average value across MirrorBenchV2 by averaging the metric for all the selected images.
+Tabs. 2 and 3 show that .
+Single Object Reflection Generation Quality.
+We com- pare the quantitative results between the baseline and MirrorFu- sion  on the single object split of MirrorBenchV2.
+The best results are shown in bold.
+This shows the effectiveness of the dataset by achieving improved scores.
+Metrics Models Reflection Generation Quality Text Alignment PSNR ↑ SSIM ↑ LPIPS ↓ CLIP Sim ↑ baseline Ours 40k         our method outperforms the baseline method and finetuning on multiple objects improves the results on complex scenes.
+7 MirrorFusionOursOurs - FTMirrorFusionOursOurs - FT .
+Multiple Object Reflection Generation Quality.
+We compare the quantitative results between MirrorFusion  trained without multiple objects and MirrorFusion  trained with multi- ple objects on the multiple object split of MirrorBenchV2.
+The best results are shown in bold.
+This shows the effectiveness of finetuning further on multiple objects.
+Metrics Reflection Generation Quality Text Alignment Models PSNR ↑ SSIM ↑ LPIPS ↓ CLIP Sim ↑ Ours 40k
+Ours 50k         .
+Comparison with SDI+Depth baseline.
+We observe color leakage issues in “SDI+Depth” generations.
+A dual-branch architecture proves to be a better choice, yielding superior out- comes. .
+Impact of adding multiple objects.
+We observe that training without multiple objects leads to (a) poor reflection gen- eration and (b) artifacts like object blending, supporting the need for finetuning the model on such scenarios.
+User study.
+To evaluate the effectiveness of our proposed strategy, we also conducted a user study where we provided users with 40 different samples containing single, multiple, GSO objects, and real-world generations from the baseline and MirrorFusion .
+84% of users preferred generations from MirrorFusion  over the baseline method.
+We provide more details in Appendix D.5.
+Limitations.
+Fig.
+10 illustrates examples where our method accurately captures overall geometry but introduces minor artifacts which can be easily addressed by synthesizing ad- ditional training data and fine-tuning the model. .
+Ablation Studies Impact of multiple objects dataset.
+To evaluate the im- pact of adding multiple objects to our dataset, we com- pare MirrorFusion  with ( “+ multiple”) and without (“- multiple”) object training in Fig.
+8.“
+MirrorFusion -w/o multiple” struggles to generate plausible mirror reflections, as evident in Fig.
+8 (b), where the bed and sofa appear to blend together.
+In contrast,“ MirrorFusion -with multi- ple” accurately captures the spatial relationships between objects within the mirror reflection.
+These results highlight the importance of including multiple objects in the dataset, enabling the model to learn spatial relationships and effec- tively handle occlusions.
+Ablation on architecture.
+To further validate our architec- tural choice, we adapt Stable Diffusion Inpainting to accept depth maps as input similar to the changes made for Mir- rorFusion  and train this modified model on our pro- 8 .
+Limitations.
+Our method performs well in multi-object scenes (more than two objects) but retains some artifacts, which can be reduced by synthesizing the dataset through the proposed data-generation pipeline and further increasing the diversity and scale.
+posed dataset referring to it as “SDI+Depth”.
+We com- pare “SDI+Depth” with MirrorFusion  in Fig.
+9.
+While “SDI+Depth” accurately positions objects in the mirror, it suffers from significant artifacts, including color leakage in contrast to MirrorFusion .
+We suspect that this happens due to the early combination of the noisy latent features, mask, and conditioning information in the initial convolu- tion layer, restricting later layers from accessing clean fea- tures.
+These findings suggest that a dual branch architecture to provide the conditioning information separately as done in MirrorFusion  is a better choice.
+6. Conclusion We introduce SynMirrorV2, a novel large-scale synthetic dataset designed to advance mirror reflection generation significantly.
+By employing targeted data augmentations, we achieved robust variability in object pose, position, and occlusion, alongside the ability to handle multi-object scenes.
+Our qualitative and quantitative evaluations demon- strate SynMirrorV2’s efficacy in reflection generation, with promising generalization to real-world scenes using cur- riculum training.
+This dataset holds substantial potential for driving progress in various mirror-related tasks.
+Future re- search will explore advanced data augmentation techniques to enhance real-world performance further.
+Acknowledgment.
+We are grateful to the Kotak IISc AI- ML Center for providing the computing resources.
+We thank Rishubh Parihar for their valuable feedback and Lokesh R. Boregowda for their valuable guidance.
+(a)(b)-multiple+ multiple (Ours)-multiple+ multiple (Ours)(a)(b)SDI+Depth OursSDI+DepthOursGTGeneratedGenerationGround-TruthGenerationGround-Truth

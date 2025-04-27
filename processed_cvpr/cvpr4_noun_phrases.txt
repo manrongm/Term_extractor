@@ -1,0 +1,726 @@
+(cid:252) zoom
+(dark-gray box
+(iii) train
+(pico-fit) ✓ ro
+*equal contribution
+, 3d object pose
+, θc
+-view rgb-d images
+. pico-fit method
+10 and 20 objects
+2. related work
+2d and 3d diffusion models
+2d images
+3 options
+30 images
+3d body
+3d body contacts
+3d body shape
+3d contact
+3d contact annotations
+3d contact estimation
+3d contact estimation regions
+3d contacts
+3d details
+3d ground-truth (gt) bodies
+3d hoi
+3d hoi datasets
+3d hoi reasoning
+3d hoi reconstruction
+3d human pose
+3d human-object interaction
+3d humans
+3d meshes
+3d object
+3d object meshes
+3d object shape
+3d object shape retrieval
+3d object shapes
+3d object-shape datasets
+3d objects
+3d people
+3d point clouds
+3d professionals
+3d reconstruction
+3d reconstructions
+3d recovery
+3d shapes
+3d w.r.t
+3d. pico
+4123 images
+42 object categories
+44 object categories
+5 2 0 2 r
+5 cm
+5 sup
+6 methods ref
+627 object instances
+7 rgb imagephosa pico-fit (ours
+75 images
+75, 88] data
+8 rgb imagecontho
+9 object classes
+: 3d human pose
+a 2d diffusion model
+a 2d image
+a 2d mask
+a 2d object mask
+a 3d object mesh
+a 3d object shape
+a 3d point
+a canonical 3d body
+a careful initial- ization
+a competing method
+a con- tact loss
+a contact patch
+a contact “axis
+a database
+a dataset
+a default axis
+a detailed review
+a detailed visualization
+a direct contact regressor
+a distance threshold
+a feed-forward model
+a fine-grained con- trol
+a finite-length “axis
+a foundation
+a geodesic be- tween
+a good torso pose
+a high-quality default axis
+a hu- man
+a huge variety
+a human mask loss
+a joint latent space
+a key limitation
+a key problem
+a large-scale database
+a latent code gi
+a likely 3d object mesh
+a long history
+a menu
+a method
+a model
+a natural image
+a new dataset
+a new mesh
+a new method
+a novel framework
+a novel method
+a novel render-and-compare fitting method
+a parametric model
+a patch axis
+a penalty
+a percep- tual study
+a perceptual study
+a pico
+a point cloud
+a positive sign
+a previously- annotated contact patch
+a proxy
+a proxy smpl
+a qual- ification process
+a rich database
+a side
+a side view
+a signed distance field
+a similar strategy
+a simple, yet effective solution
+a simple-yet-efficient, scalable solution
+a single image
+a single latent space
+a single scale
+a smpl-x body mesh
+a so- lution
+a star
+a t- posed 3d body
+a unique dataset
+a viewpoint-conditioned 3d diffusion model
+a “straight” geodesic
+ab- lations
+ablation study
+accurate 3d hoi
+action recognition
+aligned chamfer distance
+all baselines
+all intermediate triangle edge- crossings
+all models
+all object vertices
+all regressors
+all these methods
+almost-isometry preserving
+alternate optimization strategies
+alternative means
+amazon mechanical turk
+an a-priori known object type
+an annotator
+an appropriate 3d object mesh
+an axis
+an easy task
+an extra joint-refinement stage
+an image
+an image crop
+an interactive web-browser tool
+an llm
+an ob- ject mesh
+an object
+an object scale loss
+an online tool
+an optimization-based method
+an optimization-based render-and-compare fitting method
+an osx-inferred camera
+and the video
+annotated contacts
+another mesh
+another regularizer
+another surface
+any visualization bias
+ap- pearance
+arbitrary object classes
+articulated hands
+assistive robots
+axis way-points
+baselines %
+behave-trained checkpoints
+better 3d human-object contact
+bijec- tive body-object correspondences
+bijective body-object contact correspondences
+bijective body-object corre- spondences
+bijective point correspondences
+blue color
+body contact
+body contacts
+body pose
+body-model param- eters
+body-object contact
+body-object contact correspondences
+body-object contacts
+body-part segmentation masks
+both bodies
+both body
+both humans
+both images
+both regression-based hoi reconstruction methods
+both the body
+both the human
+both the human body
+camera view
+challenging images
+chicken-and-egg problems
+closest point queries
+coarse contact in- formation
+con- tact labels
+contact annotations
+contact axes
+contact correspondences
+contact initialization
+contact patch
+contact patches
+contact point locations
+controlled settings
+convex hulls
+crowd- sourcing contact annotations
+current meth- ods
+current methods
+damon images
+damon’s body contacts
+damon’s body-only contacts
+damon’s images
+deco’s bias
+deco’s body contacts
+dense bijective contact correspondences
+dense body-object 3d contact annotations
+dense contacts
+dense vertex-level 3d contact correspondences
+depth ambiguity
+depth estimation
+detailed statistics
+distorted bodies
+each body
+each body-contact patch
+each damon image
+each method
+each object
+each pico-fit stage
+each row
+each stage
+each test image
+efficient retrieval
+either directly regress humans
+end effectors
+enough constraints
+even pico-fit
+every patch vertex
+every stage
+ex- pand
+exam- ple
+existing 3d hoi recovery methods
+existing body contacts
+existing methods
+explicit 3d rep- resentations
+exten- sion
+extension meshes
+extreme ones
+fair comparison
+false negatives
+fine manually-set contact correspondences
+finite datasets
+first infer contact
+fitting interacting 3d body
+foundation models
+future work
+germany 2meshcapade 3carnegie mellon university
+gj ·gin object shape initialization
+ground-truth (gt) 3d contacts
+gt con- tact
+gt contact
+gt human
+h = 1 − iou(mh
+hand-crafted category-wise contact constraints
+heuristic thresholds
+hoi reconstructions
+hoi understanding
+human and object meshes
+human bodies
+human interaction
+human mask
+human pose
+human- mesh vertices
+human-centric applications
+human-image alignmenthuman-object contactobject meshhuman meshphase
+human-object interaction
+human-object penetrations
+i.e., contho
+i.e., pico-db
+i.e., rotation
+image evidence
+image groundingstage
+image-misaligned and need refinement
+implausible poses
+implicit functions
+in-the-wild images
+inaccurate hoi reconstruc- tion
+ini- tializing object
+initial pose θ∗
+initialization body shape
+instance segmentation
+instance-specific scale
+intelligent systems
+inter- net images
+intercap damon pa-cdh+o x
+introduction humans
+itatively compare pico-fit
+its 3d body contacts
+its ability
+its annotations
+its contact axis
+its core
+its infancy
+its orientation
+its pose
+its robustness
+its start-/end-ing points
+its vertex locations
+joint human-object reconstruction
+joint refinement
+just one contacting limb
+just re-
+just two clicks
+known object shapes
+learned methods
+learning-based methods
+likely contacts
+limited categories
+limited object categories
+lm h
+loca- tion
+lp =
+lp lh
+lr = ∥θ − θ∗∥2
+many object classes
+many previously untackled object classes
+marker- based motion capture
+mask-based database search
+mesh rotation
+middle column
+minimal effort
+minimal human effort
+mixed reality
+model-free fashion
+more comparisons
+more planar object regions
+more results
+more robust and gen- eralizes
+most methods
+most work
+natural color images
+natural dense 3d contact correspondences
+natural images
+nearest- neighbor search
+nearest-neighbor retrieval
+neighboring vertices
+neighboring-vertex patches
+new object classes
+new, previously untackled object categories
+no contact correspondences
+no existing method
+no method
+no previous method
+no single statistical model
+non-optimized ones
+notational simplicity
+novel classes
+novel object classes
+o. o
+object categories
+object classes
+object contact
+object contacts
+object detection
+object mesh
+object pose
+object rotation
+object shape
+object shapes
+object-image alignmentstage
+objects alp´ar cseke1,2∗‡
+oc- clusions
+online “vertex painting” tools
+only 2 clicks
+only constrained settings
+only humans
+only limited object classes
+only objects
+only shallow penetrations
+only the axis
+only the pose parameters
+only these specific 9 objects
+openshape-based database retrieval
+optimizable variables
+optimization-based methods
+optimized variables
+orange color
+osx-inferred bodies
+other baselines
+other work
+our contact
+our data
+our dataset
+our key insight
+our lp
+our method
+our nearest-neighbor lookup
+our new dataset
+our pico approach
+our pico-fit method
+our pico-fit∗
+our pico-fit∗. left column
+our rich dataset
+our scope
+our website
+our work
+ours opt
+outputoverlaid resultphase
+pare pico-fit∗
+part-level contacts
+past efforts
+past work
+phosa’s hand-crafted constraints
+pi ∈ o
+pi)∈s ∥vi −
+pico-db annotations
+pico-db body contact
+pico-db dataset annotations
+pico-db images
+pico-db statistics
+pico-fit and sota methods
+pico-fit infers contact
+pico-fit pico-fit∗ ours opt
+pico-fit reconstructions
+pico-fit: 3d hoi
+pico-fit’s inferred contacts
+pico-fit’s stages
+pico-fit’s three fitting stages
+pico-fit∗ meshes
+pico-fit∗ pref
+pico-fit∗ reconstructions
+pico-fit∗’s estimated meshes
+point clouds
+pose optimization
+positive and negative steps
+previous methods
+previously untackled object classes
+principal component analysis
+printed objects
+proficient annotators
+promising results
+prox- imity/orientation
+pseudo ground truth training labels
+pseudo-gt contact annotations
+qualitative ablation
+qualitative ablations
+qualitative com- parisons
+qualitative comparison
+qualitative evaluation
+quality checks
+real hands
+real images
+real time
+real, natural images
+realistically reg- istered w.r.t
+reason- ing
+recent foundation models
+recent learning-based methods
+recent work
+reconstruction results
+retrieved objects
+rich contact constraints
+rich contact corre- spondences
+rich contacts
+rich point correspondences
+right column
+ro ∈ r3
+robust infer- ence
+rough correspondences
+semantic segmentation
+seminal work
+separate pro- cesses
+several datasets
+several modal- ities
+several object classes
+shashank tripathi1∗† sai kumar
+significantly less work
+significantly more diverse ob- jects
+single images
+smart homes
+some methods
+some occlusion
+some occlusions
+sota methods
+spatial alignment
+steering weights
+strong challenges
+strong occlusions and depth ambiguities
+such data
+such methods
+such patches
+such work
+sufficient training data
+sure high quality
+surface concavities
+synthe- sis
+synthetic data
+synthetic grasps
+s∗ o
+s∗ o.
+test time
+text-to-3d models
+that body contacts form “patches
+that end
+that object
+that pico-fit handles
+that pico-fit works
+the (auto- created) axis
+the 3d body
+the 3d human-object contact
+the accuracy
+the associated annotations
+the axis
+the axis direction
+the body
+the body and object contacts
+the body surface
+the center
+the closest body-contact annotation
+the closest code
+the closest torso joint
+the combined human+object mesh
+the competing method
+the contact
+the contact axis
+the contact loss
+the contact points
+the contact transfer method
+the contactedit method
+the contacting joint, jc
+the contacts
+the contho model trains
+the contribution
+the creation
+the damon dataset
+the default axis
+the detection
+the direction
+the distance
+the effect
+the estimated contact
+the estimation
+the exception
+the field
+the first dataset
+the first principal component
+the first time
+the following main contributions
+the form
+the goal
+the gt meshes
+the huge object shape variance
+the huge variation
+the human
+the human (h
+the human mesh
+the human pose
+the image
+the impact
+the initial body
+the initial estimate
+the initial θ∗.
+the input image
+the intercap dataset
+the internet
+the joints
+the kinematic chain
+the lab
+the lack
+the latent code gin
+the latent space
+the left and right side
+the limbs
+the losses
+the main fo- cus
+the mask loss
+the mean
+the meshes
+the method
+the middle columns
+the most significant component
+the nearest- neighbor body contacts
+the nearest-neighbor latent code
+the netherlands
+the next step
+the objaverse-lvis
+the objaverse-lvis database
+the object
+the object class
+the object mask loss
+the object mesh
+the object surface
+the object w.r.t
+the objects
+the ones
+the only such dataset
+the openshape model
+the optimized elements
+the osx model
+the osx regressor
+the participants
+the patch
+the patch surface
+the percentage
+the phosa paper
+the pixel-aligned object
+the preference rate
+the procrustes-
+the pytorch3d renderer
+the recent damon dataset
+the recent openshape foundation model
+the relative 3d human-object arrangement
+the respective mesh
+the respective object contact
+the respective object shape
+the resulting two points
+the retrieved mesh
+the same camera
+the same internet images
+the scale
+the second click
+the smpl body
+the smpl-x body
+the start
+the study
+the time
+the tool
+the torso
+the transferred contact
+the two clicks
+the two reconstructions
+the wild
+the worst- case
+the ⟨object⟩
+the-wild im- ages
+the-wild images
+the-wild settings
+their 3d pose
+their 3d reasoning skills
+their combination
+their contact axis
+their spatial arrangement
+their work
+then the body
+then, the penetration loss
+thermal imaging
+these annotations
+these datasets
+these issues
+these key limitations
+these results
+these samples
+these tasks
+this annotation
+this approach
+this dataset
+this direction
+this end
+this loss
+this minimal human input
+this painting tool
+this point
+this problem
+this proxy
+this results
+this simple approach
+this simulates perfect contact “detection
+this space
+this task
+three input rgb images
+three key properties
+three steps
+three-stage fitting
+top-down view
+training datasets
+training methods
+two key drawbacks
+two main ways
+two novel- ties
+two points
+two reasons
+two regularizers
+tzionas5 1max planck institute
+unconstrained 2d images
+uniquely, pico-fit works
+unlabeled images
+unseen in-the-wild images
+usa 4ut austin
+usa 5university
+varied topologies
+various colors
+vertex-level body contact
+vertex-level contacts
+vi ∈ h
+vision foundation models
+vision-language models
+visual feedback
+wang et al
+we present pico
+webbed fingers
+widely varying viewpoints
+work hand-
+zero-1-to-3 re
+“query” pico-db
+“type” denotes
+†project lead
+∈ r3
+∗. datasets
+✓ ✓ ✗ ✓
+✗ ✗ ✗
+⟨body part⟩

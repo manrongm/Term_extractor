@@ -1,0 +1,727 @@
+(%)  m
+(64, 64) center
+(i.e., two low- rank matrices
+(multi-scale token selection
+(si log(si
+, adapter-based methods
+, gm center points
+, t m
+- iccv’21  m
+-pointnetselected multi-scale tokensp1{}mmms=1{}mmms=farthest point sampling
+1 − si) log(1
+15 categories
+16 object categories
+16 tokens
+2 pretrained weightswuwd(a
+2. related work model pre-training
+2d vision
+2d vision tasks
+2d visual or language data
+300 epochs
+311 meshed 3d cad
+32 and 8 tokens
+32 yields
+3ad lab
+3d object recognition
+3d point cloud
+3d point clouds
+3d scenarios
+3d scenes
+3d shapes
+3d tasks
+5. experiments
+50 part categories
+6. conclusion
+881 point-level synthetic objects
+= attention (q
+= prompt mlp(tinput
+a 1zju 2nus
+a 3d learning perspective
+a baseline
+a challenging
+a classical synthetic dataset
+a classification
+a combination
+a commonly used setup
+a comparison
+a comprehensive understand- ing
+a con- strained parameter budget
+a corresponding analysis
+a cross-modality teacher
+a fair comparison
+a feature vector
+a gelu activation function
+a learn- ing rate
+a learning rate
+a local geometry prompt
+a low-rank approximation
+a mask predictor
+a mini
+a minimal number
+a more efficient manner
+a more practical solution
+a multi-scale token selection module
+a noticeable impact
+a pre- trained weight matrix
+a pre-trained autoen- coder
+a promising solution
+a prompt
+a prompt mlp
+a range
+a refined token set
+a regularization term
+a robust framework
+a score vector
+a sequence
+a shared mask predictor
+a shared mini-pointnet
+a shared prompt mlp
+a sigmoid activation function
+a significant improvement
+a significant portion
+a significantly reduced parameter footprint
+a simple yet effective method
+a simple yet effective scheme
+a single consolidated weight matrix
+a single gpu
+a skip connection
+a small shared mlp
+a small subset
+a subset
+a surge
+a systematic ap-
+a theoretically higher accuracy potential
+a to- ken sequence
+a two- scale setup
+a vital role
+a weight decay
+a widely used benchmark
+ablation experiments
+ablation study
+abstract self-supervised representation learning
+ac- curacy
+accurate downstream task performance
+acl’21 acl’21
+action recognition
+adapter tuning
+adapter-based tuning inserts
+additional details
+additional tokens
+additionally, qi et al
+alibaba 4nuaa
+all blocks
+all classes
+all configurations
+all experiments
+all methods
+all model performance
+alternative adapter placements
+an aggregate score
+an illustration
+an input point cloud
+augmented views
+auto- regressive generation
+available point cloud data
+better conver- gence
+bias terms
+both components
+both gener- alization
+both lora
+both parameter count
+both standard and low-resource settings
+both the miou
+both the number
+both the qkv projection
+bottleneck-like layers
+c 1 g
+capabil- ity
+carefully crafted adapters
+center points
+chunyong hu3
+cid:88)ntotal i=1
+competitive per- formance
+competitive performance
+complex 3d scenes
+complex adapter
+complex environments
+component segmentation
+computational requirements
+computer vi- sion
+con- sists
+con- trastive learning
+consistent performance improvements
+contrasting representations
+contrastive-based approaches
+conver- gence
+correctly clas- sified instances
+corresponding tunable parameters
+critical local information
+cross-modal contrastive learning
+crucial local information
+current point
+cvpr’22 ± ± ± ±
+deep and essential features
+deep neural networks
+default data aug- mentation
+depth estimation
+detailed structures
+differ- ent levels
+differ- ent scales
+different baselines
+different datasets
+different fine-tuning schemes
+different lev- els
+different numbers
+different ranks
+different views
+discrete tokens
+distinctive feature representations
+distinctive local geometric features
+ditional computational overhead
+diverse downstream tasks
+diverse tasks
+down- stream tasks
+downstream applications
+downstream performance
+downstream task per- formance
+downstream tasks
+downstream transfer learning tasks
+each block
+each center
+each center point
+each containing g1
+each lora layer
+each module
+each scale
+eccv’22 neurips
+efficient 3d represen- tation learning
+efficient fine-tuning strategies
+efficient fine-tuning) recon
+efficiently fine-tune point
+essen- tial local features
+essential local geometric features
+evaluation metrics
+exhaustive ablation experiments
+existing 3d fine-tuning approaches
+existing methods
+existing peft methods
+existing point cloud pre-trained models
+exper- iments
+extensive experiments
+extract- ing class-agnostic segments
+fair comparison
+farthest point sampling
+feature extraction ca- pabilities
+few- shot
+few- shot learning
+few-shot learning
+few-shot learning ex- periments
+fewer tunable parameters
+ffn layers
+fine- tuning performance
+fine-tune point cloud pre-trained models
+fine-tuning performance
+fine-tuning prototypes
+fol- lowing standard protocols
+full fine-tuning
+full fine-tuning linear probing*dapt
+fully connected layers
+fur- ther
+gen- erate tokens
+generalizable representa- tions
+generative models
+global and local informa- tion
+global context
+global feature capture
+global features
+global informa- tion
+global information
+global low-rank adaptation
+global point cloud features
+ground-truth segments
+i.e., n1
+iccv’23 cvpr’24 arxiv’24
+icml’23                self-supervised representation learning
+icml’23 ± ± ± ±
+implementation details
+importance scores
+in- stances
+incorporat- ing tokens
+increased compu- tational demands
+increasing complexity
+ing capability
+instance segmentation
+instance-aware prompt extraction
+intricate details
+introduction 3d point cloud learning
+irregular patches
+ited performance gains
+its adaptability
+its effectiveness
+its mlp-like structure
+jianke zhu1†
+joint training
+k nearest neighbor points
+k-nn clustering
+k-nn) algorithm
+knowledge distillation
+l transformer blocks
+l-layer transformer blocks
+labeled data
+large language models
+larger pre-trained models
+latent fea- tures
+lation experiments
+lightweight modules
+limited annotations
+limited contribution
+linear layers
+linear probing
+lmask = − 1 ntotal
+local features
+local geometric informa- tion
+local informa- tion
+local information
+local information ex- traction
+local prior information
+local priorudwww∆=⋅ attention blocks
+lora fine-tuning
+lora layers
+lora token
+lora’s architecture
+lora’s capabilities
+lora’s feature extraction capabilities
+low-rank adaptation
+low-rank adaptation matrices
+low-rank matrices
+ltotal = ltask
+m  m  m  m
+m  m  m  m  m
+m different scales
+m oa:%tp
+m sets
+m token sets
+m. local geometry prompt
+mainstream peft ap- proaches
+mask predictor
+mask predictor learning
+mask predictorfarthest point sampling
+masked point cloud recon- struction
+mean intersection
+mecha- increase tunable parameters
+methods publication tp cls. miou
+methods publication tunable params
+minimal tunable parameters
+mod- els
+model performance
+model robustness
+model sizes
+model weights
+more implementation details
+most current ap- proaches
+most parameters
+multi-scale furthest point sampling
+multi-scale to- ken selection
+multi-scale token generation
+multi-scale token selection
+multiple scales
+multiple ver- sions
+n points
+n ′ p }m m=1
+n1k-nntopkselectionlinearrelulinearsigmoidimportance score
+natural lan- guage processing
+natural language processing
+neighboring points
+neurips’22 neurips’22 iccv’23 cvpr’24 arxiv’24
+new weight matrix
+not all local positions
+not all tokens
+ns pb-t50-rs
+obj-bg, obj-only, pb-t50- rs
+object detection
+official implementation
+only %
+only a marginal increase
+only m tunable parameters
+only minimal changes
+only wu
+optimal performance
+original tokens
+other datasets
+other parameter-efficient methods
+other peft methods
+other tasks
+our approach
+our exploration
+our goal
+our main contributions
+our method
+our pro-
+our proposed approach
+our proposed pointlora
+our proposed pointlora approach
+our scheme
+our work
+outdoor lidar data
+overall accuracy
+p , t 2 p
+p ∈ rgm×d
+parameter efficiency
+parameter-efficient fine- tuning (peft) methods
+parameter-efficient fine-tuning
+parameter-efficient fine-tuning (peft
+parameter-efficient fine-tuning adapts pre-trained models
+part segmentation
+peft methods
+performance comparison
+permutation-invariant features
+point cloud
+point cloud data
+point cloud learning
+point cloud learning song wang1,2
+point cloud models
+point cloud part segmentation
+point cloud transform- ers
+point cloud transformer
+point cloud transformer pipeline
+point cloud transformer point tokenizer
+point clouds
+point-based methods
+pointlora scheme
+pointlora: low-rank adaptation
+pointnet pointnet++ dgcnn
+pointnet’s principles
+posed approach
+positional prompt tuning
+potential dilution
+pre- trained model parameters
+pre- trained models
+pre-trained knowledge
+pre-trained model performance
+pre-trained point cloud models
+pre-trained vision transformers
+pre-trained weights
+prior classification mod- els
+prior knowledge
+prompt mlp
+prompt tokens
+prompt tuning
+qkv projection layer
+qkv projectionclassification segmentationand
+r ≪ d
+re- ducing dependency
+real-world and synthetic object classification
+recent *project leader
+recent in- novations
+recent studies
+recon+ dapt recon+ ppt∗
+reconstruction-based methods
+redundant or non- informative content
+resource-constrained applications
+resource-limited environments
+robust local features
+robust pre-trained mod- els
+scale m token num
+scale number m
+scene realism
+se- lected tokens
+seg- mentation task
+selected tokens
+selection ms-fps tp pb-t50-rs
+self-supervised representation learning
+semantic segmentation
+setup datasets
+signal reconstruction methods
+significant progress
+significantly fewer parameters
+sm ∈
+source code
+spatial arrangements
+specialized prompt design
+standard settings
+subsequent processing
+substantial storage costs
+symbol ∗ denotes
+synthetic object classification
+t 1 p
+t ′ output
+the 3d object classification task
+the 3d point cloud
+the ablation study
+the ablations
+the above concerns
+the above process
+the adaptation
+the adaptation ∆w
+the additional parameters
+the adopted loss
+the architecture
+the attention layer
+the balanced weight
+the balanced weight λ
+the baseline
+the baseline model
+the benefits
+the best performance
+the best results
+the challenging pb-t50-rs variant
+the common practice
+the complete framework
+the complex relationships
+the complexity
+the context
+the corresponding fine-tuning prototypes
+the corresponding neighbor point patch
+the corresponding neighbor point patches
+the corresponding tokens
+the crit- improvement
+the crucial local context
+the default data argumentation
+the design choices
+the di- mension
+the dimension
+the direct loading
+the discrete tokens
+the ef- fectiveness
+the effec- tiveness
+the effectiveness
+the efficiency
+the embedding
+the embedding dimension
+the encoded features
+the encoder
+the establish- ment
+the evaluation
+the ex- perimental results
+the existing point cloud
+the extracted global features
+the extraction
+the fac- tors
+the farthest point sam-
+the feed-forward network layer
+the ffn layer
+the final output
+the fine- tuning performance
+the fine- tuning process
+the fine-tuning efficiency
+the fine-tuning process
+the following section
+the full fine-tuned point- mae
+the g group centers
+the gener- alizability
+the generalizabil- ity
+the global context
+the global features
+the gpt framework
+the hardest variant
+the high computa- tional costs
+the highest accuracy
+the impact
+the importance
+the importance score
+the in- tegration
+the increase
+the inference phase
+the input
+the input point
+the integration
+the layer norm function
+the local information
+the local prompt
+the logarithm
+the lora adaptation output
+the lora layer
+the loss function
+the lower part
+the mask predictor
+the model
+the modelnet40 datasets
+the model’s generalization
+the model’s parameters
+the model’s representation
+the most challenging dataset
+the most challenging pb-t50-rs variant
+the most informative to- kens
+the most parameter- intensive components
+the most parameter-intensive components
+the multi-scale token selection process
+the need
+the network
+the new input
+the newly inserted parameters
+the number
+the object classification task
+the obtained tp
+the official implementation
+the only newly added component
+the only parameter-efficient fine-tuning method
+the orig- inal scale
+the original inputs
+the original low-rank matrices
+the original point tokenizer
+the original pre-trained weights
+the original task
+the original weights
+the overall accuracy
+the overall structure
+the overlap
+the pa- rameters
+the parameter count
+the parameter- intensive nature
+the parameter-heavy components
+the part
+the part segmentation
+the pb-t50-rs split
+the point cloud
+the point cloud data
+the point cloud sequence
+the point cloud transformer
+the point cloud transformer architecture
+the point cloud transformer block
+the point patches
+the pointlora layer
+the pre- trained point-mae model
+the pre- trained weights
+the pre-trained model
+the pre-trained model pa- rameters
+the pre-trained point-mae
+the pre-trained weight wp
+the pre-trained weights
+the prompt mlp
+the proposed method
+the proposed scheme
+the public source code
+the qkv projection
+the qkv projection parameters
+the ra- tionale
+the rank
+the ratio
+the raw point cloud
+the recon model
+the regular- ization loss
+the resulting combined output
+the results
+the resuluts
+the rich information
+the robustness
+the same scale
+the scanobjectnn
+the scanobjectnn dataset
+the scores
+the segmentation head
+the selected center points
+the selected tokens
+the self-attention
+the sequence length
+the shapenetpart
+the shapenetpart dataset
+the shared prompt mlp
+the sparsity
+the standard deviation
+the strong potential
+the sub- sequent methods
+the supplementary material
+the syn- ergy
+the t-sne feature visualization
+the t-sne visualization results
+the task-specific head
+the task-specific loss
+the tok- enization process
+the tokenization process
+the tokens
+the top two highest accuracies
+the top-k tokens
+the total number
+the trainable parameters
+the transfer
+the transformer
+the transformer block
+the transformer-based network design
+the understanding
+the updated amount
+the updated weight
+the upper part
+the use
+the vanilla
+the vanilla lora’s performance
+the volume
+their center points
+their im- portance scores
+their parameter efficiency
+their relevance
+their unordered structure
+these approaches
+these challenges
+these lay-
+these layers
+these local point patches
+these matrices
+these methods
+these models
+these pre- trained models
+these resource requirements
+these selected tokens
+these sets
+these techniques
+these tokens
+these two scales
+thest point sampling
+this approach
+this consolidation
+this design
+this dimension
+this fine-grained scene
+this hyperparame- ter
+this issue
+this method
+this module
+this paper
+this section
+this work
+three challenging datasets
+three challenging public datasets
+three variants
+three widely used 3d datasets
+tional full fine-tuning
+to further su- pervise
+token number ns
+token selection
+top-k selection
+toutput = ffn
+trainable matrices
+trainable param- eters
+trans- former architectures
+transformer block
+troducing parameter-efficient fine-tuning (peft) methods
+tunable components
+tunable parameter counts
+tunable parameters
+two auxiliary low-rank matrices
+two different scales
+two multi-layer perceptron (mlp) layers
+two widely used pre-trained models
+undefined values
+unique challenges
+unlabeled point clouds
+unordered point sets
+v =
+value spaces
+vanilla lora
+vanilla lora baseline
+vanilla lora methods
+various aspects
+various datasets
+various positions
+various pre-trained models
+various scales
+varying numbers
+wd ∈
+well-pretrained models
+wentong li4
+winfer = wp
+wu ∈ rd×r
+wv ∈ rd×d
+xiaolu liu1
+• low-rank adaptation
+∗ denotes results
+✔ ✔ ✔

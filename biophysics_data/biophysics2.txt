@@ -1,0 +1,1483 @@
+5
+2
+0
+2
+
+r
+p
+A
+0
+1
+
+]
+h
+p
+-
+o
+i
+b
+.
+s
+c
+i
+s
+y
+h
+p
+[
+
+1
+v
+6
+9
+0
+8
+0
+.
+4
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Cellular Development Follows the Path of Minimum Action
+
+Rohola Zandie1*, Farhan Khodaee1, Yufan Xia1, Elazer R. Edelman1,2
+
+1*Institute for Medical Engineering and Science, Massachusetts Institute of
+Technology, Cambridge, 02139, MA, USA.
+2Department of Medicine (Cardiovascular Medicine), Brigham and Women’s Hospital,
+Boston, 02115, MA, USA.
+
+*Corresponding author(s). E-mail(s): rohola@mit.edu;
+
+Abstract
+
+Cellular development follows a stochastic yet rule-governed trajectory, though the underlying
+principles remain elusive. Here, we propose that cellular development follows paths of least
+action, aligning with foundational physical laws that govern dynamic systems across nature.
+We introduce a computational framework that takes advantage of the deep connection between
+the principle of least action and maximum entropy to model developmental processes using
+Transformers architecture. This approach enables precise quantification of entropy production,
+information flow curvature, and local irreversibility for developmental asymmetry in single-cell
+RNA sequence data. Within this unified framework, we provide interpretable metrics: entropy
+to capture exploration-exploitation trade-offs, curvature to assess plasticity–elasticity dynamics,
+and entropy production to characterize dedifferentiation and transdifferentiation. We validate our
+method across both single-cell and embryonic development datasets, demonstrating its ability to
+reveal hidden thermodynamic and informational constraints shaping cellular fate decisions.
+
+1 Introduction
+
+Cellular development is a complex biological process critical for a wide range of physiological func-
+tions, ranging from embryonic growth and cellular differentiation to tissue repair and regeneration.
+Over the centuries, many researchers have sought a universal principle explaining how cells make
+developmental decisions. Karl Ernst von Baer was the first to systematically study cellular develop-
+ment in this light, and in 1828 he introduced empirical evidence for what became known as the “Law
+of Development” [34, 36]. Building on von Baer’s foundational work, Wilhelm Roux (1850–1924) and
+Hans Driesch (1867–1941) ushered in the era of experimental embryology, further probing the rules
+of morphogenesis [35]. It was, however, Conrad Waddington who bridged experimental observations
+with genetics by proposing the “epigenetic landscape” as the conceptual field in which cellular devel-
+opment unfolds [1, 37]. Although conceptually powerful, this qualitative framework does not yet offer
+the quantitative metrics and mechanistic details needed to fully comprehend cellular decision-making
+[72].
+
+A clearer path to understanding the time evolution of biological development may lie in differen-
+tiating between the notion of a process and that of an object. In contrast to approaches in physics,
+which often focus on tracking a single object over time, biological systems typically involve collec-
+tions of entities evolving through shared, more generic processes [27]. Thus organisms are specific
+objects resulting from more universal developmental processes. Likewise, at the cellular level, individ-
+ual cells, each with its own developmental path, known as cell fate, can be understood as particular
+realizations of the same overarching process. Focusing on this process-oriented perspective is a crucial
+step toward establishing more rigorous and quantitative principles for how cells make developmental
+decisions.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+In this paper, we propose a more general mathematical representation of these developmental
+processes using random process {Xt}t∈T
+, where t indexes time. Each realization of this process
+defines a trajectory Γ ≡ {Xt : t ≥ 0}, which, in principle, is a continuous functions. The collection of
+all such trajectories constitutes the experimental observations of the system’s dynamics. However,
+in practice, we do not observe an infinite set of trajectories or continuous-time data; instead, we
+work with a finite number of trajectories, each sampled at discrete time points. Specifically, we rely
+on finite samples obtained from a parametric joint probability distribution pθ(X0, · · · , XN ) over
+a chosen time window of size N . Formally, each specific trajectory γ is drawn from this distribution:
+
+γ = (x0, · · · xN ) ∼ pθ(X0, · · · , XN )
+
+(1)
+
+It is important to note that this modeling approach treats each trajectory as an indivisible
+building block rather than assuming a memoryless Markov chain. This distinction is crucial for our
+later modeling, which prioritizes the primacy of trajectories in the analysis rather than individual
+time points. By focusing on entire trajectories, we capture the inherent dependencies and long-range
+correlations in the system, which are essential for accurately representing biological processes [39].
+To provide additional insight into how trajectories might be selected or weighted, we use La-
+grangian mechanics in physics which offers a powerful framework for finding a system’s “right”
+trajectory by minimizing an action functional. In classical physics, this yields a unique path dic-
+tated by the laws of motion, whereas in quantum physics, Feynman’s path integral formulation
+generalizes this principle by integrating over infinitely many possible trajectories between two time
+points.
+
+This framework is not limited to these physical systems but can be viewed as a universal prin-
+ciple applicable to complex systems operating under probabilistic constraints, providing a natural
+foundation for modeling stochastic biological processes [81].
+
+Unlike physics, explicit formulation of biological paths has not been possible. Therefore, we fo-
+cus on data-driven computational modeling. We first start with the Lagrangian formulation applied
+to biological processes and develop a powerful computational framework that is general yet inter-
+pretable enough to explain different developments such as cell differentiation and reprogramming
+[18], spatiotempral mouse organogenesis development [83] and mouse embryonic development [82],
+from gastrula to pup using single cell RNA-seq data. This can be achieved by bridging the gap be-
+tween the principle of least action and the principle of maximum entropy (MaxEnt) using
+the computational framework of autoregressive neural networks. In addition, this framework helps us
+to identify cellular development as “geodesics” on the configuration manifold induced by the interac-
+tions in the gene expression space. We demonstrate how the geometry of this manifold, as encoded
+in its curvatures, reveals crucial insights into the flow of information throughout the process. Our re-
+sults demonstrate a quantitative understanding of development and concepts such as irreversibility,
+entropy, and the curvature of development processes with minimum assumptions.
+
+2 Results
+
+2.1 Overview of Principle of Least Action
+The Principle of Least Action is a fundamental law of nature that appears in various contexts within
+classical and modern physics. It states that, among all possible trajectories a system could follow
+between two fixed points in configuration space over a given time interval, the actual trajectory is
+the one that makes the action functional, A stationary—this trajectory is known as a geodesic.
+Simply put, A(γ) is a functional that evaluates a given trajectory by computing its associated energy.
+This variational principle provides a powerful framework for understanding stochastic dynamical
+systems including biological processes. In particular, when modeling cellular decision-making, we
+can extend this concept by considering the epigenetic landscape—often described as Waddington’s
+landscape—not just as a static energy potential but as a dynamically evolving configuration space.
+Here, the relevant configuration space, M , consists of cells characterized by different gene expression
+states (Figure 1A). If each cell is represented as C = (x1, x2, . . . , xn) in which xi is the expression
+level of gene i collectively, then the system forms a high-dimensional space known as the gene
+regulatory network state space or epigenetic state space. This manifold is endowed with a metric or
+connection that encodes how gene regulation and epigenetic factors shape and constrain a cell’s
+developmental trajectory. The associated tangent space T M contains the velocity vectors in each
+position on the manifold.
+
+2
+
+Figure 1 A. The Waddington landscape represented as a high-dimensional manifold (M ). Different geodesic trajec-
+tories are associated with varying probabilities, indicated by the thickness of each trajectory. These trajectories can
+diverge (at 1), merge (at 3), or even locally reverse direction (at 2). The tangent space Tp(M ) is illustrated for an
+arbitrary point p along the geodesic trajectory γ(t). B. Various curvature scenarios in a multipartite graph. In the
+leftmost panel, negative curvature represents a bottleneck in information flow between nodes i and j which is crucial
+for passing information between the layers (Bridge). The middle panel illustrates positive curvature, where multiple
+shortcut paths exist, with (i, j) being just one of them, this shows robustness in information flow (Hub). The right-
+most panel depicts zero curvature, indicating a neutral information flow structure. C. The model architecture used in
+this study is based on an autoregressive transformer model composed of stacked decoder layers. The inputs at each
+time point include both cell expression data and cell type information, which are summed and used to predict the next
+cell expression state.
+
+The principle of least action, when applied to cellular decision-making, suggests that the develop-
+mental trajectory of a cell follows a path that optimally balances regulatory constraints and energy
+expenditure within the gene regulatory network state space. This naturally leads to the concept of
+geodesic flow, which describes how these optimal trajectories evolve over time. The geodesic flow
+Gt(V ) is the flow on the tangent space T M for the velocity vector V ∈ TpM at point p ∈ M . This
+flow is determined by the derivative of geodesic:
+
+The geodesic curves γ(t) are the trajectories that minimize the action functional:
+
+Gt(V ) := ˙γV (t)
+
+(2)
+
+3
+
+δA
+δγ
+
+= 0
+
+(3)
+
+By applying the calculus of variations, we move beyond analyzing discrete points or static forces
+and instead focus on entire trajectories and how energy is distributed over time. This perspective
+aligns with the primacy of trajectories discussed in the section 1. It is important to note that we are
+refer to geodesic trajectories rather than a single optimal trajectory, because there is not a unique
+optimal solution for the above functional derivative equation.
+
+Since geodesic trajectories minimize the action functional A, their properties are inherently tied
+to the underlying geometry of the configuration space. To formalize this connection, we express
+the action functional in terms of the metric tensor g, which encodes the geometric structure of the
+manifold:
+
+Z L
+
+q
+
+A(γ) =
+
+gγ(t)( ˙γ(t), ˙γ(t))dt.
+
+(4)
+
+the pseudo-Riemannian metric tensor gγ(t) determines the geometric structure of the manifold
+M . It determines the distances and angles, and also the curvature of the space, which influences the
+possible trajectories that cells can take in their developmental process. In section 2.4 we introduce a
+surrogate metric, the Balanced Forman-Ricci curvature to numerically approximate the the curvature
+of the configuration manifold (Figure 1B).
+
+0
+
+2.2 Computational Reconstruction of Action
+Understanding the geometric structure of the configuration manifold through the pseudo-Riemannian
+metric and its curvature provides a robust theoretical foundation for modeling cellular trajectories.
+However, in many biological contexts, the explicit mathematical form of this configuration space is
+either unknown or too complex to derive analytically. To address this, we adopt a reverse approach:
+rather than starting with a known action functional to derive trajectories, we first construct a dataset
+of observed trajectories and then infer the underlying action functional from this data. This data-
+driven strategy allows us to approximate the geodesic structure of the system without requiring an
+explicit analytical model of the configuration space.
+
+More specifically, we employ an autoregressive transformer model [16] to learn cellular tra-
+jectories (Figure 1C). This choice is motivated by the Transformer’s ability to capture dependencies
+across the entire trajectory, rather than relying on simplified models based on Markov assumptions.
+Autoregressive Transformers have proven highly effective in modeling high-dimensional data with
+intricate temporal dependencies across different data modalities [28–33], making them well-suited
+for capturing the dynamics of time-evolving cellular states.
+
+As demonstrated in Section 4.2.2, transformer models learn the paths of least action, implicitly
+learning to minimize the action functional approximated from the data. By training the model
+on experimentally derived datasets that track cellular development (see Section 4.2.1), we aim to
+approximate the underlying structure governing cell fate transitions.
+
+To assess the model’s performance and ensure that it effectively reconstructs meaningful
+
+trajectories, we evaluate it using three key metrics:
+
+1. Loss: Measures the cross-entropy between the model prediction and the trajectories from the
+
+evaluation set. We have to minimize this value.
+
+2. Accuracy: Evaluates the correctness of orders in time steps. It does so by comparing the predicted
+
+sequence of cell states to their actual temporal progression in the dataset.
+
+3. Coverage: Assesses how comprehensively the model explores the full distribution of cell states,
+independent of their temporal order. A model with high coverage successfully reconstructs the
+diversity of cellular phenotypes observed in the dataset
+
+Our experimental results show that the model quickly learns the correct time-step ordering,
+achieving high accuracy early in training. However, it takes longer for the model to explore the
+full distribution of possible cell states, leading to a more gradual improvement in coverage (Figure
+2). As the model overfit to the training set, accuracy tends to decrease while coverage remains
+relatively stable, highlighting the trade-off between memorizing training data and generalizing to
+novel trajectories 3.
+
+Once the model has been trained and evaluated, the next step is to generate predicted cellular
+trajectories using an appropriate sampling strategy. Since the autoregressive transformer model
+
+4
+
+Figure 2 A. Cell reprogramming dynamics over time and across cell types, visualized using a directed force algorithm.
+B. Accuracy decreases as coverage increases, but there exists an optimal balance where both accuracy and coverage
+remain high. C., D. Sample Training Results of the Autoregressive Model. The overall trend indicates that as training
+progresses and overfitting occurs, accuracy declines while coverage increases. Higher Top−k values and temperature
+T improve coverage but negatively impact accuracy.
+
+predicts the next cell state sequentially, the choice of sampling method significantly impacts the
+quality and diversity of the generated trajectories.
+
+To ensure a balance between diversity and accuracy, we employ Nucleus Sampling [40] that
+
+has three different parameters:
+
+• Top−p: selects cells from the smallest set whose cumulative probability exceeds a chosen threshold
+
+p.
+
+• Top−k: restricts the cell choice to the k most likely cells, discarding all others.
+• Temperature (T ): controls the randomness of the sampling of cells, higher temperatures correlate
+
+with more random choices
+
+We generate trajectories with different values of each parameter: the higher Top-k and Top-p
+increase the diversity of possible cell choices at each time step, allowing for greater exploration of
+the state space which comes at the cost of reduced accuracy, as the model may deviate from the
+most probable trajectories (Figure 2C and D).
+
+To gain a deeper understanding of how trajectories evolve over time, we introduce novel metrics
+to quantitatively analyze the structure and characteristics of the cellular development manifold. In
+the next sections we will discuss entropy, curvature, and reversibility as measures that allow us to
+investigate how cells explore their developmental landscape and identify constraints that govern their
+transitions.
+
+2.3 Entropy Measures Exploration-Exploitation Ratio in Development
+Entropy serves as a measure of diversity in the model’s decision-making process at each time step.
+By examining how entropy evolves over different stages of development, we can gain insights into
+how the cells balance exploration (diverse trajectory) and exploitation (following the most likely
+trajectories). During the cellular decision-making process, cells follow specific exploration strategies
+depending on their context. At each stage, they evaluate both past and current states to compute the
+probability of transitioning to subsequent states within the phase space of gene expression values.
+These transitions can be represented as probability distributions over a defined parameter space.
+
+5
+
+Figure 3 The training of Transformer Autoregressive model for predicting the cell development on evaluation set
+of Reprogramming of mouse embryonic fibroblasts dataset. As the training progresses the accuracy decreases as the
+coverage increases
+
+When modeling this process within an autoregressive modeling framework, the probability dis-
+tribution at each time step can be adjusted using a temperature parameter. In this context, a higher
+temperature increases randomness, promoting broader exploration of possible states, whereas a lower
+temperature constrains the model to follow more deterministic pathways, favoring the most proba-
+ble transitions at each step. This same principle applies to our cellular trajectory predictions, where
+adjusting the temperature parameter influences the entropy of the system, shaping how the model
+navigates the developmental landscape.
+
+Since temperature controls the balance between exploration and exploitation in trajectory gener-
+ation, increasing the temperature generally leads to higher entropy in the system. However, because
+the number of cells varies at each time step t, a direct comparison of entropy values across different
+time points would be misleading. To address this, we normalize the entropy Ht by dividing it by the
+logarithm of the number of cells at that time step, log(Nt) to ensure a fair comparison across stages:
+
+Hnormalized = − PNt
+
+i=1 pt log(pt)
+log(Nt)
+
+(5)
+
+The normalized entropy Hnormalized provides a measure of how extensively the developmental
+process explores the expression phase space at different stages. Figure 4 presents the entropy of
+trajectories averaged over 100 samples, computed separately for different temperature values.
+
+A key trend observed in the entropy analysis is a gradual decrease in entropy as cells transition
+from less differentiated states to their final stages, consistent with findings reported in Baptista et
+al. [53]. However, this decline is not uniform throughout the trajectory of reprogramming dataset.
+A sharp drop in entropy occurs at time step 24 (corresponding to day 11, 11.5 days post-Dox
+withdrawal), after which entropy rises again in subsequent time steps. This increase could suggest
+that cells begin to explore a significantly larger expression space following a period of constraint,
+representing a bottleneck in the developmental process. Interestingly, this entropy pattern aligns
+with the curvature dynamics observed in Figure 5 that we discuss further in the next section.
+
+A more detailed view emerges when the temperature is lowered, allowing us to capture the
+deterministic aspects of each time step through cell-cell similarity dynamics. Another notable pat-
+tern in Figure 4A is that entropy levels vary across cell types in reprogramming dataset. MET
+(mesenchymal-to-epithelial transition) and MEF/other cells (mouse embryonic fibroblasts) exhibit
+
+6
+
+Figure 4 Normalized Entropy Across Different Time Steps A. Normalized Entropy of different cell types across time
+steps at fixed temperature (T = 0.1): MET is the highest while IPS has the lowest average entropy (Empty boxes
+indicate missing data due to scarcity). B. Entropy fluctuations on the temperature scale [0, 1]. Higher temperatures
+smooth out differences in next-cell selection, while lower temperatures make these differences more pronounced. C. A
+zoomed-in view of normalized entropy in the [0, 0.1] range, revealing finer details of fluctuations. Notably, two valleys
+appear at time steps 12 and 24.
+
+the highest entropy, particularly during the early stages of development, indicating broad exploratory
+behavior. In contrast, IPS (Induced Pluripotent Stem) and Trophoblast cells maintain the lowest
+average entropy which indicates a more deterministic and constrained differentiation trajectory.
+
+While entropy provides a statistical view of how broadly cells explore the expression phase space
+during development, it does not fully capture the geometric structure that shapes these trajectories.
+To complement the entropy analysis, we turn to the study of curvature, which offers a deeper
+understanding of the underlying constraints and dynamical tendencies of the configuration manifold.
+
+2.4 Curvature Quantifies Information Flow
+By viewing cell fate as a process, an ensemble of cells moving along geodesics in high-dimensional
+configuration space, we can apply tools from differential and information geometry [54] to analyze
+how developmental information propagates over time. These geometric approaches provide insight
+into how information flows for long-distance message passing [38], especially for systems far from
+equilibrium, where traditional equilibrium thermodynamic models fall short.
+
+In particular, Riemannian geometry has been used in non-equilibrium thermodynamics to study
+system behavior through concepts such as Ruppeiner geometry [55, 56], which has successfully ex-
+plained phenomena in complex, non-Boltzmannian dynamics [66, 67]. Although the metric tensor g
+encodes the full local structure of the manifold, in practice, we often focus on curvature, a scalar
+quantity that captures the global geometric properties and the directional behavior of trajectories.
+Recent studies have extended this framework to biological systems, employing discrete analogs of
+
+7
+
+curvature to study genomic and regulatory network data [57, 58], and to explore its relationship
+with entropy and information flow [59, 74]. In our context, curvature analysis allows us to inter-
+pret how developmental constraints and regulatory architecture shape the space through which cells
+transition, providing a complementary lens to both trajectory prediction and entropy dynamics.
+
+We use the learned cell embeddings to construct a multipartite graph G = (V, E) to ap-
+proximate the curvature. Like manifolds, graphs exhibit curvature that makes them appropriate for
+studying spaces with hyperbolic geometry [61, 62]. In this graph, the set V represents the cells,
+which we organize into k = N layers, where N corresponds to the number of time steps. An edge
+(i, i + 1) ∈ E exists if and only if the two cells are consecutive in a trajectory γ, meaning Ci, Ci+1 ∈ γ
+for some γ. The degree of the cell i, denoted by di, represents the total number of trajectories entering
+or exiting the cell.
+
+Following [38], we use the Balanced Forman curvature. This choice is primarily because of
+the limitations of Forman [65] and Ollivier [63, 64] curvatures, which tend to be either skewed toward
+negative values and pose challenges in controlling local quantities [15].
+
+First, we need the following definitions:
+
+• Ti,j: number of triangles based on i ∼ j
+• Si: number of 4-cycles without inside diagonal at i
+• γmax(i, j): Maximal number of 4-cycles based on i ∼ j traversing a common node
+The Balanced Forman curvature for an edge i ∼ j is defined as follows:
+
+Ric(i, j) =
+
+2
+
+di
+
++
+
+2
+
+dj
+
+− 2 + 2
+
+Tij
+max {di, dj}
+
++
+
+Tij
+min {di, dj}
+
++
+
+Si + Sj
+γmax max {di, dj}
+
+(6)
+
+The Ric(i, j) = 0 when min {di, dj} = 1. Unlike the Ollivier or Forman curvature that are biased
+towards negative curvature, this definition gives a more balanced values to curvature across the
+graph.
+
+In this context, two types of connections can be distinguished:
+
+• Bridges (Negative curvature): These edges function as bridges or bottlenecks for information.
+Removing them increases the average shortest path length in the graph. Their role is to map
+information to a lower-dimensional space, a phenomenon known as oversquashing [38].
+
+• Hubs (Positive curvature): These edges serve as backup trajectories, and their removal does
+not alter the shortest paths. Their primary function is to enhance the robustness of the network.
+
+The above definitions are also reflected in [68], where in gene regulatory or co-expression networks,
+positive Ricci curvature often signifies a tightly knit cluster of genes (many redundant connections
+and feedback loops), whereas negative curvature marks sparse bridges between modules. Recently,
+the curvature has been used for calculating the network robustness in biological system that captures
+global gene signaling changes in functional cooperation [69].
+
+In order to calculate the curvature for each node (cell), the curvature of each node is calculated
+
+based on the average of in-coming and out-going edges:
+
+1
+
+X
+
+κ(i) =
+
+di
+
+Ric(i, j)
+
+(7)
+
+i:(i,j)∈E
+As we can see from the Figure 5, the curvature follows very different dynamics for different cell
+types. Specifically, the curvature for Neural, mouse embryonic fibroblasts (MEF)/Other, and Stromal
+cell types is more positive, an indication that they pass through network hubs with feedback loops
+and redundant signaling pathways, which support promiscuous signaling and robust information flow
+[75]. This means the information flow of gene expression in different time steps are more robust, and
+even removing the signalings will not compromise the differentiation process as much as the other
+cell types. Neural cells and stromal fibroblasts, which respond to a wide range of developmental and
+environmental cues, often overexpress network hub genes to distribute signaling efficiently across the
+genome [71–73]. Such overexpression of hub genes effectively “draws in” signaling flux and spreads it
+over a highly interconnected network, increasing the efficiency and robustness of signal propagation.
+For instance, Sandhu and colleagues observed globally increased network curvature in stem-like cells
+(which include pluripotent cells and, by extension, plastic stromal cells) [74]. In practical terms, a
+neural or mesenchymal cell’s fate decisions are buffered by this robust network: multiple signals and
+feedback loops ensure that development proceeds smoothly even in noisy conditions.
+
+8
+
+Figure 5 Curvature Analysis of Cell Development in the Evaluation Set of Mouse Embryonic Reprogramming.
+A. The average curvature across time steps and cell types reveals distinct differences between both cell types and
+developmental stages. B. Cell development trajectories are color-coded based on Balanced Forman curvature. Initially,
+curvature remains mostly flat (1). In most trajectories, particularly during intermediate time steps (2), curvature
+becomes negative, indicating the oversquashing phenomenon, characteristic of Bridges. In contrast, regions with
+positive curvature (3) predominantly appear in Stromal and Neural cell types, suggesting excessive connectivity,
+characteristic of Hubs.
+
+In contrast, for IPS (induced pluripotent stemcells), MET (mesenchymal-to-epithelial transition),
+epithelial and trophoblast cell types are specialized in passing the necessary information by a lower
+dimensional representation over Bridges. This is crucial for special roles these cell types have in
+their final state. These systems have gene regulatory connections that are more tree-like or linear,
+indicating specialized pathways with less redundancy. during iPSC reprogramming of fibroblasts,
+cells must pass through a transitional MET state that is particularly fragile – blocking the MET
+gene program (e.g. E-cadherin induction) aborts reprogramming [76]. The MET stage represents a
+narrow bridge between mesenchymal and pluripotent networks; its gene expression dimensionality is
+low and easily perturbed, consistent with negative curvature edges connecting the fibroblast module
+to the pluripotency module.
+
+Curvature analysis reflects this phenomenon through an abundance of low or negative curva-
+ture edges, corresponding to bridge-like connections with limited information exchange [68]. In [75],
+it’s been demonstrated that signal promiscuity diminishes in favor of a few dominant pathways,
+which leads to gene expression patterns that become increasingly canalized and exhibit lower curva-
+ture. Similarly, findings in [53] confirm that total Ricci curvature decreases in accordance with our
+observations of curvature flattening as cells approach the terminal stages of differentiation.
+
+2.5 Local Reversibility Is A Metric of Developmental Asymmetry
+One of the most fundamental aspects of biological physics is the concept of irreversibility [47–49].
+This principle, rooted in the second law of thermodynamics, was also recognized early in biology
+through Dollo’s law of irreversibility [43], which states “an organism never fully return to its
+initial condition in which it has previously lived”. Despite the centrality of this concept in biological
+development, many current approaches [18, 19, 23] disregard irreversibility by treating the Wadding-
+ton landscape as a conservative potential field function, V (x), where traversing a closed path results
+in no net change to the system’s state which is the hallmark of reversible dynamics. Similarly, some
+models describe statistical dynamics in equilibrium with steady-state conditions, incorporating de-
+terministic drift and random forces via Langevin dynamics. However, such models assume the system
+is near equilibrium with detailed balance, a condition that fails in open systems with energy flux
+and in active matter or non-Boltzmann conditions, where reversibility is broken [41].
+
+The concept of irreversible differentiation was challenged—and eventually overturned—by piv-
+otal experiments in the 20th and 21st centuries. These studies demonstrated that, under appropriate
+conditions, a cell’s developmental trajectory can be reversed or reset. In 1962, John Gurdon’s work
+on amphibian nuclear transfer provided the first clear evidence that differentiated cells retain the
+genomic information necessary to drive embryonic development. His experiments showed that the
+
+9
+
+nucleus of a specialized intestinal cell could be “reprogrammed” by an enucleated egg to form a
+tadpole, establishing that genomic potential is preserved during differentiation [44]. Since then, cellu-
+lar reprogramming, transdifferentiation, and even dedifferentiation have been observed, highlighting
+that cell fate is experimentally malleable [45, 46].
+
+These findings suggest that biological development is neither fully reversible nor completely irre-
+versible but rather a complex interplay of both. In this section, we introduce a generalized framework
+that quantifies “local (ir)reversibility” by employing the concept of local entropy production.
+This measure not only indicates the intensity of reversibility but also pinpoints its location within
+the process of cellular development.
+Suppose a trajectory as follows:
+
+we can also define the reverse of this trajectory:
+
+γ = (x0, · · · , xT )
+
+˜γ = (xT , · · · , x0)
+
+(8)
+
+(9)
+
+In equilibrium, the system satisfies detailed balance, meaning the probability of any forward
+trajectory is exactly equal to that of its reverse. In contrast, nonequilibrium systems violate
+detailed balance, leading to a difference between the forward and reverse trajectory probabilities.
+Entropy production quantifies how far a system deviates from detailed balance. In other words,
+entropy production is a measure of time-reversal symmetry breaking. As dictated by the second law
+of thermodynamics, entropy production is always non-negative [20]. For a given trajectory γ, the
+entropy production is defined as:
+
+σ(γ) = kB log Pθ(γ)
+Pθ(˜γ)
+
+(10)
+
+Figure 6 Mean and Variance of Entropy Production Across Different Reversed Trajectories. A. Entropy pro-
+duction increases with longer sequence segments. B. The variance in entropy production remains generally low but
+increases for longer sequence segments.
+
+where kB is the Boltzmann constant. When the system satisfies detailed balance or is driven
+by a conservative field, the entropy production is zero. The Kullback-Leibler (KL) divergence
+between the forward trajectory probability distribution Pθ(γ) and the backward trajectory probability
+distribution Pθ(˜γ) is given by:
+
+DKL(Pθ(γ)∥Pθ(˜γ)) = X
+
+γ
+
+Pθ(γ) log Pθ(γ)
+Pθ(˜γ)
+
+(11)
+
+Now we can calculate the expected entropy production over an ensemble of trajectories as follows:
+
+⟨σ(γ)⟩γ∈Γ′ = kB
+
+Pθ(γ) log Pθ(γ)
+Pθ(˜γ)
+
+X
+
+γ∈Γ′
+
+(12)
+
+10
+
+Unlike most previous approaches [22, 72] that assume detailed balance, we demonstrate that de-
+velopment is predominantly an irreversible process—forward trajectories are far more likely than
+their reversals. Nonetheless, it is important to recognize that developmental trajectories can occa-
+sionally involve a “dedifferentiation” process, whereby a cell reverts from a partially or terminally
+differentiated state to a less differentiated one within the same lineage [26]. This phenomenon pro-
+vides evidence that these biological processes can exhibit local reversibility under certain conditions.
+Modeling such processes as either fully reversible or completely irreversible fails to capture these
+nuances. To address this, we generalize the concept of entropy production to account for locally
+reversible trajectories, allowing us to analyze where reversibility is most likely to occur during
+development.
+
+To achieve this, we define a locally time-reversed trajectory for the interval [i, j] (i < j) as
+
+follows:
+
+In this definition, the time intervals where t < i or t > j remains identical to those of the original
+
+trajectory, while for i ≤ t ≤ j is reversed. The local entropy production is defined as follows:
+
+˜γ[i,j] = (x0, · · · , xj, · · · xi, · · · , xT )
+
+(13)
+
+σ[i,j](γ) = kB log
+
+#
+
+"
+
+Pθ(γ)
+(cid:0)˜γ[i,j]
+
+Pθ
+
+(cid:1)
+
+(14)
+
+Given the learned model Pθ, the local entropy production has been calculated across different
+time steps as shown in Figure 6. In panel A, the x-axis represents the starting point of the reversed
+sequence segment (i), while the y-axis indicates the segment length (j − i). As we move downward
+in the heatmap, segment lengths increase, leading to higher entropy production, as expected. How-
+ever, the figure also reveals additional interesting patterns. Notably, entropy production is negligible
+for segments shorter than 5, suggesting that the cell development process is locally reversible at
+small segment sizes. This observation aligns with the behavior of many cells that exhibit local os-
+cillations within the gene expression manifold, without committing to an irreversible change in fate,
+consistent with previously reported gene expression dynamics [50]. Computational studies of gene
+regulatory circuits also recapitulated this behavior [51], consistent with the local reversibility fea-
+ture. Conversely, larger segments exhibit more pronounced irreversibility at later time points, and
+the maximum entropy production corresponds to reversing the total process.
+
+It’s important to note that this observed pattern is not uniform throughout the process. For
+example, a darker band appears between time steps 6 and 9, corresponding to segment sizes roughly
+between 19 and 30, suggesting that cell trajectories are more likely to retrace their trajectories at later
+stages than at earlier ones. As shown in [52], strong asymmetric potential barriers inherently favor
+the forward direction. Additionally, an epithelial-to-mesenchymal transition (EMT ) study found that
+once cells have transitioned, the reversal (mesenchymal-to-epithelial) is more likely to occur at later
+time points but not fully terminal states. At the same time the variance of entropy production is
+generally low (Figure 6 panel B) but increases with larger segment sizes, indicating greater variability
+in the reversibility of cell development over longer trajectories and at later time points.
+
+3 Discussion
+
+Traditionally, cell and developmental biology have long been viewed as distinct disciplines differen-
+tiated by their specific research focus. However, with the advent of molecular biology techniques, it
+has become increasingly evident that both fields fundamentally seek to understand similar biological
+processes [25]. In general, insights into how cells develop and specialize inform key phenomena such
+as differentiation, dedifferentiation, embryogenesis, and tissue homeostasis.
+
+Despite significant progress in measurement techniques, the overarching principles that guide
+cellular development remain qualitative and only partially understood. Here, we demonstrate that
+cell fate dynamics conform to the principle of least action and introduce a computational framework
+capable of quantifying action from time-series data points. Our approach has several advantages:
+
+1. As opposed to interpreting the Waddington landscape as a conservative potential function,
+where movements along a closed path do not result in net change [18, 19, 23], we incorpo-
+rate irreversibility explicitly in the trajectories of cell development, reflecting their inherent
+time-asymmetry.
+
+11
+
+2. Many current modeling approaches assume the system is in equilibrium or a steady state, and
+describe its behavior using Langevin dynamics, which combine deterministic drift with random
+forces modeled as Gaussian noise [41, 42]. In contrast, our approach is tailored for systems op-
+erating far from equilibrium, a more appropriate framework for biological processes, which are
+inherently directional and dissipative
+
+3. Our method does not rely on the Markov assumption, which treats cell state transitions as
+memoryless. Instead, we allow for history-dependent transitions, capturing potential affinities and
+path dependencies between states across time.
+
+4. We avoid averaging over heterogeneous cell trajectories, which can blur distinct patterns in cell
+behavior. By focusing on the least action path for each trajectory, our method preserves the
+fine-grained structure of cell state evolution, that can’t be captured by a general Jacobian field.
+5. Our framework is grounded in well-established physical principles, providing a more rigorous
+and interpretable foundation for understanding cell decision-making. By anchoring developmental
+dynamics in the variational principle of least action, we open up a path for integrating tools from
+statistical physics and dynamical systems theory with modern single-cell measurement techniques.
+
+Furthermore, we propose entropy, curvature, and irreversibility as key quantitative metrics for
+understanding how cells commit to specific developmental pathways. High entropy levels reflect
+extensive exploration of the gene expression landscape—a signature of cellular plasticity. As cells
+commit to defined lineages, entropy decreases, signaling a loss of plasticity and a shift toward more
+deterministic behavior. The degree of commitment, plasticity, can be further quantified by irre-
+versibility: higher irreversibility, as measured by our proposed metric, indicates greater plasticity
+and the capacity for dynamic transitions. Concurrently, our curvature analysis reveals that regions
+of positive curvature correspond to robust, redundant signaling hubs—’elastic zones’ that can buffer
+perturbations. Conversely, regions with negative curvature delineate critical bottlenecks or bridges,
+indicating areas where the system is less resilient, more fragile, and susceptible to disruption.
+
+Despite these advances, several limitations merit consideration. First, our approach is dependent
+on the availability of high-resolution, time-series single-cell data; noise and sampling biases in such
+datasets may compromise trajectory reconstruction. Second, while transformer-based architectures
+effectively capture long-range dependencies, their high computational cost could limit scalability
+to even larger or more complex datasets. Finally, although entropy and curvature provide pow-
+erful quantitative insights, the biological interpretation of these abstract metrics requires further
+experimental validation to fully substantiate their relevance in vivo.
+
+By bridging physical principles with biological complexity, our computational framework provides
+a novel perspective on cellular development and pathological deviations. This approach opens new
+avenues for future research by enabling data-driven analyses across diverse biological datasets and
+emphasizes the potential of machine learning to capture complex temporal dynamics, ultimately
+advancing the development of more predictive and interpretable models of biological systems.
+
+4 Methods
+
+Current methods for modeling scRNA dynamics rely on arbitrary, restrictive assumptions that hinder
+the generalization of these dynamics and the handling of out-of-distribution cases. Rather than
+treating the Waddington landscape [18, 19, 23] as a conservative potential function, we need a model
+that accurately captures irreversibility. This requires accounting for the non-equilibrium dynamics
+that are fundamental to biological processes, as emphasized by pioneers such as Prigogine [77, 78]
+and Lotka [79]. To address these challenges, our model should also move beyond the traditional
+Markov assumption to incorporate memory effects in developmental processes.
+
+Some approaches [80] rely on “averages” over trajectories that originate from and lead to various
+points in cell history, thereby overlooking the detailed individual cell movements that cannot be
+captured by a general “Jacobian field.”
+
+The issues mentioned above arise from arbitrary modeling with weak physical foundations, which
+fail to provide a comprehensive framework for cell differentiation dynamics. We propose a model
+that integrates concepts from physics and information theory, leveraging data-driven techniques from
+modern machine learning to bridge this gap and offer deeper insights into the underlying dynamics.
+In this section we lay out our approach which is based on the principle of least action that is
+generalized to a probabilistic setting. We then show how this can be calculated using the standard
+language model objective.
+
+12
+
+4.1 Least Action Principle
+In a probabilistic setting, it can be shown that the principle of least action is equivalent to the
+principle of maximum entropy (MaxEnt) [4]. MaxEnt has been proposed as an underlying principle
+to numerous fields such as ecology [5], neuroscience [6], machine learning [7] and economy [8]. Within
+this framework, there is not a unique trajectory from the initial to the final state but an ensemble of
+them. Each cell follows a trajectory with a corresponding probability. This trajectory is determined
+by not only the initial conditions but also the paracrine signaling between cells as well as the
+randomness of the environment that affects fates.
+
+Assume we have n genes for each cell at time t, represented by n−dimensional vector xt. Also,
+the gene velocity is given by ˙xt Although time is continuous, our observations consist of discrete
+samples. Each trajectory γi ∈ Γ is a sequence of cell states from start (progenitor cells) to target
+(differentiated or terminal cells), and can be represented as follows:
+
+In any system, to model the Action, we need to calculate the Lagrangian of the system. For each
+
+trajectory i from time 0 to L the Action for trajectory γi is defined as:
+
+γi = (xi
+
+0, · · · , xi
+T
+
+)
+
+(15)
+
+Aθ(γi) =
+
+Z L
+
+0
+
+Li
+θ
+
+(t, xi
+
+t, ˙xi
+t
+
+)dt
+
+(16)
+
+and
+where Li
+θ
+. We used the parameter θ to show that the Action functional and the Lagrangian are
+
+(t, xi, ˙xi) is the Lagrangian of the trajectory γi which is function of expression xi
+t
+
+velocity ˙xi
+t
+both unknown but belong to a family of functions parametrized by θ.
+
+For conservative systems, the focus is typically on the “least action path,” representing the
+trajectory with the minimum action. However, in our context, the system explores an ensemble
+of trajectories rather than a single one. While the Lagrangian can be analytically derived from
+kinetic and potential energy in simple systems with few degrees of freedom and linear dynamics, this
+approach becomes infeasible for more complex systems. Instead, we learn the Lagrangian directly
+from data using a Transformer neural network [9, 10]. To achieve this, we adopt an alternative
+formulation of the Lagrangian, leveraging information theory in conjunction with neural networks.
+If we consider a family of statistical models pθ parameterized by θ to model the distributions of
+trajectories, such that pθ(γi) represents the likelihood of the trajectory γi, then the expectation of
+the action over a subset of possible trajectories Γ′ ⊆ Γ can be calculated as:
+
+Aθ(Γ′) = X
+
+pθ(γi)Aθ(γi)
+
+γi∈Γ′
+
+this is in parallel with the Shannon entropy for trajectories in Γ′:
+
+Hθ(Γ′) = −
+
+X
+
+γi∈Γ′
+
+pθ(γi) log pθ(γi)
+
+(17)
+
+(18)
+
+in this context, Hθ(Γ′) is the trajectories entropy which quantifies the uncertainty associated with
+predicting the trajectory of a cell in an ensemble of cells that transitioning from time 0 (progenitor
+cells) to L (differentiated or terminal cells). This entropy captures the stochastic nature of the
+developmental process, reflecting variability in possible cellular pathways.
+Following [2, 3], we can define the action of a trajectory as follows:
+
+Aθ(γi) = − log pθ(γi)
+
+(19)
+
+This interpretation suggests that action is equivalent to Surprise. This equation provides a fasci-
+nating bridge between physics (specifically the principle of least action) and information theory.
+From a probabilistic perspective, the principle of least action corresponds to selecting the paths
+that minimizes the negative log-likelihood, − log pθ(γi). Thus, minimizing the action corresponds to
+minimizing uncertainty Hθ(Γ′) over the possible cellular trajectories Γ′.
+
+13
+
+4.2 Training using a Language Model
+
+4.2.1 Creating the Dataset
+
+We take a data-driven approach by first extracting possible trajectories from the source to destination
+cells using scRNA cell expression and velocity data. This allows us to create a dataset of trajectory
+time sequences. Consider the trajectory dataset comprising N trajectories:
+
+1, ˙xi
+
+} = {({xi
+
+1, · · · , Ci
+Ti
+
+in which xi
+j
+
+Γ′ = {Ci
+and ˙xi
+j
+
+2}, . . . , {xi
+Li
+are the expression and velocity of the cell at time j in trajectory i respectively
+and Li is the length of trajectory i, usually all the trajctories have the same length hence Li = L.
+We can represent all the data we have about each cell at time j as Ci
+j}, this generalized
+j
+coordinate is also known as configuration space, this can include other cell data such as phenotypes
+too.
+
+}) for all i = 1 : N }
+
+1}, {xi
+
+= {xi
+
+, ˙xi
+Li
+
+2, ˙xi
+
+j, ˙xi
+
+(20)
+
+Because scRNA-seq destroys cells in the process of recording them through time, it is impossible
+to follow the expressions through time. The current approaches to find the cell transitions are mostly
+rely on finding the correlations between the cells at different times j and k, Cj and Ck in a Markov
+setting as follows [11, 14, 17]:
+
+pj,k =
+
+P
+
+exp (corr (Cj, Ck))
+
+exp (corr (Cj, Cl))
+
+l∈Nj
+
+(21)
+
+in which Nj are the neighbors of cell at time j that was calculated using a KNN (k-nearest neighbor)
+approach.
+
+To account for the influence of past states in predicting the next state k, we can construct a
+weighted combination of their correlations with the candidate state. A widely used approach is to
+apply an exponential decay factor λ ∈ (0, 1), which ensures that more recent states exert a stronger
+influence while older states contribute progressively less.
+
+Under this formulation, the influence of a state visited m steps in the past is weighted by λm
+
+leading to a memory-aware transition model where past states contribute in a decaying fashion:
+
+p(t)
+j,k
+
+=
+
+(cid:16)PL−1
+
+exp
+
+m=0 λm corr (cid:0)Cjt−1−m, Ck
+(cid:16)PL−1
+
+m=0 λm corr (cid:0)Cjt−1−m, Cl
+
+(cid:1)(cid:17)
+
+P
+
+l∈Nj
+
+exp
+
+(cid:1)(cid:17) .
+
+(22)
+
+The non-Markovian transition probability accounts for a weighted history of previously visited
+states, allowing past correlations to influence the current transition choice. this approach captures
+long-range dependencies in the system, making it particularly well-suited for modeling biological
+processes such as cell differentiation, where past states can significantly impact future transitions.
+
+4.2.2 Formulating the Loss Function
+
+The probability of each trajectory can be represented using the chain rule in its most general form
+as follows:
+
+pθ(γi) = pθ
+
+(cid:0)Ci(cid:1) = pθ
+
+(cid:0)Ci
+
+1
+
+(cid:1) pθ
+
+(cid:0)Ci
+
+2 | Ci
+1
+
+(cid:1) . . . pθ
+
+(cid:0)Ci
+Li
+
+The action for each trajectory is calculated as:
+
+|Ci
+
+1Ci
+
+2 . . . , Ci
+
+Li−1
+
+LiY
+
+(cid:1) =
+
+i
+
+pθ
+
+(cid:0)Ci
+
+t | Ci
+<t
+
+(cid:1)
+
+(23)
+
+Aθ(γi) = − log pθ
+
+(cid:0)Ci(cid:1) = −
+
+LiX
+
+t=1
+
+log pθ
+
+(cid:0)Ci
+
+t | Ci
+<t
+
+(cid:1)
+
+The entropy (or average action) on the dataset Γ′ is:
+
+Hθ(Γ′) = −
+
+X
+
+(cid:0)Ci(cid:1) log pθ
+
+(cid:0)Ci(cid:1)
+
+pθ
+
+Ci∈Γ′
+
+14
+
+(24)
+
+(25)
+
+because we don’t know p(yi) we use the ensemble average on all the trajectories in the dataset:
+
+Hθ(Γ′) =
+
+1
+
+N
+
+N
+X
+
+i=1
+
+− log pθ
+
+(cid:0)Ci(cid:1) = −1
+N
+
+N
+X
+
+LiX
+
+i=1
+
+t=1
+
+log pθ
+
+(cid:0)Ci
+
+t | Ci
+<t
+
+(cid:1)
+
+(26)
+
+To model pθ we utilize an autoregressive Transformers neural network [9] which is well-
+suited for capturing sequential dependencies and complex probability distributions. We minimize
+the action in the space of neural network parameters, which, in the context of machine learning, is
+equivalent to the loss function:
+
+θ∗ = min
+
+θ
+
+Hθ(Γ′)
+
+(27)
+
+in which θ∗ are the learned parameters. For this modeling to be effective, we need to be able to
+sample from the cells distribution. To achieve this goal we take a simple approach of treating all the
+cells in the dataset as the vocabulary and then reduce the size of it using discretizing the cell space
+by Voroni diagrams.
+
+5 Data Availability
+
+We incorporated scRNA-seq data from various datasets of cellular reprogramming [18], spatiotempral
+mouse organogenesis development [83] and mouse embryonic development [82] all available publically
+in the original papers.
+
+6 Code Availability
+
+The training script for the model, tokenizer and the code for preprocessing data and inference are
+publicly available on the Github repository: https://github.com/roholazandie/BioLeastAction
+
+7 Acknowledgement
+
+The work was supported in part by a grant from the National Institutes of Health R01 HL161069
+awarded to ERE.
+
+8 Competing Interests Statement
+
+The authors declare no competing interests.
+
+References
+
+[1] Waddington, C. The strategy of the genes. (Routledge,1957)
+
+[2] Wang, Q. Maximum path information and the principle of least action for chaotic system.
+
+Chaos, Solitons & Fractals. 23, 1253-1258 (2005)
+
+[3] Wang, Q. Maximum entropy change and least action principle for nonequilibrium systems.
+
+Astrophysics And Space Science. 305 pp. 273-281 (2006)
+
+[4] Brissaud, J. MaxEnt mechanics. ArXiv Preprint Physics/0701127. (2007)
+
+[5] Harte, J. Maximum entropy and ecology: a theory of abundance, distribution, and energetics.
+
+(OUP Oxford,2011)
+
+[6] Xu, Z., Bi, G., Zhou, D. & Cai, D. A dynamical state underlying the second order maximum
+entropy principle in neuronal networks. Communications In Mathematical Sciences. 15, 665-692
+(2017)
+
+[7] Zheng, G., Sang, J. & Xu, C. Understanding deep learning generalization by maximum entropy.
+
+ArXiv Preprint ArXiv:1711.07758. (2017)
+
+15
+
+[8] Scharfenaker, E. & Yang, J. Maximum entropy economics. The European Physical Journal
+
+Special Topics. 229 pp. 1577-1590 (2020)
+
+[9] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A., Kaiser,  L. & Polo-
+sukhin, I. Attention is all you need. Advances In Neural Information Processing Systems. 30
+(2017)
+
+[10] Cranmer, M., Greydanus, S., Hoyer, S., Battaglia, P., Spergel, D. & Ho, S. Lagrangian neural
+
+networks. ArXiv Preprint ArXiv:2003.04630. (2020)
+
+[11] Lange, M., Bergen, V., Klein, M., Setty, M., Reuter, B., Bakhti, M., Lickert, H., Ansari, M.,
+Schniering, J., Schiller, H. & Others CellRank for directed single-cell fate mapping. Nature
+Methods. 19, 159-170 (2022)
+
+[12] Qiu, X., Zhu, D., Lu, Y., Yao, J., Jing, Z., Min, K., Cheng, M., Pan, H., Zuo, L., King, S. &
+
+Others Spatiotemporal modeling of molecular holograms. Cell. 187, 7351-7373 (2024)
+
+[13] Stassen, S., Kobashi, M., Lam, E., Huang, Y., Ho, J. & Tsia, K. StaVia: spatially and temporally
+aware cartography with higher-order random walks for cell atlases. Genome Biology. 25, 224
+(2024)
+
+[14] Bergen, V., Lange, M., Peidli, S., Wolf, F. & Theis, F. Generalizing RNA velocity to transient
+
+cell states through dynamical modeling. Nature Biotechnology. 38, 1408-1414 (2020)
+
+[15] M¨unch, F. Non-negative Ollivier curvature on graphs, reverse Poincar´e inequality, Buser inequal-
+ity, Liouville property, Harnack inequality and eigenvalue estimates. Journal De Math´ematiques
+Pures Et Appliqu´ees. 170 pp. 231-257 (2023)
+
+[16] Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., Sutskever, I. & Others Language models
+
+are unsupervised multitask learners. OpenAI Blog. 1, 9 (2019)
+
+[17] Maizels, R., Snell, D. & Briscoe, J. Deep dynamical modelling of developmental trajectories
+
+with temporal transcriptomics. BioRxiv. pp. 2023-07 (2023)
+
+[18] Schiebinger, G., Shu, J., Tabaka, M., Cleary, B., Subramanian, V., Solomon, A., Gould, J.,
+Liu, S., Lin, S., Berube, P. & Others Optimal-transport analysis of single-cell gene expression
+identifies developmental trajectories in reprogramming. Cell. 176, 928-943 (2019)
+
+[19] Shi, J., Li, T., Chen, L. & Aihara, K. Quantifying pluripotency landscape of cell differentiation
+from scRNA-seq data by continuous birth-death process. PLoS Computational Biology. 15,
+e1007488 (2019)
+
+[20] Mandal, D., Klymko, K. & DeWeese, M. Entropy production and fluctuation theorems for active
+
+matter. Physical Review Letters. 119, 258001 (2017)
+
+[21] Shi, J., Teschendorff, A., Chen, W., Chen, L. & Li, T. Quantifying Waddington’s epigenetic
+landscape: a comparison of single-cell potency measures. Briefings In Bioinformatics. 21, 248-
+261 (2020)
+
+[22] Huang, S., Li, F., Zhou, J. & Qian, H. Processes on the emergent landscapes of biochemical
+reaction networks and heterogeneous cell population dynamics: differentiation in living matters.
+Journal Of The Royal Society Interface. 14, 20170097 (2017)
+
+[23] Zhou, P., Wang, S., Li, T. & Nie, Q. Dissecting transition cells from single-cell transcriptome
+data through multiscale stochastic dynamics. Nature Communications. 12, 5609 (2021)
+
+[24] Pan, L., Parini, P., Tremmel, R., Loscalzo, J., Lauschke, V., Maron, B., Paci, P., Ernberg, I.,
+Tan, N., Liao, Z. & Others Single Cell Atlas: a single-cell multi-omics human cell encyclopedia.
+Genome Biology. 25, 104 (2024)
+
+16
+
+[25] Dawes-Hoang, R. & Wieschaus, E. Cell and developmental biology—a shared past, an
+
+intertwined future. Developmental Cell. 1, 27-36 (2001)
+
+[26] Yao, Y. & Wang, C. Dedifferentiation:
+
+inspiration for devising engineering strategies for
+
+regenerative medicine. npj Regenerative Medicine, 5. (July,2020)
+
+[27] Bailly, F., Longo, G. & Montevil, M. A 2-dimensional geometry for biological time. Progress In
+
+Biophysics And Molecular Biology. 106, 474-484 (2011)
+
+[28] Hong, W., Ding, M., Zheng, W., Liu, X. & Tang, J. Cogvideo: Large-scale pretraining for
+
+text-to-video generation via transformers. ArXiv Preprint ArXiv:2205.15868. (2022)
+
+[29] Ma, X., Wang, Y., Jia, G., Chen, X., Liu, Z., Li, Y., Chen, C. & Qiao, Y. Latte: Latent diffusion
+
+transformer for video generation. ArXiv Preprint ArXiv:2401.03048. (2024)
+
+[30] Ren, Y., Hu, C., Tan, X., Qin, T., Zhao, S., Zhao, Z. & Liu, T. Fastspeech 2: Fast and high-
+
+quality end-to-end text to speech. ArXiv Preprint ArXiv:2006.04558. (2020)
+
+[31] Geneva, N. & Zabaras, N. Transformers for modeling physical systems. Neural Networks. 146
+pp. 272-289 (2022), https://www.sciencedirect.com/science/article/pii/S0893608021004500
+
+[32] Nguyen, T., Shah, R., Bansal, H., Arcomano, T., Maulik, R., Kotamarthi, V., Foster, I.,
+Madireddy, S. & Grover, A. Scaling transformer neural networks for skillful and reliable
+medium-range weather forecasting. ArXiv Preprint ArXiv:2312.03876. (2023)
+
+[33] Karniadakis, G., Kevrekidis, I., Lu, L., Perdikaris, P., Wang, S. & Yang, L. Physics-informed
+
+machine learning. Nature Reviews Physics. 3, 422-440 (2021)
+
+[34] Von Baer, K. ¨Uber Entwickelungsgeschichte der Thiere; Beobachtung und Reflexion. (Bei den
+
+gebr¨udern Borntr¨ager,1828)
+
+[35] Maienschein, J. The origins of Entwicklungsmechanik. A Conceptual History Of Modern
+
+Embryology. pp. 43-61 (1991)
+
+[36] Abzhanov, A. von Baer’s law for the ages: lost and found principles of developmental evolution.
+
+Trends In Genetics. 29, 712-722 (2013)
+
+[37] Waddington, C. How animals develop. (Routledge,2015)
+
+[38] Topping, J., Di Giovanni, F., Chamberlain, B., Dong, X. & Bronstein, M. Understanding over-
+squashing and bottlenecks on graphs via curvature. ArXiv Preprint ArXiv:2111.14522. (2021)
+
+[39] Stumpf, P., Smith, R., Lenz, M., Schuppert, A., M¨uller, F., Babtie, A., Chan, T., Stumpf, M.,
+Please, C., Howison, S. & Others Stem cell differentiation as a non-Markov stochastic process.
+Cell Systems. 5, 268-282 (2017)
+
+[40] Holtzman, A., Buys, J., Du, L., Forbes, M. & Choi, Y. The curious case of neural text
+
+degeneration. ArXiv Preprint ArXiv:1904.09751. (2019)
+
+[41] O’Byrne, J., Kafri, Y., Tailleur, J. & Wijland, F. Time irreversibility in active matter, from
+
+micro to macro. Nature Reviews Physics. 4, 167-183 (2022)
+
+[42] Cao, Y. & Liang, S. Stochastic thermodynamics for biological functions. Quantitative Biology.
+
+13, e75 (2025)
+
+[43] Louis, D. Les lois de l’´evolution. Arno, New York. (1893)
+
+[44] Gurdon, J. From nuclear transfer to nuclear reprogramming: the reversal of cell differentiation.
+
+Annu. Rev. Cell Dev. Biol.. 22, 1-22 (2006)
+
+17
+
+[45] Loi, P., Czernik, M., Zacchini, F., Iuso, D., Scapolo, P. & Ptak, G. Sheep: the first large ani-
+mal model in nuclear transfer research. Cellular Reprogramming (Formerly” Cloning And Stem
+Cells”). 15, 367-373 (2013)
+
+[46] Kalra, R., Dhanjal, J., Das, M., Singh, B. & Naithani, R. Cell transdifferentiation and repro-
+gramming in disease modeling: insights into the neuronal and cardiac disease models and current
+translational strategies. Cells. 10, 2558 (2021)
+
+[47] England, J. Dissipative adaptation in driven self-assembly. Nature Nanotechnology. 10, 919-923
+
+(2015)
+
+[48] Collin, D., Ritort, F., Jarzynski, C., Smith, S., Tinoco Jr, I. & Bustamante, C. Verification of
+the Crooks fluctuation theorem and recovery of RNA folding free energies. Nature. 437, 231-234
+(2005)
+
+[49] Bustamante, C., Chemla, Y., Liu, S. & Wang, M. Optical tweezers in single-molecule biophysics.
+
+Nature Reviews Methods Primers. 1, 25 (2021)
+
+[50] Leng, N., Chu, L., Barry, C., Li, Y., Choi, J., Li, X., Jiang, P., Stewart, R., Thomson, J.
+& Kendziorski, C. Oscope identifies oscillatory genes in unsynchronized single-cell RNA-seq
+experiments. Nature Methods. 12, 947-950 (2015)
+
+[51] Ramirez, D. & Lu, M. Dissecting reversible and irreversible single cell state transitions from
+
+gene regulatory networks. BioRxiv. (2024)
+
+[52] Wang, J., Xu, L., Wang, E. & Huang, S. The potential landscape of genetic circuits imposes
+
+the arrow of time in stem cell differentiation. Biophysical Journal. 99, 29-39 (2010)
+
+[53] Baptista, A., MacArthur, B. & Banerji, C. Charting cellular differentiation trajectories with
+
+Ricci flow. Nature Communications. 15, 2258 (2024)
+
+[54] Amari, S. Information geometry and its applications. (Springer,2016)
+
+[55] Ruppeiner, G. Thermodynamics: A Riemannian geometric model. Physical Review A. 20, 1608
+
+(1979)
+
+[56] Ruppeiner, G. Riemannian geometry in thermodynamic fluctuation theory. Reviews Of Modern
+
+Physics. 67, 605 (1995)
+
+[57] Pouryahya, M., Mathews, J. & Tannenbaum, A. Comparing three notions of discrete Ricci
+
+curvature on biological networks. ArXiv Preprint ArXiv:1712.02943. (2017)
+
+[58] Murgas, K., Saucan, E. & Sandhu, R. Quantifying cellular pluripotency and pathway robustness
+through Forman-Ricci curvature. Complex Networks & Their Applications X: Volume 2, Pro-
+ceedings Of The Tenth International Conference On Complex Networks And Their Applications
+COMPLEX NETWORKS 2021 10. pp. 616-628 (2022)
+
+[59] Sandhu, R., Georgiou, T., Reznik, E., Zhu, L., Kolesov, I., Senbabaoglu, Y. & Tannenbaum, A.
+Graph curvature for differentiating cancer networks. Scientific Reports. 5, 12323 (2015)
+
+[60] Murgas, K., Saucan, E. & Sandhu, R. Hypergraph geometry reflects higher-order dynamics in
+
+protein interaction networks. Scientific Reports. 12, 20879 (2022)
+
+[61] Liu, Q., Nickel, M. & Kiela, D. Hyperbolic graph neural networks. Advances In Neural
+
+Information Processing Systems. 32 (2019)
+
+[62] Boguna, M., Bonamassa, I., De Domenico, M., Havlin, S., Krioukov, D. & Serrano, M. Network
+
+geometry. Nature Reviews Physics. 3, 114-135 (2021)
+
+[63] Ollivier, Y. Ricci curvature of metric spaces. Comptes Rendus Mathematique. 345, 643-646
+
+(2007)
+
+18
+
+[64] Ollivier, Y. Ricci curvature of Markov chains on metric spaces. Journal Of Functional Analysis.
+
+256, 810-864 (2009)
+
+[65] Forman, R. Discrete and computational geometry. (2003)
+
+[66] Crooks, G. Measuring thermodynamic length. Physical Review Letters. 99, 100602 (2007)
+
+[67] AAman, J., Bengtsson, I., Pidokrajt, N. & Ward, J. Thermodynamic geometries of black holes.
+The Eleventh Marcel Grossmann Meeting: On Recent Developments In Theoretical And Ex-
+perimental General Relativity, Gravitation And Relativistic Field Theories (In 3 Volumes). pp.
+1511-1513 (2008)
+
+[68] Elkin, R., Oh, J., Dela Cruz, F., Norton, L., Deasy, J., Kung, A. & Tannenbaum, A. Dynamic
+network curvature analysis of gene expression reveals novel potential therapeutic targets in
+sarcoma. Scientific Reports. 14, 488 (2024)
+
+[69] Simhal, A., Weistuch, C., Murgas, K., Grange, D., Zhu, J., Oh, J., Elkin, R. & Deasy, J. ORCO:
+Ollivier-Ricci Curvature-Omics—an unsupervised method for analyzing robustness in biological
+systems. BioRxiv. (2024)
+
+[70] Banerji, C., Miranda-Saavedra, D., Severini, S., Widschwendter, M., Enver, T., Zhou, J. &
+Teschendorff, A. Cellular network entropy as the energy potential in Waddington’s differentia-
+tion landscape. Scientific Reports. 3, 3039 (2013)
+
+[71] Teschendorff, A., Maity, A., Hu, X., Weiyan, C. & Lechner, M. Ultra-fast scalable estimation of
+single-cell differentiation potency from scRNA-Seq data. Bioinformatics. 37, 1528-1534 (2021)
+
+[72] Shi, J., Teschendorff, A., Chen, W., Chen, L. & Li, T. Quantifying Waddington’s epigenetic
+landscape: a comparison of single-cell potency measures. Briefings In Bioinformatics. 21, 248-
+261 (2020)
+
+[73] Teschendorff, A. & Enver, T. Single-cell entropy for accurate estimation of differentiation
+
+potency from a cell’s transcriptome. Nature Communications. 8, 15599 (2017)
+
+[74] Murgas, K., Saucan, E. & Sandhu, R. Hypergraph geometry reflects higher-order dynamics in
+
+protein interaction networks. Scientific Reports. 12, 20879 (2022)
+
+[75] Banerji, C., Miranda-Saavedra, D., Severini, S., Widschwendter, M., Enver, T., Zhou, J. &
+Teschendorff, A. Cellular network entropy as the energy potential in Waddington’s differentia-
+tion landscape. Scientific Reports. 3, 3039 (2013)
+
+[76] Li, R., Liang, J., Ni, S., Zhou, T., Qing, X., Li, H., He, W., Chen, J., Li, F., Zhuang, Q. & Others
+A mesenchymal-to-epithelial transition initiates and is required for the nuclear reprogramming
+of mouse fibroblasts. Cell Stem Cell. 7, 51-63 (2010)
+
+[77] Prigogine, I. & Hiebert, E. From being to becoming: Time and complexity in the physical
+
+sciences. (American Institute of Physics,1982)
+
+[78] Prigogine, I. & Stengers, I. Order out of chaos: Man’s new dialogue with nature. (Verso
+
+Books,2018)
+
+[79] Lotka, A. Elements of mathematical biology. (Dover Publications,1956)
+
+[80] Qiu, X., Zhang, Y., Martin-Rufino, J., Weng, C., Hosseinzadeh, S., Yang, D., Pogson, A., Hein,
+M., Min, K., Wang, L. & Others Mapping transcriptomic vector fields of single cells. Cell. 185,
+690-711 (2022)
+
+[81] Kaila, V. & Annila, A. Natural selection for least action. Proceedings Of The Royal Society A:
+
+Mathematical, Physical And Engineering Sciences. 464, 3055-3070 (2008)
+
+19
+
+[82] Qiu, C., Martin, B., Welsh, I., Daza, R., Le, T., Huang, X., Nichols, E., Taylor, M., Fulton, O.,
+O’Day, D. & Others A single-cell time-lapse of mouse prenatal development from gastrula to
+birth. Nature. 626, 1084-1093 (2024)
+
+[83] Chen, A., Liao, S., Cheng, M., Ma, K., Wu, L., Lai, Y., Qiu, X., Yang, J., Xu, J., Hao, S. & Others
+Spatiotemporal transcriptomic atlas of mouse organogenesis using DNA nanoball-patterned
+arrays. Cell. 185, 1777-1792 (2022)
+
+20
+
+

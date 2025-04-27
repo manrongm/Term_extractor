@@ -1,0 +1,336 @@
+PRaDA: Projective Radial Distortion Averaging Daniil Sinitsyn1,2, Linus H¨arenstam-Nielsen1,2, Daniel Cremers1,2 1Technical University of Munich, 2Munich Center for Machine Learning daniil.sinitsyn@tum.de, linus.nielsen@tum.de, cremers@tum.de 5 2 0 2 r p A 3 2 ] V C .
+s
+c [ 1 v 9 9 4 6 1 . 4 0 5 2 : v i X r a
+Abstract We tackle the problem of automatic calibration of radially distorted cameras in challenging conditions.
+Accurately de- termining distortion parameters typically requires either 1) solving the full Structure from Motion (SfM) problem involv- ing camera poses, 3D points, and the distortion parameters, which is only possible if many images with sufficient overlap are provided, or 2) relying heavily on learning-based meth- ods that are comparatively less accurate.
+In this work, we demonstrate that distortion calibration can be decoupled from 3D reconstruction, maintaining the accuracy of SfM- based methods while avoiding many of the associated com- plexities.
+This is achieved by working in Projective space, where the geometry is unique up to a homography, which encapsulates all camera parameters except for distortion.
+Our proposed method, Projective Radial Distortion Averag-
+ing, averages multiple distortion estimates in a fully projec- tive framework without creating 3d points and full bundle adjustment.
+By relying on pairwise projective relations, our methods support any feature-matching approaches without constructing point tracks across multiple images.
+1.
+Introduction Having access to an accurate camera model is foundational to essentially all geometric computer vision algorithms, in- cluding Structure from Motion (SfM), Simultaneous Lo- calization and Mapping (SLAM), and novel-view synthe- sis (NVS).
+However, in many cases, prior accurate intrin- sics are not available.
+For instance, if images are sourced from the internet or if camera parameters have drifted over time due to wear and tear.
+In such cases, intrinsics must instead be estimated using geometric principles or learned from data.
+Despite active research, accurately determin- ing intrinsics remains a challenging problem with no es- tablished go-to method.
+Methods based on full SfM and bundle adjustment [48, 49] often fail to converge without a good initialization, and learning-based methods tend to lack accuracy and robustness.
+In this work, we introduce Projective Radial Distortion .
+We average multiple imprecise and mutually inconsis- tent distortion model estimates into a single consistent model.
+Averaging (PRaDA), a simple yet effective approach for calibrating radially distorted cameras from unordered image collections.
+SfM methods typically operate in Euclidean space, recovering 3D reconstructions and poses up to trans- lation, rotation, and scaling.
+Projective framework extends this to projective space, where reconstructions are defined up to a homography that encapsulates all non-distortion pa- rameters.
+This simplifies distortion optimization and en- ables image relationships to be expressed without 3D points or poses at any stage of the entire algorithm.
+We observe that standard image matching algorithms, which are typi- cally designed for pinhole cameras, work well even for dis- torted images.
+For each image, we start off by computing point correspondences with every other image using well- established methods.
+For each such pair, we then use a ro- bust correspondence-based minimal solver to obtain an esti- mate of the radial distortion.
+These individual estimates are then finally averaged to produce a single consistent model per camera.
+Fig.
+1
+An overview of the approach can be found in Fig.
+3.
+Our contributions are summarized as fol- lows: 1.
+We introduce a fully projective method for radial distor- tion averaging.
+Our method does not require explicit 3D point reconstruction or focal length estimation, signifi- cantly simplifying the auto-calibration process.
+2. We propose a novel distortion averaging technique that fuses inconsistent pairwise estimates into a single, con- sistent camera model.
+3.
+We demonstrate significant improvements in accuracy and robustness over commonly used methods and vali- date them on challenging datasets.
+1
+d e t r o t s i D d
+e t r o t s
+i d
+n U .
+Epipolar lines for the original distorted fisheye image (top), and the undistorted pinhole-like image (bottom).
+Points in the left and right images indicate matched points.
+In the undis- torted image, epipolar lines are straight, and point correspon- dences satisfy Eq. .
+Our method is agnostic to specific image matching tech- niques and does not rely on keypoint tracks across images, unlike traditional SfM pipelines.
+Several methods exist in the literature for estimating radial distortion from a single pair of camera views (cf .
+Sec. 3).
+However, two views often lack sufficient informa- tion for a fully accurate distortion estimate across the entire image.
+The accuracy depends on factors like visual overlap and the quality of pixel correspondences.
+2. Background Epipolar geometry with radial distortion: The goal of camera distortion calibration is to map a distorted image (Fig. 2, top row) to an undistorted image (Fig. 2, bottom row), which is consistent with a pinhole camera.
+For pin- hole cameras, the epipolar geometry between two views takes a particularly simple form.
+Namely, it can be charac- terized fully by a 3×3 fundamental matrix F , which maps points from one image to their corresponding epipolar lines on the other image .
+Given two pinhole camera images, any 2D point correspondence pu i will satisfy the epipo- lar constraint:
+i , qu (¯qu i )
+⊺F ¯pu i = 0.
+Here, we use a bar to denote the homogeneous representa- tion of a point p, that is: ¯p = (p⊺; 1)⊺. In the presence of distortion, epipolar lines are no longer straight, as shown in the top row of Fig.
+2.
+This means point correspondences pi, qi will generally not satisfy Eq.
+for any single fundamental matrix.
+However, there is a map- ping Uθ(p), with parameters θ, which maps distorted points p to undistorted points: pu i = Uθ(pi), qu i = Uθ(qi), 2
+In particu- which are consistent with pinhole geometry.
+lar, we consider radial distortion, where the distortion only changes the distance from the center of the image: Uθ(p) = dθ(∥p∥)p.
+i , qu Radial distortion calibration: The goal of radial distor- tion calibration is formulated as follows: determine the pa- rameters θ such that the undistorted points
+pu
+i satisfy Eq.
+for some fundamental fundamental matrix F .
+Once the distortion parameters have been estimated, the undis- torted points can be used in any 3D reconstruction method designed for pinhole cameras.
+Division camera model: Importantly, the epipolar con- straint from Eq. is invariant to multiplication by any non- zero scalar.
+We can use this fact to rescale the homogeneous points ¯pu
+i and move the dependence on radial distortion to the last homogeneous coordinate: ¯pu i = (cid:18)dθ(∥pi∥)pi 1 (cid:19) ≃ (cid:18) (cid:19) pi 1/dθ(∥pi∥) Where ≃ denotes equivalence up to a scaling factor.
+Of par- ticular importance to our work is the one-parameter division camera model , given by: dλ(r) = 1/(1 + λr2).
+Which has the undistortion function: Uλ( ¯pi) ≃ (cid:18) pi 1 + λ∥pi∥2 (cid:19) .
+While the one-parameter division model has well- established minimal solvers [12, 28, 30], it is not expres- sive enough to capture many real-world distortion patterns.
+Therefore, we also consider the extension to a k-th degree polynomial : Uθ( ¯pi) = (cid:19) (cid:18) pi hθ(∥pi∥) where h(r)
+= (cid:80)k 1/hθ(r).
+i=0 θiri.
+Which corresponds to d(r)
+= 3.
+Related work Accurate distortion estimation plays a crucial role in tasks such as SfM and 3D reconstruction.
+Various approaches have been proposed to address this challenge, each with dif- ferent assumptions and requirements.
+One category of approaches leverages a known 3D map to estimate camera distortions and focal lengths.
+These methods can be divided into two subcategories.
+The first assumes a perfect 3D map, which is the standard setup for camera calibration using patterns like chessboards
+[37, 47, 61] or learned patterns .
+The second relies on a 3D map constructed by a SfM framework to register a new image ...
+Image graph matching Initial Pairwise Estimations Distortion Averaging Global Projective BA .
+Method overview: Each possible image pair generates separate parameters of the distortion model via a robust solver (cf .
+Sec. ).
+Then, for each camera Ci, the models are merged to form a single consistent estimation θi using distortion averaging (cf .
+Sec. ).
+Each stage is further refined using nonlinear optimization (cf .
+Secs.  and ) within it.
+For an available 3D map, a 3-parameter polyno- mial distortion model can be obtained from 5 2D-to-3D cor- respondences .
+If more correspondences are available, calibration can be estimated using a rational model or implicitly .
+However, obtaining an accurate 3D map from images with unknown distortion can be a challenging problem.
+In the case when a 3D map is not available, existing ap- proaches can be broadly split into three categories: N-point- solvers, bundle-adjustment-based, and learning-based.
+N-point solvers work by solving for the unknown funda- mental matrix and distortion parameters subject to the con- straints from Eq. and Eq. .
+Pioneering work from Fitzgibbon shows that a single-parameter polynomial model can be estimated minimally using 8 correspondences from an image pair from the same camera.
+The method was extended by Jiang et al. to include focal length estima- tion.
+If the two images come from different cameras, a one- parameter (per camera) polynomial model can be estimated minimally with 9 correspondences [8, 28], by 3 variants of solvers requiring 10 correspondences , with 12 corre- spondences or 15 correspondences .
+SVA goes beyond point correspondences and detects vanishing points by finding the intersection of circular arcs (corresponding to distorted lines).
+However, because of this reliance on straight lines, it may not work in cases where straight lines are not present.
+According to performance analysis in , the 10-point method F10 gives the best result in terms of performance compared to minimal methods.
+Bundle-adjustment methods Distortion parameters can also be calculated as part of a SfM pipeline in the bundle adjustment step
+[14, 41, 48, 49], or NeRF optimization , although at the cost of increasing the complexity of the loss function.
+Global SfM methods such as GLOMAP are promising, as they utilize least squares fitting for each pair of images and then average the results, potentially allowing distortion estimation in the first stage.
+Calibration-free SfM can avoid the need to estimate radial distortion.
+This .
+3 approach uses clever minimal solvers that require three im- ages in the dataset to have intersecting optical axes or tracks on 4 images , which may not always be the case, espe- cially for sparse images.
+RpOSE solves the projective reconstruction globally in a radial distortion-invariant way to later fit radial distortion.
+Having a big basin of conver- gence, this approach requires a set of image points tracked along several images, which can be challenging to obtain without pre-filtering stages that should be carefully handled in the presence of distortion.
+Learning-based methods Calibration parameters can also be estimated using learning-based methods.
+Early works model distortion by learning to map point correspondences directly to 3d points or by learning the residual error induced by the unknown calibration
+[11, 55].
+Rong et al. predicts a single-parameter division model.
+Trained on synthetically distorted images.
+DeepFocal predicts fo- cal length, trained on internet images.
+Hold-Geoffroy et al.
+Predicts focal length and rotation relative to the hori- zon line.
+DeepCalib predicts the focal length and ξ from the unified spherical model
+[5, 13, 37], trained on crops from panoramic images.
+DroidCalib extents DROID- SLAM to optimize unified camera model with Gauss-Newton.
+GeoCalib regresses a pixel-wise per- spective field , which can be used to estimate radial dis- tortion with nonlinear optimization.
+In DeepCalib , the authors observe that their solution performs better on im- ages with significant distortion.
+They explain this by point- ing to the non-uniformity of the training data, noting the absence of a dataset containing diverse fisheye distortions.
+Additionally, they argue that manually generating such data is unfeasible because applying artificial fisheye distortion to an image produces unrealistic results.
+Similarly to Sarlin et al. , we argue that re-learning geometric principles with neural networks is often unneces-
+Instead, these principles can be accurately handled sary.
+with traditional methods, using deep learning where ex- act modeling is infeasible.
+We find that well-established learning-based matchers
+[10, 34, 36, 45, 51] demonstrate strong robustness to distortion changes [28–31, 40, 41, 48, 49].
+Eucledian vs Projective SfM In SfM, reconstruction can be performed in either a projective
+[26, 27] or Euclidean [41, 48] framework .
+Projective SfM recovers the scene structure up to a homography without requiring information on focal length.
+The resulting reconstruction can still be op- timal regarding reprojection errors and geometric relations but lacks metric accuracy.
+The point cloud can be arbitrar- ily skewed.
+Often, projective reconstruction is utilized as a first step in SfM methods [21, 22, 54] because it requires estimating fewer parameters.
+is particularly interesting because it does not depend on tracking points across several images.
+4.
+Method We start by estimating 2D-2D correspondences (pi, qi)mn for each pair of images {Im, In}.
+These correspondences are the basis for estimating the distortion parameters of the camera model for each image.
+From each correspondence set (pi, qi)mn, we then estimate a fundamental matrix and one-parameter distortion model (Sec. ).
+This results in multiple initial estimates for each image’s camera model.
+These distortion estimates are further refined by minimizing the Sampson error
+[15, 44] (Sec. ).
+The two-view distortion estimates are typically accurate only in the regions of the image where 2D points are avail- able.
+So, to obtain a reliable camera model across the full image, we fuse the individual estimates through distortion averaging (Sec. ).
+This step ensures a single consistent camera model per camera, which optimally merges the in- dividual models.
+As a final step to further improve the distortion estimate, we perform a global refinement (Sec. ) of the Sampson error
+[15, 44] across all images.
+The full pipeline, illus- trated in Fig. 3, produces a highly reliable distortion esti- mate without estimation of 3D points or camera poses. .
+Two-view initialization We obtain initial one-parameter distortion models us-
+ing LO-RANSAC with the F10 solver proposed by Kukelova et al. .
+This minimal solver supports dif- ferent camera models for both images.
+For each image pair {Im, In}, we have a separate estimation of 2 distor- tion models.
+We normalize pixel coordinates by the length of the image diagonal to increase the numerical stability of the solver.
+The benefits of this stage are two-fold.
+First off, we ob- tain initial estimates of the distortion models and fundamen- tal matrices for all cameras from all matched image pairs, respectively.
+Secondly, RANSAC ensures that outlier cor- respondences generated by the matcher are filtered out. .
+Two-view nonlinear refinement
+Next, we refine the initial single-parameter distortion es- timates using nonlinear refinement with a higher-order degree-k polynomial model from Eq. .
+Following Scara- muzza et al. , we parameterize polynomials such that θ0 is fixed to 1 and θ1 is fixed to 0.
+This parameteriza- tion ensures the model behaves like a pinhole near the im- age center.
+Each higher-order model is initialized by setting θ0 = 1, θ2 = λ, and other θi to 0.
+Minimal solvers for the higher-order polynomial divi- sion model are impractical due to the increasing number of minimal samples required.
+Therefore, we rely on nonlinear optimization for this stage.
+For this we use the Sampson error
+[15, 44]: r2 sampson (p, q, F, θ1, θ2) = C 2(dp, dq) (cid:13) (cid:13) (cid:13)J C dp (cid:13) 2 (cid:13) (cid:13) + (cid:13) (cid:13) (cid:13)J C dq 2 , (cid:13) (cid:13) (cid:13) where C(dp, dq) = Uθ1(q + dq)⊺F Uθ2(p + dp) is the epipolar constraint centered at p, q. Geometrically, the Sampson error approximates the minimum adjustment in pixels required for each point correspondence pi, qi to satisfy the epipolar constraint with respect to F : r2 sampson ≈    ∥dp∥2 2 + ∥dq∥2 2 min dp,dq s.t. Uθ1
+(qi +dq)⊺F Uθ2 (pi +dp) = 0.
+The approximation is obtained by linearizing the epipolar constraint around pi, qi.
+Let (Ii, Ij) be an image pair with m correspondences.
+Let Ci and Cj be the corresponding cameras.
+The camera parameters estimated during the two-view step (Sec. ) are denoted as θij .
+The superscript indicates that Ci the parameters are specific to this image pair.
+The optimiza- tion problem can then be formulated as: and θij Cj argmin ,θij Cj Fij ,θij Ci m (cid:88) l=1 (cid:16)
+r2 sampson pl, ql, Fij, θij Ci , θij Cj (cid:17) Intuitively, minimizing the Sampson error refines the cam- era parameters and the fundamental matrices to ensure that the adjustments needed for the points to satisfy the epipolar constraint Eq. are as small as possible.
+In addition, as Eq. is defined only in terms of the epipolar constraint, it lets us bypass the explicit estimation of 3D points.
+Nonlinear optimization of the fundamental matrix re- quires careful handling.
+While being 3 × 3 real matrix it has 7 degrees-of-freedom .
+One common way to parameter- ize it is
+SO × S1 × SO.
+SO is the group of 3 × 3 4 rotation matrices in R3 and has 3 degrees of freedom.
+S1 is the 1-dimensional sphere representing the unit circle and can be parameterized as an angle.
+This parameterization is unique and supports local updates via the corresponding Lie group exponential map The fundamental matrix is scale-invariant, i.e. it remains unchanged when multiplied by any non-zero scalar, and it has at most two non-zero singular values .
+Given these properties, the minimal parameterization of the fundamen- tal matrix can be obtained using the following scheme:
+1.
+Compute SVD F = U ΣV ⊤. 2.
+Normalize U and V to ensure they have determinant 1: U ← U · det(U ), V ← V · det(V ).
+3. Normalize singular values σ1 and σ2: σ′ = (σ1, σ2) ∥σ1, σ2∥2 .
+After these steps U ∈ SO, V ∈ SO, σ′ ∈ S1. .
+Polynomial distortion regularization Since the images are not fully covered by 2D-2D correspon- dences (pi, qi)mn, the camera model is unconstrained and can behave arbitrarily in the uncovered regions.
+To address this, we introduce additional regularization to the distortion polynomials.
+Following the approach of Hartley and Kang , Pan et al.
+we apply the local linearity assumption to the undistortion function, treating it as a function of the radius.
+This aims to constrain the rate of change of the undistortion function, ensuring it remains monotonic.
+In the continuous case, this regularization can be formulated as: min R (cid:90) 0 (cid:13) (cid:13) (cid:13) (cid:13) dUθ(r) dr (cid:13) 2 (cid:13) (cid:13) (cid:13) dr
+This function is not analytically integrable due to the poten- tially high degree polynomial in the denominator.
+Instead, we use an efficient numerical approximation of this integral. .
+Distortion averaging After the initial pairwise estimation of camera parameters, we collect all the observed parameters for each physical camera model.
+The goal of this step is to determine the model that best fits the set of estimated camera parameters.
+For each camera C, we have multiple, potentially mutu- ally inconsistent estimates of the distortion parameters θ.
+Each estimated distortion model is generally consistent only within the regions covered by point correspondences and may be inconsistent in other image regions.
+To combine these individual estimates into a single, unified distortion polynomial, we propose distortion averaging.
+We solve an optimization problem in functional space so that the so- lution behaves similarly to each of the estimated camera models within the image.
+As a general principle, we can average multiple distor- tion models ˆUi, i = 1, . . .
+, n by solving a weighted least- squares problem within the space of functions on the image plane: ¯U = argmin U = argmin
+U n (cid:88)
+i=1 n (cid:88) i=1
+(cid:68)
+U, ˆUi (cid:69)2 ωi (cid:90) ωi p∈I (cid:13) (cid:13) 2 (cid:13)U (p) − ˆUi(p) (cid:13) (cid:13) (cid:13) dx dy where p = (x, y) ranges over all pixels of the image, and ωi are weights that sum to 1.
+Reparametrizing in terms of the radial distortion model U (p) = pd(∥p∥) and expressing this integral in polar coordinates, we get: ¯d = argmin
+d n (cid:88)
+i=1 ωi R (cid:90) 0 (cid:13) (cid:13) 2 (cid:13)d(r) − ˆdi(r) (cid:13) (cid:13) (cid:13) r3 dr.
+Finally, we constrain the solution to be in the form of an undistortion function of the polynomial division model (See Eq. ).
+Then Eq. changes to: ¯θ = argmin θ n (cid:88) i=1
+ωi R (cid:90) 0 (cid:13) (cid:13) (cid:13) (cid:13) 1 hθ(r)
+− 1 hθi(r) (cid:13) 2 (cid:13) (cid:13) (cid:13) r3 dr where θ corresponds to the coefficients of the polynomial.
+We solve this numerically, initializing θ as a weighted aver- age of θi: ¯θ = (cid:80)n (cid:80)n i=1 ωiθi i=1 ωi .
+Note that our averaging approach can generate polynomials of nearly any degree, making the degree a hyperparameter of the averaging scheme.
+However, the degree of θ from Eq. is limited by the maximum degree of θ.
+While Eq. is not in general optimal for Eq. , it turns out to be an optimal solution of Eq. for the mul- tiplicative distortion model (see Supplementary mate- rial). .
+Global refinement
+Even after the distortion averaging step, the resulting cam- era models may still lack sufficient accuracy.
+We refine them together with the fundamental matrix in a global opti- mization.
+We minimize a robust Sampson error loss across all images:
+argmin {Fij },{θk} (cid:88) l,i,j ρ (cid:0)rsampson (cid:0)pl, ql, Fij, θCi, θCj (cid:1)(cid:1) 5 a) KITTI-360 b) WoodScape .
+Example of images from challenging sequences. .
+ScanNet++ by sequence: Our method consistently out- performs SfM-based methods Colmap [48, 49] and Glomap in terms of calibration accuracy.
+where ρ is a Cauchy loss function and pl, ql corre- sponding points.
+If an image Ii appears in multiple pairs, such as (Ii, Ij) and (Ii, Ik), the same camera model is used for all pairs, and the optimization is performed jointly over these pairs.
+Solving Eq. ensures that the camera models remain consistent with the relative geometry across multi- ple image pairs.
+In addition, this loss formulation allows the optimization of principal points if there is sufficient cover- age across all image pairs.
+5. Experiments .
+Metrics To measure the accuracy of the distortion estimate, we use the Reprojection Error (RE), computed as: RE = 1 |Ω| (cid:88) p∈Ω (cid:13) (cid:13)πθ (cid:0)π−1 (p)(cid:1) − p(cid:13) (cid:13) .
+Where p ∈ Ω are the image pixel coordinates, π is the pro- jection function of the ground truth camera model, and πθ is the projection function of the estimated model with pa- rameters θ.
+MRE is widely used to compare camera models
+[7, 30, 35, 53].
+It provides an interpretable measure of ac- curacy in units of pixels in the original image.
+For a fair comparison of the distortion estimation only, we compute Focal-Adjusted RE (FA-RE), which is obtained by selecting the focal length that minimizes Eq. .
+The error thus reflects the model’s ability to represent distortion uniformly across the image.
+This formulation helps to better capture the true error in highly distorted regions.
+We also evaluate the impact of our method on the down- stream task of SfM.
+We measure the deviation in transla- tion direction and rotation angle between the estimated and ground truth relative poses for each possible image pair, as in GLOMAP
+.This metric is more robust to completely incorrect estimation of a subset of poses than an absolute pose error. .
+Datasets ETH3D : A multi-view stereo benchmark dataset comprising video sequences captured by camera rigs and ground-truth calibrations in COLMAP format.
+We use all frames from all 5 sequences from the “Low-res many-view” category, which includes cameras with significant distor- tion.
+KITTI 360 : An extension of the KITTI dataset that in- cludes 360-degree panoramic images created from two 180◦ fisheye cameras.
+For evaluation, we use the 600 first frames for each camera from each sequence.
+ScanNet++ : This dataset provides fisheye-lens DSLR images across various indoor scenes.
+Each scene includes continuous sequences of 200+ images.
+To evaluate perfor- mance, we use all frames from the test set sequences pro- vided by the dataset.
+WoodScape :
+WoodScape is a fisheye camera dataset comprising over 10,000 images captured by four 180◦ fish- eye cameras mounted on a vehicle.
+The images are taken at sparse timestamps.
+This makes the application of feature- based methods particularly challenging.
+For DeepCalib and Geocalib, we use all available frames.
+KITTI-360 and WoodScape are particularly challenging as the images are heavily distorted; see Fig.
+4.
+We estimate one camera model per distinct physical camera presented in datasets.
+That is: 2 cameras for ETH3D, 2 for KITTI, one for ScanNet++, and 4 for WoodScape. .
+Results Baselines: We compare our method to several com- mon and state-of-the-art autocalibration approaches: COLMAP
+[48, 49], which incrementally estimates the camera model using a dense subset of images; GLOMAP , which uses global optimization in SfM similar to our approach; DroidCalib , a SLAM-based method that optimizes camera parameters from video input; GeoCalib , which jointly refines the camera model and gravity direction from a single image; and Deep- Calib , which directly regresses camera intrinsic and distortion parameters using Mei’s camera model .
+Ad- ditional implementation details are given in supplementary Appendix A. Quantitative Results: The results of the reprojection errors are summarized in Tab.
+1.
+To ensure fairness in the com- parison, we run our solution on the same SIFT matches as 6 01234reprojection error051015sequence countColmapGlomapPRaDA (ours)median ScanNet++ ETH3D (cam 4) ETH3D (cam 5) KITTI-360 (cam 2) KITTI-360 (cam 3)
+Method Min Mean Max Min Mean Max Min Mean Max Min Mean Max Min Mean Max Colmap Glomap DroidCalib GeoCalib DeepCalib Ours (w. SIFT)                                                                                           .
+Performance comparison on challenging datasets: Minimum, mean, and maximum focal-adjusted reprojection errors (in pixels) are reported for selected baseline methods.
+The reported errors represent the values for all sequences within each dataset.
+Our method uses the same SIFT matches as COLMAP and GLOMAP to ensure a fair comparison.
+For datasets with multiple camera models, errors are reported for each model independently, with the corresponding model in parentheses.
+Ground Truth Ours Geocalib Deepcalib COLMAP GLOMAP e p a c S d o o W e p a c S d o o W 0 6 3 - I T T
+I K + + t e N n a c S .
+Qualitative results: Comparison of estimated camera models on challenging datasets.
+The models are adjusted so that the center of an image approximately matches the center of the image undistorted by the ground truth model.
+Method Ours DeepCalib GeoCalib FV    RV MVR MVL          .
+WoodScape dataset: The mean focal-adjusted reprojec- tion error on the WoodScape dataset is reported for each camera as follows: FV points forward, RV points backward, MVR rep- resents the right-side camera, and MVL represents the left-side camera.
+times, varying parameters such as image step and number of frames.
+Geocalib and DeepCalib are run on all images.
+For DroidCalib, Deepcalib, and Geocalib, we report the mean error over all models for each sequence.
+Our proposed solution consistently outperforms all base- line methods across all datasets, achieving lower minimum reprojection errors.
+Despite these improvements, due to the radially symmetric distortion assumption, the proposed method cannot achieve a subpixel reprojection error on datasets with ground-truth models that are not radially sym- metric, such as ETH3D or KITTI-360.
+COLMAP and GLOMAP.
+If either COLMAP or GLOMAP splits the 3D scene into multiple models, we choose the one with more registered images.
+We run DroidCalib several Fig.
+5 shows the histogram of reprojection errors per se- quence on the test split of ScanNet++.
+Our method demon- strates a significantly higher concentration of errors below 1 7 pixel, outperforming both COLMAP and GLOMAP in this critical accuracy range.
+The results on WoodScape are summarized in Tab.
+2. We compare our solution to DeepCalib and GeoCalib because other methods do not produce meaningful results.
+Our so- lution was applied to the first 60 frames of each camera.
+Increasing the number of frames had no significant effect on the results.
+We used LOFTR to build point cor- respondences.
+DeepCalib and GeoCalib used all available images for each camera.
+We report the mean error of all estimated models.
+As expected, we get worse results for cameras pointing backward and forward.
+This means that the center of the distortion coincides with or close to the projection of the second camera onto the image, which cor- responds to the degenerative case for distortion estimation from correspondences
+[18, 57].
+Intuitively, this is the case when all epipolar lines are straight, regardless of camera distortion.
+We compare the accuracy of GLOMAP with and without the distortion model initialization from PRaDA in Tab.
+3.
+We evaluate angular errors for relative poses on the Sparse test images from the test split of ScanNet++ , which is a challenging dataset containing extreme baselines with low overlap.
+The results demonstrate the benefits of a decoupled calibration stage.
+In contrast, joint estimation of camera cal- ibration and 3D geometry often leads to poor reconstruction performance in non-ideal settings.
+Qualitative results: Fig.
+6 presents qualitative results, showing the visual undistortion of an image from multi- ple datasets.
+If the method does not work on the dataset, we show the original image, such as for COLMAP and GLOMAP on WoodScape.
+Since we are not estimating the focal length, we match it to the one of the ground truth model.
+To do it, we rely on the observation that a distorted image can be approximated by a pinhole camera near its center.
+Specifically, for a given focal length f and a small pixel displacement dx, the angular resolution near the im- age center, denoted by θ, can be described as: dx f ≈ tan(θ)
+For small angles tan(θ) ≈ θ.
+Then for f : f ≈ dx θ PRaDA + GLOMAP GLOMAP rerr (deg) terr (deg) // // // // initialization: Sparse ScanNet with different .
+Min/Mean/Max angular errors of relative poses for GLOMAP and GLOMAP initialized with PRaDA.
+These results highlight the benefits of PRaDA for 3D reconstruction.
+6.
+Discussion Similar to COLMAP
+[48, 49] and GLOMAP , our If the method relies on the performance of the matcher.
+matcher has been trained or optimized primarily for pinhole settings, its errors can noticeably impact our results.
+This is because we use the Levenberg-Marquardt algorithm as a nonlinear optimizer, which assumes normally distributed errors.
+This condition may not hold in distorted regions, re- sulting in reduced accuracy.
+This can be properly modeled by estimating the error distribution.
+Like COLMAP and GLOMAP, which use predefined thresholds for RANSAC and inlier estimation, we also rely on them.
+We would like to point out that it is possible to overcome the thresholds completely.
+Using the σ or σ++ consensus introduced by Barath et al.
+[2, 3] through all steps of the proposed algorithm makes this possible.
+However, its application requires thoughtful design.
+We see this as a promising direction for future research.
+7. Conclusion This paper proposes a new method for estimating radial dis- tortion in a projective setting.
+Our approach integrates dis- tortion modeling to each stage of the global projective re- construction pipeline, with model averaging based on pixel errors in the image plane relative to less expressive mod- els.
+This careful design allows for more accurate distortion correction.
+We demonstrate that our method outperforms modern techniques, achieving the lowest error on almost all datasets.
+We show that it can estimate extremely distorted images with a 180◦ lens.
+KITTI-360 and WoodScape serve as strong ex- amples of the robustness of the proposed solution, as they use cameras with an exact 180◦ field of view.
+This demon- strates the ability of the proposed solution to effectively handle extreme wide-angle fisheye cameras.
+The angle θ is defined as the angle between the optical ray corresponding to the principal point and the ray correspond-
+ing to the back projection of the displacement dx.
+This ensures that all models behave similarly near the center of the image, making it possible to undistort the im- ages defining the same FOV.
