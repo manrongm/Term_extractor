@@ -12,8 +12,8 @@ def normalize_text(text):
     return text
 
 
-sentences = Path("processed_biophysics/biophysics10_sentences.txt").read_text(encoding="utf-8").splitlines()
-noun_phrases = set(Path("processed_biophysics/biophysics10_noun_phrases.txt").read_text(encoding="utf-8").splitlines())
+sentences = Path("processed_cvpr/cvpr15_sentences.txt").read_text(encoding="utf-8").splitlines()
+noun_phrases = set(Path("processed_cvpr/cvpr15_noun_phrases.txt").read_text(encoding="utf-8").splitlines())
 
 noun_phrases_norm = set(normalize_text(p) for p in noun_phrases)
 
@@ -64,7 +64,7 @@ for sentence in sentences:
         output_lines.append(f"{token}\t{tag}")
     output_lines.append("")
 
-Path("biophysics10_BIO.txt").write_text("\n".join(output_lines), encoding="utf-8")
+Path("cvpr15_BIO.txt").write_text("\n".join(output_lines), encoding="utf-8")
 
 print(f"Finished tagging! There are {len(unmatched_phrases)} noun phrases not tagged:")
 for phrase in list(unmatched_phrases)[:20]:

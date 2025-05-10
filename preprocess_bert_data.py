@@ -2,8 +2,11 @@
 import os
 from transformers import BertTokenizerFast
 import torch
+from collections import Counter
 
 tokenizer = BertTokenizerFast.from_pretrained("bert-base-cased")
+# tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+# tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
 
 def read_bio_file(filepath):
     all_sentences, all_labels = [], []
@@ -25,11 +28,11 @@ def read_bio_file(filepath):
     return all_sentences, all_labels
 
 bio_files = [
-    "cvpr1_BIO.txt", "cvpr2_BIO.txt", "cvpr3_BIO.txt", "cvpr4_BIO.txt", "cvpr5_BIO.txt", 
-    "cvpr6_BIO.txt", "cvpr7_BIO.txt", "cvpr8_BIO.txt", "cvpr9_BIO.txt", "cvpr10_BIO.txt",
-    "biophysics1_BIO.txt", "biophysics2_BIO.txt", "biophysics3_BIO.txt", "biophysics4_BIO.txt",
-    "biophysics5_BIO.txt", "biophysics6_BIO.txt", "biophysics7_BIO.txt", "biophysics8_BIO.txt",
-    "biophysics9_BIO.txt", "biophysics10_BIO.txt"
+    "c_cvpr1_BIO.txt", "c_cvpr2_BIO.txt", "c_cvpr3_BIO.txt", "c_cvpr4_BIO.txt", "c_cvpr5_BIO.txt", 
+    "c_cvpr6_BIO.txt", "c_cvpr7_BIO.txt", "c_cvpr8_BIO.txt", "c_cvpr9_BIO.txt", "c_cvpr10_BIO.txt",
+    "c_biophysics1_BIO.txt", "c_biophysics2_BIO.txt", "c_biophysics3_BIO.txt", "c_biophysics4_BIO.txt",
+    "c_biophysics5_BIO.txt", "c_biophysics6_BIO.txt", "c_biophysics7_BIO.txt", "c_biophysics8_BIO.txt",
+    "c_biophysics9_BIO.txt", "c_biophysics10_BIO.txt"
 ]
 
 all_sents, all_tags = [], []
@@ -51,6 +54,7 @@ encodings = tokenizer(
 )
 
 labels = []
+flat_label_ids = []
 for i, label in enumerate(all_tags):
     word_ids = encodings.word_ids(batch_index=i)
     label_ids = []
@@ -59,11 +63,16 @@ for i, label in enumerate(all_tags):
         if word_idx is None:
             label_ids.append(-100)
         elif word_idx != previous_word_idx:
-            label_ids.append(label2id.get(label[word_idx], 0))
+            mapped = label2id.get(label[word_idx], 0)
+            label_ids.append(mapped)
+            flat_label_ids.append(mapped)
         else:
-            label_ids.append(label2id.get(label[word_idx], 0))
+            mapped = label2id.get(label[word_idx], 0)
+            label_ids.append(mapped)
+            flat_label_ids.append(mapped)
         previous_word_idx = word_idx
     labels.append(label_ids)
+
 
 labels = torch.tensor(labels)
 
@@ -73,5 +82,5 @@ dataset = {
     "labels": labels
 }
 
-torch.save(dataset, "merged_cvpr_biophysics.pt")
-print("✅ saved to merged_cvpr_biophysics.pt")
+torch.save(dataset, "c_merged_cvpr_biophysics.pt")
+print("\n✅ Saved to c_merged_cvpr_biophysics.pt")
