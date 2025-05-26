@@ -58,8 +58,3 @@ The best-performing configuration uses:
 ## 📄 License
 
 MIT License
-
-## 👥 Authors
-
-Xiaowei Ma*, Alex Jia*, Mandy Mao*, Rishi Rana*  
-*Equal contribution — NYU 2025 NLP Final Project.
